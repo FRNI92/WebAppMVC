@@ -1,12 +1,11 @@
-﻿
-using Database.Data;
+﻿using Database.Data;
 using Database.ReposResult;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
-namespace Data_Infrastructure.Repositories;
+namespace Database.Repos;
 
 public abstract class BaseRepository<TEntity>(AppDbContext context) where TEntity : class
 {
@@ -45,39 +44,67 @@ public abstract class BaseRepository<TEntity>(AppDbContext context) where TEntit
 
 
 
-    public virtual async Task<ReposResult<T>> AddAsync(TEntity entity)
+    public virtual async Task <ReposResult<TEntity>> AddAsync(TEntity entity)
     {
         try
         {
             if (entity == null)
             {
-                return false;
+                return new ReposResult<TEntity>
+                {
+                    Succeeded = false,
+                    StatusCode = 400,
+                    Error = "Entity is null",
+                    Result = entity
+                };
             }
-            else
+
+            await _dbSet.AddAsync(entity);
+            return new ReposResult<TEntity>
             {
-                await _dbSet.AddAsync(entity);
-                return true;
-            }
+                Succeeded = true,
+                StatusCode = 200,
+                Result = null!
+            };
         }
         catch (Exception ex)
         {
-            Debug.Write($"Error In AddAsync:{ex.Message}");
-            return false;
+            return new ReposResult<TEntity>
+            {
+                Succeeded = false,
+                StatusCode = 500,
+                Error = $"Error In AddAsync: {ex.Message}",
+                Result = null!
+            };
         }
+
     }
 
-
-    public virtual async Task<int> SaveAsync()
+    public virtual async Task<ReposResult<int>> SaveAsync()
     {
         try
         {
+            //savechanges returns a value of how many rows were saved. so it can succed but make no changes if no rows were affected
             Console.WriteLine("Saving Something");
-            return await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+
+            return new ReposResult<int>
+            {
+                Succeeded = true,
+                StatusCode = 200,
+                Result = result
+            };
         }
         catch (Exception ex)
         {
-            Debug.Write($"Error In SaveAsync: {ex.Message}");
-            return 0; // work kind of like a bool
+            Debug.WriteLine($"Error In SaveAsync: {ex.Message}");
+            return new ReposResult<int>
+            {
+                Succeeded = false,
+                StatusCode = 500,
+                Error = $"Error in SaveAsync: {ex.Message}",
+                Result = 0
+            };
         }
     }
 
