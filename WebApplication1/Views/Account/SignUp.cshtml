@@ -1,0 +1,82 @@
+﻿@{
+    Layout = "~/Views/Shared/_CleanLayout.cshtml";
+}
+@* if using 2 form add id to them so js can find the right one *@
+@model SignUpFormModel
+<div class="center-wrapper">
+    <main>
+        <section id="signup">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Create Account</h1>
+                </div>
+                <div class="card-body">
+                    @* google sign *@    
+                    <form method="post" asp-controller="SignUp" asp-action="SignUpWithGoogle">
+                        <button class="btn-external" type="submit">
+                            <img src="Images/google-icon.svg" alt="google icon" />
+                            <span>Sign Up with Google</span>
+                        </button>
+                    </form>
+
+                    <div class="or-divider"><span>OR</span></div>
+
+                    @* normal sign *@
+                    <form id="signUpForm" method="post" asp-controller="Account" asp-action="SignUp" novalidate>
+                        <div class="form-group">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input asp-for="FirstName" class="form-input" />
+                            <span asp-validation-for="FirstName"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input asp-for="LastName" class="form-input" />
+                            <span asp-validation-for="LastName"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-input" />
+                            <span asp-validation-for="Email"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-input" />
+                            <span asp-validation-for="Password"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ConfirmPassword" class="form-label"></label>
+                            <input asp-for="ConfirmPassword" class="form-input" />
+                            <span asp-validation-for="ConfirmPassword"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input asp-for="TermsAndCondition" />
+                                <span asp-validation-for="TermsAndCondition"></span>
+                                <span>I accept</span>
+                                <a href="#">Terms and Conditions</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn">Create account</button>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <span>Already have an account?</span>
+                    <a asp-controller="Account" asp-action="SignIn">Log in</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+@* dont need to write whole controller name 
+    had to use Url.Content to find the correct folder
+    url.contect is a helperfunction that converts shortcut to a relativ URL. it "translates" the tilde symbol so the html can read it
+    *@
+@* to save what the user put in the field we access the models password. we also add a var viewmodel in the controller *@
+@await Html.PartialAsync("ValidationScripts/_ValidationScripts")
+@* connects this View with the correct script *@

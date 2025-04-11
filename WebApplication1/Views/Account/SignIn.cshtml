@@ -1,0 +1,70 @@
+﻿
+@* @using Business.Dtos put this in viewimports for easy access *@
+@model SignInFormModel;
+@{
+    Layout = "~/Views/Shared/_CleanLayout.cshtml";
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="center-wrapper">
+    <main>
+        <section id="login">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Login</h1>
+                </div>
+                <div class="card-body">
+
+                    <!-- Google login form -->
+                    <form method="post" asp-controller="Account" asp-action="SignInWithGoogle">
+                        <button class="btn-external" type="submit">
+                            <img src="@Url.Content("~/Images/google-icon.svg")" alt="google icon" />
+                            <span>Login with Google</span>
+                        </button>
+                    </form>
+
+                    <div class="or-divider"><span>OR</span></div>
+
+                    <!-- Normal login form -->
+                    <form method="post" asp-controller="Account" asp-action="SignIn" novalidate>
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-input" />
+                            <span asp-validation-for="Email"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-input" />
+                            <span asp-validation-for="Password"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input type="checkbox" />
+                                <span>Remember me</span>
+                                <a href="#">Forgot Password?</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn">Log In</button>
+
+                        @if (ViewBag.LoginError != null)
+                        {
+                            <span class="login-error-message">@ViewBag.LoginError</span>
+                        }
+                    </form>
+                </div>
+
+                <div class="card-footer">
+                    <span>Don't have an account?</span>
+                    <a asp-controller="Account" asp-action="SignUp">Sign Up</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+@await Html.PartialAsync("ValidationScripts/_ValidateLogin")
+@* connects this View with the correct script *@
+
