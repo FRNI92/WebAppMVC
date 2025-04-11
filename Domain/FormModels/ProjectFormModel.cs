@@ -14,7 +14,7 @@ public class ProjectFormModel
     //[Required(ErrorMessage = "This field is required.")]
     [DataType(DataType.Text)]
     [Display(Name = "Project Name", Prompt = "Enter project name")]
-    public string Project { get; set; } = null!;
+    public string ProjectName { get; set; } = null!;
 
     [Required]
     [DataType(DataType.Text)]

@@ -2,6 +2,17 @@
 @{
     Layout = "_Layout";
 }
+@model Domain.FormModels.ProjectFormModel
+
+@if (Model != null)
+{
+
+    <p>@Model.Description</p>
+}
+else
+{
+    <p>No project found.</p>
+}
 
 <div class="backoffice-wrapper">
     <aside id="sidebar">
@@ -143,7 +154,7 @@
                             <img src="~/Images/company_logo.svg"
                                  alt="template project" />
                         </div>
-                        <h6 class="project-name">Fredrik AB</h6>
+                        <h6 class="project-name">@Model.ProjectName</h6>
                         <span class="client-name">IKEA</span>
 
                         <div id="project-actions-container">

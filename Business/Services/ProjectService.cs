@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Domain.Extensions;
+using Database.ReposResult;
+using Microsoft.EntityFrameworkCore;
 namespace Business.Services;
 
 public class ProjectService
@@ -26,7 +28,7 @@ public class ProjectService
         var entity = new ProjectEntity
         {
             Image = form.Image,
-            ProjectName = form.Project,
+            ProjectName = form.ProjectName,
             Description = form.Description,
             StartDate = form.StartDate ?? DateTime.Now,
             EndDate = form.EndDate ?? DateTime.Now.AddDays(7),
@@ -38,6 +40,13 @@ public class ProjectService
 
         _context.Projects.Add(entity);
         await _context.SaveChangesAsync();
+    }
+
+
+    public async Task<T?> GetAsync<T>(int id)
+    {
+        var entity = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
+        return entity is null ? default : entity.MapTo<T>();
     }
 }
 

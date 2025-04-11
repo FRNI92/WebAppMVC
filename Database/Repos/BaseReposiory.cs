@@ -1,11 +1,13 @@
-﻿using Database.Data;
+﻿
+using Database.Data;
+using Database.Entities;
 using Database.ReposResult;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Diagnostics;
 using System.Linq.Expressions;
-
 namespace Database.Repos;
+
 
 public abstract class BaseRepository<TEntity>(AppDbContext context) where TEntity : class
 {
@@ -108,38 +110,56 @@ public abstract class BaseRepository<TEntity>(AppDbContext context) where TEntit
         }
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
-    {
-        try
-        {
-            var allEntities = await _dbSet.ToListAsync();
-            if (allEntities == null)
-                return null!;
-            Debug.WriteLine("BaseRepository: Fetching all entities In...");
-            return allEntities;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error In GetAllAsync:{ex.Message} {ex.StackTrace}");
-            return null!;
-        }
-    }
+    //public virtual async Task<ReposResult<IEnumerable<T>>> GetAllAsync<T>()
+    //{
+    //    try
+    //    {
+    //        var allEntities = await _dbSet.ToListAsync();
+    //        return new ReposResult<IEnumerable<T>>
+    //        {
+    //            Succeeded = true,
+    //            StatusCode = 200,
+    //            Result = result
+    //        };
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Debug.WriteLine($"Error In GetAllAsync:{ex.Message} {ex.StackTrace}");
+    //        return null!;
+    //    }
+    //}
 
-    public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> expression)
+    public virtual async Task<ReposResult<TEntity>> GetAsync(Expression<Func<TEntity, bool>> expression)
     {
         try
         {
             var entity = await _dbSet.FirstOrDefaultAsync(expression);
 
             if (entity == null)
-                return null!;
+            {
+                return new ReposResult<TEntity>
+                {
+                    Succeeded = false,
+                    StatusCode = 404,
+                    Error = "Entity not found"
+                };
+            }
 
-            return entity;
+            return new ReposResult<TEntity>
+            {
+                Succeeded = true,
+                StatusCode = 200,
+                Result = entity
+            };
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error In GetAsync:{ex.Message} {ex.StackTrace}");
-            return null!;
+            return new ReposResult<TEntity>
+            {
+                Succeeded = false,
+                StatusCode = 500,
+                Error = $"Error in GetAsync: {ex.Message}"
+            };
         }
     }
 

@@ -30,10 +30,10 @@ builder.Services.AddIdentity<AppUserEntity, IdentityRole>(x =>
 builder.Services.ConfigureApplicationCookie(x =>
 {
     x.LoginPath = "/account/signin";
-    x.AccessDeniedPath = "account/denied";
+    //x.AccessDeniedPath = "account/denied";
     x.Cookie.HttpOnly = true;
     x.Cookie.IsEssential = true;
-    x.Cookie.Expiration = TimeSpan.FromHours(1);
+    //x.Cookie.Expiration = TimeSpan.FromHours(1);
     x.SlidingExpiration = true;
 });
 

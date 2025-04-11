@@ -1,4 +1,6 @@
 ﻿using Business.Services;
+using Domain.Dtos;
+using Domain.Extensions;
 using Domain.FormModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +10,12 @@ namespace WebApplication1.Controllers
     {
         private readonly ProjectService _projectService = projectService;
 
-        public IActionResult Projects()
+        public async Task<IActionResult> Projects()
         {
-            //if (!User.Identity.IsAuthenticated)
-            //    return RedirectToAction("Signup", "SignUp");
+            var dto = await _projectService.GetAsync<ProjectFormDto>(6);
+                    var model = dto.MapTo<ProjectFormModel>(); // om du har en sån metod
 
-            return View();
+            return View(model); // skickar rätt typ till vyn
         }
 
         [HttpPost]
