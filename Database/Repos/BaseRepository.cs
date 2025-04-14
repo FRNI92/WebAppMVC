@@ -109,26 +109,32 @@ public abstract class BaseRepository<TEntity>(AppDbContext context) where TEntit
             };
         }
     }
+    //getallasync knows what type from <IEnumerable<TEntity>>
+    public virtual async Task<ReposResult<IEnumerable<TEntity>>> GetAllAsync()
+    {
+        try
+        {
+            var allEntities = await _dbSet.ToListAsync();
+            return new ReposResult<IEnumerable<TEntity>>
+            {
+                Succeeded = true,
+                StatusCode = 200,
+                Result = allEntities
+            };
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error In GetAllAsync:{ex.Message} {ex.StackTrace}");
+            return null!;
+        }
+    }
 
-    //public virtual async Task<ReposResult<IEnumerable<T>>> GetAllAsync<T>()
-    //{
-    //    try
-    //    {
-    //        var allEntities = await _dbSet.ToListAsync();
-    //        return new ReposResult<IEnumerable<T>>
-    //        {
-    //            Succeeded = true,
-    //            StatusCode = 200,
-    //            Result = result
-    //        };
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Debug.WriteLine($"Error In GetAllAsync:{ex.Message} {ex.StackTrace}");
-    //        return null!;
-    //    }
-    //}
-
+    //public: acces everywhere
+    // virtual: can t be be overwriten with an override. ex from projectrepos
+    // async: the method is async and returns a task. need to use await in the codeblock
+    // returns resposresult of any type. can also just have success true or false and a statuscode
+    // GetAsync: method name and what type it can handle.
+    // expression says what I want from the database. works like filter. select * FROM 
     public virtual async Task<ReposResult<TEntity>> GetAsync(Expression<Func<TEntity, bool>> expression)
     {
         try

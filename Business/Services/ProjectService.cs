@@ -12,15 +12,17 @@ using System.Threading.Tasks;
 using Domain.Extensions;
 using Database.ReposResult;
 using Microsoft.EntityFrameworkCore;
+using Database.Repos;
 namespace Business.Services;
 
 public class ProjectService
 {
-    private readonly AppDbContext _context;
 
-    public ProjectService(AppDbContext context)
+    private readonly ProjectRepository _projectRespository;
+
+    public ProjectService(ProjectRepository projectrepository)
     {
-        _context = context;
+        _projectRespository = projectrepository;
     }
 
     public async Task CreateAsync(ProjectFormModel form)
@@ -38,15 +40,16 @@ public class ProjectService
             ClientId = 1, // Tillfälligt (byt när du kopplar clientval)
         };
 
-        _context.Projects.Add(entity);
-        await _context.SaveChangesAsync();
+        var isSuccess = await _projectRespository.AddAsync(entity);
+        if (isSuccess.Succeeded)
+            await _projectRespository.SaveAsync();
     }
 
 
     public async Task<T?> GetAsync<T>(int id)
     {
-        var entity = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
-        return entity is null ? default : entity.MapTo<T>();
+        var result = await _projectRespository.GetAsync(p => p.Id == id);
+        return result.Result.MapTo<T>();
     }
 }
 

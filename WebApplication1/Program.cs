@@ -1,5 +1,6 @@
 using Business.Services;
 using Database.Data;
+using Database.Repos;
 using IdentityDatabase.Data;
 using IdentityDatabase.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -40,6 +41,9 @@ builder.Services.ConfigureApplicationCookie(x =>
 //register services
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProjectService>();
+
+//register repos
+builder.Services.AddScoped<ProjectRepository>();
 
 var app = builder.Build();
 
