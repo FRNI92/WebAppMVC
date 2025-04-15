@@ -21,8 +21,4 @@
     <ProjectReference Include="..\IdentityDatabase\IdentityDatabase.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

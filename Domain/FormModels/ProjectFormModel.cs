@@ -1,5 +1,6 @@
 ﻿
 
+using Domain.Dtos;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.FormModels;
@@ -27,9 +28,10 @@ public class ProjectFormModel
     [DataType(DataType.Date)]
     public DateTime? EndDate { get; set; }
 
+    public int ClientId { get; set; }
     public string? Member { get; set; }
 
     public decimal? Budget { get; set; }
-    
 
+    public IEnumerable<ClientDto> Clients { get; set; } = new List<ClientDto>();
 }

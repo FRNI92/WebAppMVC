@@ -1,4 +1,4 @@
-﻿@model ProjectFormModel
+﻿@model ProjectViewModels
 
 <section id="add-project-modal" class="modal">
     <div class="card">
@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Project Name</label>
-                    <input class="form-input" type="text" asp-for="ProjectName"/>
+                    <input class="form-input" type="text" asp-for="FormModel.ProjectName"/>
                 </div>
 
                 <div class="form-group">
@@ -37,16 +37,18 @@
                             <span class="form-select-text"></span>
                         </button>
                         <ul class="form-select-options">
-                            <li class="form-select-option" data-value="1">Client 1</li>
-                            <li class="form-select-option" data-value="2">Client 2</li>
+                            @foreach (var client in Model.Clients)
+                            {
+                                <li class="form-select-option" data-value="@client.Id">@client.ClientName</li>
+                            }
                         </ul>
-                        <input type="hidden" name="client-select-value" />
+                        <input type="hidden" name="ClientId" asp-for="FormModel.ClientId" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Description</label>
-                    <textarea class="form-input" asp-for="Description"></textarea>
+                    <textarea class="form-input" asp-for="FormModel.Description"></textarea>
                 </div>
 
                 <div class="form-horizontal-group">
@@ -82,7 +84,7 @@
                     <label class="form-label">Budget</label>
                     <div class="form-input-extended">
                         <i class="fa-duotone fa-solid fa-dollar-sign"></i>
-                        <input class="form-input" type="text" asp-for="Budget" />
+                        <input class="form-input" type="text" asp-for="FormModel.Budget" />
                     </div>
                 </div>
 

@@ -3,19 +3,28 @@ using Domain.Dtos;
 using Domain.Extensions;
 using Domain.FormModels;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    public class ProjectsController(ProjectService projectService) : Controller
+    public class ProjectsController(ProjectService projectService, ClientService clientService) : Controller
     {
         private readonly ProjectService _projectService = projectService;
-
+        private readonly ClientService _clientService = clientService;
         public async Task<IActionResult> Projects()
         {
-            var dto = await _projectService.GetAsync<ProjectFormDto>(6);
-                    var model = dto.MapTo<ProjectFormModel>(); // om du har en sån metod
+            var clients = await _clientService.GetAllClientsAsync();
 
-            return View(model); // skickar rätt typ till vyn
+            var dtos = await _projectService.GetAllWithRelationsAsync();
+
+            var model = new ProjectViewModels
+            {
+                FormModel = new ProjectFormModel(),
+                ProjectList = dtos, // detta är redan IEnumerable<ProjectFormDto>
+                Clients = clients
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -33,7 +42,7 @@ namespace WebApplication1.Controllers
             }
 
             await _projectService.CreateAsync(model);
-            return Ok(); // Eller return RedirectToAction("Projects");
+            return RedirectToAction("Projects");
         }
     }
 }

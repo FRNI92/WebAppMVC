@@ -1,19 +1,9 @@
-﻿@* it will go to layout by default if I remove layout = "layout" *@
+﻿@using WebApplication1.ViewModels
+@* it will go to layout by default if I remove layout = "layout" *@
 @{
     Layout = "_Layout";
 }
-@model Domain.FormModels.ProjectFormModel
-
-@if (Model != null)
-{
-
-    <p>@Model.Description</p>
-}
-else
-{
-    <p>No project found.</p>
-}
-
+@model ProjectViewModels
 <div class="backoffice-wrapper">
     <aside id="sidebar">
         <section class="logotype">
@@ -148,135 +138,16 @@ else
             </div>
 
             <section class="project-list">
-                <div class="project card">
-                    <div class="card-header">
-                        <div class="project-image">
-                            <img src="~/Images/company_logo.svg"
-                                 alt="template project" />
-                        </div>
-                        <h6 class="project-name">@Model.ProjectName</h6>
-                        <span class="client-name">IKEA</span>
-
-                        <div id="project-actions-container">
-                            <button id="project-dropdown-menu"
-                                    type="button"
-                                    data-type="dropdown"
-                                    data-target="#edith-dropdown-1"
-                                    class="btn-actions open-edith-trigger">
-                                <i class="fa-duotone fa-solid fa-ellipsis"></i>
-                            </button>
-                            <div id="edith-dropdown-1" class="edith-dropdown">
-                                <div class="dropdown-body">
-                                    <nav class="dropdown-actions">
-                                        <a data-type="modal"
-                                           data-target="#add-edit-project-modal"
-                                           id="edit-project-open"
-                                           class="dropdown-action"
-                                           href="#">
-                                            <i class="fa-duotone fa-solid fa-pen-to-square"></i>
-                                            <span>Edit</span>
-                                        </a>
-                                        <a class="dropdown-action" href="#">
-                                            <i class="fa-duotone fa-solid fa-user-plus"></i>
-                                            <span>Add Member</span>
-                                        </a>
-                                        <div class="divider"></div>
-                                        <a class="dropdown-action danger" href="#">
-                                            <i class="fa-duotone fa-solid fa-trash-can"></i>
-                                            <span>Delete Project</span>
-                                        </a>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <p>Lorem ipsum dolor sit amet dsdfsfsdfconsectetur </p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="badge badge">
-                            <i class="fa-duotone fa-solid fa-clock"></i>
-                            <span>1 week left</span>
-                        </div>
-                        <div class="members">
-                            <div class="user-image">
-                                <img src="/Images/Avatar.svg">
-                            </div>
-                            <div class="user-image">
-                                <img src="/Images/Avatar.svg">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="project card">
-                    <div class="card-header">
-                        <div class="project-image">
-                            <img src="~/Images/company_logo.svg"
-                                 alt="template project" />
-                        </div>
-                        <h6 class="project-name">Fredrik AB</h6>
-                        <span class="client-name">IKEA</span>
-
-                        <div id="project-actions-container">
-                            <button id="project-dropdown-menu"
-                                    type="button"
-                                    data-type="dropdown"
-                                    data-target="#edith-dropdown-2"
-                                    class="btn-actions open-edith-trigger">
-                                <i class="fa-duotone fa-solid fa-ellipsis"></i>
-                            </button>
-                            <div id="edith-dropdown-2" class="edith-dropdown">
-                                <div class="dropdown-body">
-                                    <nav class="dropdown-actions">
-                                        <a data-type="modal"
-                                           data-target="#add-edit-project-modal"
-                                           id="edit-project-open"
-                                           class="dropdown-action"
-                                           href="#">
-                                            <i class="fa-duotone fa-solid fa-pen-to-square"></i>
-                                            <span>Edit</span>
-                                        </a>
-                                        <a class="dropdown-action" href="#">
-                                            <i class="fa-duotone fa-solid fa-user-plus"></i>
-                                            <span>Add Member</span>
-                                        </a>
-                                        <div class="divider"></div>
-                                        <a class="dropdown-action danger" href="#">
-                                            <i class="fa-duotone fa-solid fa-trash-can"></i>
-                                            <span>Delete Project</span>
-                                        </a>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <p>Lorem ipsum dolor sit amet dsdfsfsdfconsectetur </p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="badge badge">
-                            <i class="fa-duotone fa-solid fa-clock"></i>
-                            <span>1 week left</span>
-                        </div>
-                        <div class="members">
-                            <div class="user-image">
-                                <img src="/Images/Avatar.svg">
-                            </div>
-                            <div class="user-image">
-                                <img src="/Images/Avatar.svg">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                @foreach (var project in Model.ProjectList) 
+                 { 
+                     @await Html.PartialAsync("_ProjectCardPartial", project) 
+                 }
             </section>
 
         </div>
     </main>
 </div>
 
-@await Html.PartialAsync("_AddProjectModalPartial")
-@await Html.PartialAsync("_EditProjectModalPartial")
+ @await Html.PartialAsync("_AddProjectModalPartial", Model)  
+ @await Html.PartialAsync("_EditProjectModalPartial") 
 

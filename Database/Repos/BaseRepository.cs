@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices.ObjectiveC;
 namespace Database.Repos;
 
 
@@ -110,22 +111,51 @@ public abstract class BaseRepository<TEntity>(AppDbContext context) where TEntit
         }
     }
     //getallasync knows what type from <IEnumerable<TEntity>>
-    public virtual async Task<ReposResult<IEnumerable<TEntity>>> GetAllAsync()
+    public virtual async Task<ReposResult<IEnumerable<TEntity>>> GetAllAsync
+        (
+            Expression<Func<TEntity, bool>>? where = null,
+            Expression<Func<TEntity, object>>? sortBy = null,
+            bool orderByDescending = false,
+            params Expression<Func<TEntity, object>>[] includes
+        )
     {
         try
         {
-            var allEntities = await _dbSet.ToListAsync();
+            IQueryable<TEntity> query = _dbSet;
+
+            if (where != null)
+                query = query.Where(where);
+
+            if (includes != null && includes.Length > 0)
+            {
+                foreach (var include in includes)
+                    query = query.Include(include);
+            }
+
+            if (sortBy != null)
+            {
+                query = orderByDescending
+                    ? query.OrderByDescending(sortBy)
+                    : query.OrderBy(sortBy);
+            }
+
+            var entities = await query.ToListAsync();
+
             return new ReposResult<IEnumerable<TEntity>>
             {
                 Succeeded = true,
                 StatusCode = 200,
-                Result = allEntities
+                Result = entities
             };
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error In GetAllAsync:{ex.Message} {ex.StackTrace}");
-            return null!;
+            return new ReposResult<IEnumerable<TEntity>>
+            {
+                Succeeded = false,
+                StatusCode = 500,
+                Error = $"Error in GetAllAsync: {ex.Message}"
+            };
         }
     }
 
@@ -188,35 +218,55 @@ public abstract class BaseRepository<TEntity>(AppDbContext context) where TEntit
         }
     }
 
-    public virtual async Task<bool> RemoveAsync(Expression<Func<TEntity, bool>> expression)
+    public virtual async Task<ReposResult<bool>> RemoveAsync(Expression<Func<TEntity, bool>> expression)
     {
+        var result = new ReposResult<bool>();
         try
         {
             var entity = await _dbSet.FirstOrDefaultAsync(expression);
             if (entity != null)
             {
                 _context.Remove(entity);
-                return true;
+                result.Result = true;
+                result.Succeeded = true;
+                result.StatusCode = 200;
+                return result;
             }
-            return false;
+
+            result.Result = false;
+            result.Succeeded = false;
+            result.StatusCode = 404;
+            result.Error = "Entity not found.";
+            return result;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error With DeleteAsync{ex.Message}");
-            return false;
+            Console.WriteLine($"Error With DeleteAsync {ex.Message}");
+            result.Result = false;
+            result.Succeeded = false;
+            result.StatusCode = 500;
+            result.Error = "Failed to remove entity.";
+            return result;
         }
     }
 
-    public virtual async Task<bool> DoesEntityExistAsync(Expression<Func<TEntity, bool>> expression)
+    public virtual async Task<ReposResult<bool>> DoesEntityExistAsync(Expression<Func<TEntity, bool>> expression)
     {
+        var result = new ReposResult<bool>();
         try
         {
-            return await _dbSet.AnyAsync(expression);
+            result.Result = await _dbSet.AnyAsync(expression);
+            result.Succeeded = true;
+            result.StatusCode = 200;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error with DoesEntityExistAsync{ex.Message}");
-            return false;
+            Debug.WriteLine($"Error with DoesEntityExistAsync {ex.Message}");
+            result.Succeeded = false;
+            result.StatusCode = 500;
+            result.Error = "Failed to check if entity exists.";
         }
+
+        return result;
     }
 }
