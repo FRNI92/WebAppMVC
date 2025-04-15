@@ -82,12 +82,12 @@
     --badge-red-text-color: var(--white-100);
     --badge-red-border-color: var(--white-100);
     --badge-red-background-color: var(--red);
-    --badge-warning-text-color: var(--dark-400);
-    --badge-warning-border-color: var(--white-100);
-    --badge-warning-background-color: var(--yellow);
+    --badge-warning-text-color: var(--red);
+    --badge-warning-border-color: var(--red-semilight);
+    --badge-warning-background-color: var(--red-semilight);
     --badge-danger-text-color: var(--white-100);
     --badge-danger-border-color: var(--white-100);
-    --badge-danger-background-color: var(--green);
+    --badge-danger-background-color: var(--red);
     --badge-normal-text-color: var(--dark-400);
     --badge-normal-border-color: var(--grey-100);
     --badge-normal-background-color: var(--grey-100);
@@ -1138,6 +1138,12 @@ textarea {
             bottom: -10%;
         }
 
+
+#image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 #image-upload,
 #image-upload-edit {
     display: none;
@@ -1456,8 +1462,8 @@ input:checked::before {
 
     #projects .project-list {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
     }
 
     #projects .project.card {

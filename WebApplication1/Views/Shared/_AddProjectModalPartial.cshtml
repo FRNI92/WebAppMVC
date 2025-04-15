@@ -23,7 +23,7 @@
                                class="fa-duotone fa-solid fa-camera"></i>
                         </div>
                     </div>
-                    <input type="file" id="image-upload" accept="image/*" />
+                    <input asp-for="FormModel.ImageFile" type="file" id="image-upload" accept="image/*" />
                 </div>
                 <div class="form-group">
                     <label class="form-label">Project Name</label>
@@ -54,11 +54,11 @@
                 <div class="form-horizontal-group">
                     <div class="form-group">
                         <label class="form-label">Start Date</label>
-                        <input class="form-input" type="date" />
+                        <input class="form-input" type="date" asp-for="FormModel.StartDate" />
                     </div>
                     <div class="form-group">
                         <label class="form-label">End Date</label>
-                        <input class="form-input" type="date" />
+                        <input class="form-input" type="date" asp-for="FormModel.EndDate" />
                     </div>
                 </div>
 

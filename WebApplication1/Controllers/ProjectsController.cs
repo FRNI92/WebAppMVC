@@ -7,8 +7,11 @@ using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    public class ProjectsController(ProjectService projectService, ClientService clientService) : Controller
+    public class ProjectsController(ProjectService projectService, ClientService clientService, IWebHostEnvironment env) : Controller
     {
+
+        private readonly IWebHostEnvironment _env = env;
+
         private readonly ProjectService _projectService = projectService;
         private readonly ClientService _clientService = clientService;
         public async Task<IActionResult> Projects()
@@ -28,7 +31,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(ProjectFormModel model)
+        public async Task<IActionResult> Add(ProjectViewModels model)
         {
             if (!ModelState.IsValid)
             {
@@ -40,8 +43,40 @@ namespace WebApplication1.Controllers
                     )
                 });
             }
+            if (model.FormModel.ImageFile != null && model.FormModel.ImageFile.Length > 0)
+            {
+                var uploadFolder = Path.Combine(_env.WebRootPath, "uploads");
+                Directory.CreateDirectory(uploadFolder); // Skapa om den inte finns
 
-            await _projectService.CreateAsync(model);
+                var originalName = Path.GetFileName(model.FormModel.ImageFile.FileName);
+                var fileName = $"{Guid.NewGuid()}_{originalName}";
+                var filePath = Path.Combine(uploadFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.FormModel.ImageFile.CopyToAsync(stream);
+                }
+
+                model.FormModel.Image = fileName;
+            }
+
+            await _projectService.CreateAsync(model.FormModel);
+            return RedirectToAction("Projects");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _projectService.DeleteProjectAsync(id);
+
+            if (!result.Succeeded)
+            {
+                // Visa ett felmeddelande på samma vy eller annan vy
+                TempData["Error"] = result.Error;
+                return RedirectToAction("Projects");
+            }
+
             return RedirectToAction("Projects");
         }
     }

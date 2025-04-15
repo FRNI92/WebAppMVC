@@ -1,6 +1,7 @@
 ﻿
 
 using Domain.Dtos;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.FormModels;
@@ -10,7 +11,7 @@ public class ProjectFormModel
     [DataType(DataType.ImageUrl)]
     [Display(Name = "Image", Prompt = "Select a image")]
     public string? Image { get; set; }
-
+    public IFormFile? ImageFile { get; set; }
 
     //[Required(ErrorMessage = "This field is required.")]
     [DataType(DataType.Text)]

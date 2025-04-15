@@ -82,11 +82,23 @@ public class ProjectService
 
         return result.Result.Select(e => new ProjectFormDto
         {
+            Id = e.Id,
+            Image = e.Image,
             ProjectName = e.ProjectName,
             Description = e.Description,
             StartDate = e.StartDate,
             EndDate = e.EndDate,
             Created = e.Created,
+
+            TimeLeftText = (e.EndDate.Date - DateTime.Today).Days switch
+            {
+                < 0 => "Past deadline",
+                0 => "Ends today",
+                < 7 => $"{(e.EndDate.Date - DateTime.Today).Days} days left",
+                _ => $"{(e.EndDate.Date - DateTime.Today).Days / 7} weeks left"
+            },
+
+
             Budget = e.Budget,
             ClientId = e.ClientId,
             ClientName = e.Client?.ClientName,
@@ -162,4 +174,4 @@ public class ProjectService
             };
         }
     }
-
+}

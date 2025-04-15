@@ -7,6 +7,8 @@ namespace Domain.Dtos;
 
 public class ProjectFormDto
 {
+    //added id so I cant generate unique id on edit drop down
+    public int Id { get; set; }
     public string? Image { get; set; }
     public string? ProjectName { get; set; }
     public string? Description { get; set; }
@@ -14,7 +16,8 @@ public class ProjectFormDto
     public DateTime StartDate { get; set; }
 
     public DateTime EndDate { get; set; }
-
+    //to handle the time left
+    public string TimeLeftText { get; set; } = string.Empty;
     public DateTime Created { get; set; }
     public decimal Budget { get; set; }
 

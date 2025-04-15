@@ -66,7 +66,55 @@ document.addEventListener('DOMContentLoaded', () => {
             target?.classList.remove("modal-show");
         });
     });
+
+
+//delete button in edit,add member, delete drop down
+document.querySelectorAll('.delete-project').forEach(button => {
+    button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const id = button.getAttribute('data-id');
+        })
+    });
+    // to handle the color of clock depending on the time
+    document.querySelectorAll(".badge[data-enddate]").forEach(badge => {
+        const endDateStr = badge.dataset.enddate;
+        const span = badge.querySelector(".javascript-badge-text");
+        console.log("1")
+        if (!endDateStr || !span) return;
+        console.log("2")
+        const endDate = new Date(endDateStr);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // time is set to zeo
+
+        const diffDays = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+        console.log("3")
+        // remove all the old classes
+        badge.classList.remove("badge-red", "badge-danger", "badge-warning", "badge-normal");
+        console.log("4")
+        // Sätt ny text och färg
+        if (diffDays < 0) {
+            span.textContent = "Past deadline";
+            badge.classList.add("badge-danger");
+            console.log("5")
+        } else if (diffDays === 0) {
+            span.textContent = "Ends today";
+            badge.classList.add("badge-red");
+            console.log("6")
+        } else if (diffDays <= 3) {
+            span.textContent = `${diffDays} days left`;
+            badge.classList.add("badge-warning");
+            console.log("7")
+        } else {
+            span.textContent = `${Math.floor(diffDays / 7)} weeks left`;
+            badge.classList.add("badge-normal");
+        }
+    });
 });
+
+
+
+
+
     //open modal
 
     //close modal

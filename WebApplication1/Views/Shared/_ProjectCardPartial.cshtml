@@ -6,21 +6,20 @@
 <div class="project card">
     <div class="card-header">
         <div class="project-image">
-            <img src="~/Images/company_logo.svg"
-                 alt="template project" />
+            <img src="@Url.Content($"~/uploads/{Model.Image}")" alt="Project image" />
         </div>
         <h6 class="project-name">@Model.ProjectName</h6>
         <span class="client-name">@Model.ClientName</span>
 
         <div id="project-actions-container">
-            <button id="project-dropdown-menu"
+            <button id="project-dropdown-menu-@Model.Id"
                     type="button"
                     data-type="dropdown"
-                    data-target="#edith-dropdown-1"
+                    data-target="#edith-dropdown-@Model.Id"
                     class="btn-actions open-edith-trigger">
                 <i class="fa-duotone fa-solid fa-ellipsis"></i>
             </button>
-            <div id="edith-dropdown-1" class="edith-dropdown">
+            <div id="edith-dropdown-@Model.Id" class="edith-dropdown">
                 <div class="dropdown-body">
                     <nav class="dropdown-actions">
                         <a data-type="modal"
@@ -36,10 +35,13 @@
                             <span>Add Member</span>
                         </a>
                         <div class="divider"></div>
-                        <a class="dropdown-action danger" href="#">
-                            <i class="fa-duotone fa-solid fa-trash-can"></i>
-                            <span>Delete Project</span>
-                        </a>
+                        <form method="post" asp-action="Delete" asp-controller="Projects">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <a class="dropdown-action danger" onclick="this.closest('form').submit()";>
+                                <i class="fa-duotone fa-solid fa-trash-can"></i>
+                                <span>Delete Project</span>
+                            </a>
+                        </form>
                     </nav>
                 </div>
             </div>
@@ -49,9 +51,10 @@
         <p>@Model.Description</p>
     </div>
     <div class="card-footer">
-        <div class="badge badge">
+        @* must use to string so that javascript can read it correctly *@
+        <div class="badge " data-enddate="@Model.EndDate.ToString("yyyy-MM-dd")">
             <i class="fa-duotone fa-solid fa-clock"></i>
-            <span>1 week</span>
+            <span class="javascript-badge-text">@Model.TimeLeftText</span>
         </div>
         <div class="members">
             <div class="user-image">
