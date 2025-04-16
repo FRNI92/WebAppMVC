@@ -8,5 +8,6 @@ namespace WebApplication1.ViewModels
         public ProjectFormModel FormModel { get; set; } = new();
         public IEnumerable<ProjectFormDto> ProjectList { get; set; } = new List<ProjectFormDto>();
         public IEnumerable<ClientDto> Clients { get; set; } = new List<ClientDto>();
+        public IEnumerable<MemberDto> Members { get; set; } = new List<MemberDto>();
     }
 }

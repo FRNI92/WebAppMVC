@@ -42,9 +42,11 @@ builder.Services.ConfigureApplicationCookie(x =>
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProjectService>();
 builder.Services.AddScoped<ClientService>();
+builder.Services.AddScoped<MemberService>();
 //register repos
 builder.Services.AddScoped<ProjectRepository>();
 builder.Services.AddScoped<ClientRepository>();
+builder.Services.AddScoped<MemberRepository>();
 
 var app = builder.Build();
 

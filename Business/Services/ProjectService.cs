@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Database.Repos;
 using System.Linq.Expressions;
 using System.Diagnostics;
+using System.Collections.Immutable;
 namespace Business.Services;
 
 public class ProjectService
@@ -39,7 +40,9 @@ public class ProjectService
             Created = DateTime.Now,
             Budget = form.Budget ?? 0,
             StatusId = 1, // On hold
-            ClientId = 1, // Tillfälligt (byt när du kopplar clientval)
+
+            ClientId = form.ClientId, // Tillfälligt (byt när du kopplar clientval)
+            MemberId = form.MemberId
         };
 
         var isSuccess = await _projectRepository.AddAsync(entity);
@@ -104,6 +107,7 @@ public class ProjectService
             ClientName = e.Client?.ClientName,
             StatusId = e.StatusId,
             StatusName = e.Status?.StatusName,
+            MemberId = e.MemberId,
             MemberNames = e.Members.Select(m => $"{m.FirstName} {m.LastName}").ToList()
         });
     }

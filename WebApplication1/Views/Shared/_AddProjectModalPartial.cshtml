@@ -42,7 +42,7 @@
                                 <li class="form-select-option" data-value="@client.Id">@client.ClientName</li>
                             }
                         </ul>
-                        <input type="hidden" name="ClientId" asp-for="FormModel.ClientId" />
+                        <input type="hidden" name="FormModel.ClientId" asp-for="FormModel.ClientId" />
                     </div>
                 </div>
 
@@ -69,14 +69,12 @@
                             <span class="form-select-text"></span>
                         </button>
                         <ul class="form-select-options">
-                            <li class="form-select-option" data-value="1">
-                                Fredrik Nilsson
-                            </li>
-                            <li class="form-select-option" data-value="2">
-                                Elin Andersson
-                            </li>
+                            @foreach (var members in Model.Members)
+                            {
+                                <li class="form-select-option" data-value="@members.Id"> @($"{members.FirstName} {members.LastName} {members.JobTitle}")</li>
+                            }
                         </ul>
-                        <input type="hidden" name="member-select-value" />
+                        <input type="hidden" name="FormModel.ClientId" asp-for="FormModel.ClientId" />
                     </div>
                 </div>
 

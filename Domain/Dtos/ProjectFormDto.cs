@@ -28,5 +28,7 @@ public class ProjectFormDto
     public int ClientId { get; set; }
     public string? ClientName { get; set; } // mappa från entity.Client.ClientName
 
+
+    public int? MemberId { get; set; } //remove later when adding many to many between projects and members
     public List<string> MemberNames { get; set; } = new();
 }

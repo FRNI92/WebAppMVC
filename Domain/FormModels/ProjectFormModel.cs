@@ -30,7 +30,7 @@ public class ProjectFormModel
     public DateTime? EndDate { get; set; }
 
     public int ClientId { get; set; }
-    public string? Member { get; set; }
+    public int? MemberId { get; set; }
 
     public decimal? Budget { get; set; }
 

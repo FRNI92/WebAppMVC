@@ -3,12 +3,16 @@ using Domain.Dtos;
 using Domain.Extensions;
 using Domain.FormModels;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.Design.Serialization;
 using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    public class ProjectsController(ProjectService projectService, ClientService clientService, IWebHostEnvironment env) : Controller
+    public class ProjectsController(ProjectService projectService, ClientService clientService, IWebHostEnvironment env, MemberService memberService) : Controller
     {
+
+        private readonly MemberService _memberService = memberService;
+
 
         private readonly IWebHostEnvironment _env = env;
 
@@ -16,6 +20,8 @@ namespace WebApplication1.Controllers
         private readonly ClientService _clientService = clientService;
         public async Task<IActionResult> Projects()
         {
+
+            var members = await _memberService.GetAllMembersAsync();
             var clients = await _clientService.GetAllClientsAsync();
 
             var dtos = await _projectService.GetAllWithRelationsAsync();
@@ -24,7 +30,8 @@ namespace WebApplication1.Controllers
             {
                 FormModel = new ProjectFormModel(),
                 ProjectList = dtos, // detta är redan IEnumerable<ProjectFormDto>
-                Clients = clients
+                Clients = clients,
+                Members = members
             };
 
             return View(model);
