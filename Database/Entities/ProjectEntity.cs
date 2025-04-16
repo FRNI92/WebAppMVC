@@ -31,8 +31,5 @@ public class ProjectEntity
     public ClientEntity Client { get; set; } = null!;
 
 
-
-    public int? MemberId { get; set; } // During developement. remove when adding many to many between projects and members
-    [ForeignKey(nameof(Members))]
-    public ICollection<MemberEntity> Members { get; set; } = new List<MemberEntity>();
+    public ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = new List<ProjectMemberEntity>();
 }

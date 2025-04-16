@@ -25,8 +25,14 @@
                         <a data-type="modal"
                            data-target="#add-edit-project-modal"
                            id="edit-project-open"
-                           class="dropdown-action"
-                           href="#">
+                           class="dropdown-action open-edit-modal"
+                           data-name="@Model.ProjectName"
+                           data-client="@Model.ClientId"
+                           data-status="@Model.StatusId"
+                           data-description="@Model.Description"
+                           data-budget="@Model.Budget"
+                           data-start="@Model.StartDate.ToString("yyyy-MM-dd")"
+                           data-end="@Model.EndDate.ToString("yyyy-MM-dd")">
                             <i class="fa-duotone fa-solid fa-pen-to-square"></i>
                             <span>Edit</span>
                         </a>
@@ -58,6 +64,7 @@
         </div>
         <div class="members">
             <div class="user-image">
+                @* <p>@string.Join(", ", Model.MemberNames)</p> *@
                 <img src="/Images/Avatar.svg">
             </div>
             <div class="user-image">

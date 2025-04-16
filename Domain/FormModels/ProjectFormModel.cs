@@ -31,6 +31,7 @@ public class ProjectFormModel
 
     public int ClientId { get; set; }
     public int? MemberId { get; set; }
+    public int StatusId { get; set; }
 
     public decimal? Budget { get; set; }
 

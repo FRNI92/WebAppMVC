@@ -1,5 +1,6 @@
 using Business.Services;
 using Database.Data;
+using Database.Entities;
 using Database.Repos;
 using IdentityDatabase.Data;
 using IdentityDatabase.Entities;
@@ -43,10 +44,13 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProjectService>();
 builder.Services.AddScoped<ClientService>();
 builder.Services.AddScoped<MemberService>();
+builder.Services.AddScoped<StatusService>();
 //register repos
 builder.Services.AddScoped<ProjectRepository>();
 builder.Services.AddScoped<ClientRepository>();
 builder.Services.AddScoped<MemberRepository>();
+builder.Services.AddScoped<ProjectMemberRepository>();
+builder.Services.AddScoped<StatusRepository>();
 
 var app = builder.Build();
 

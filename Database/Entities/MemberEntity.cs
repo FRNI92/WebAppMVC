@@ -19,5 +19,5 @@ public class MemberEntity
     public int AddressId { get; set; }
     public AddressEntity Address { get; set; } = null!;
 
-    public ICollection<ProjectEntity> Projects { get; set; } = new List<ProjectEntity>();
+    public ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = new List<ProjectMemberEntity>();
 }

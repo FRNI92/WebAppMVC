@@ -109,6 +109,50 @@ document.querySelectorAll('.delete-project').forEach(button => {
             badge.classList.add("badge-normal");
         }
     });
+
+
+
+
+
+    // project card. dropdown edit button
+    document.querySelectorAll('.open-edit-modal').forEach(button => {
+        button.addEventListener('click', e => {
+            // Grunder
+            const name = button.dataset.name;
+            const clientId = button.dataset.client;
+            const statusId = button.dataset.status;
+            const description = button.dataset.description;
+            const budget = button.dataset.budget;
+            const start = button.dataset.start;
+            const end = button.dataset.end;
+
+            // Project Name
+            document.querySelector('#add-edit-project-modal input[name="projectName"]').value = name;
+
+            // Client
+            const clientSelect = document.querySelector('#add-edit-project-modal input[name="clientId"]');
+            const clientWrapper = clientSelect.closest('.form-select');
+            const clientOption = clientWrapper.querySelector(`.form-select-option[data-value="${clientId}"]`);
+            clientSelect.value = clientId;
+            clientWrapper.querySelector('.form-select-text').textContent = clientOption?.textContent ?? 'Choose a client';
+
+            // Status
+            const statusSelect = document.querySelector('#add-edit-project-modal input[name="statusId"]');
+            const statusWrapper = statusSelect.closest('.form-select');
+            const statusOption = statusWrapper.querySelector(`.form-select-option[data-value="${statusId}"]`);
+            statusSelect.value = statusId;
+            statusWrapper.querySelector('.form-select-text').textContent = statusOption?.textContent ?? 'Choose a status';
+
+            // Resten
+            document.querySelector('#add-edit-project-modal textarea[name="description"]').value = description;
+            document.querySelector('#add-edit-project-modal input[name="budget"]').value = budget;
+            document.querySelector('#add-edit-project-modal input[name="startDate"]').value = start;
+            document.querySelector('#add-edit-project-modal input[name="endDate"]').value = end;
+        });
+    });
+
+
+
 });
 
 

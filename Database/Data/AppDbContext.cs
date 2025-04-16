@@ -13,6 +13,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<AddressEntity> Addresses { get; set; }
     public DbSet<StatusEntity> Statuses { get; set; }
 
+    public DbSet<ProjectMemberEntity> ProjectMembers { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -58,5 +60,25 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             new AddressEntity { Id = 1, StreetName = "Testgatan", StreetNumber = "1", PostalCode = "12345", City = "Stockholm" },
             new AddressEntity { Id = 2, StreetName = "Exempelvägen", StreetNumber = "2", PostalCode = "54321", City = "Göteborg" }
         );
+
+
+
+
+
+        modelBuilder.Entity<ProjectMemberEntity>()
+    .HasKey(pm => new { pm.ProjectId, pm.MemberId });
+
+        modelBuilder.Entity<ProjectMemberEntity>()
+            .HasOne(pm => pm.Project)
+            .WithMany(p => p.ProjectMembers)
+            .HasForeignKey(pm => pm.ProjectId);
+
+        modelBuilder.Entity<ProjectMemberEntity>()
+            .HasOne(pm => pm.Member)
+            .WithMany(m => m.ProjectMembers)
+            .HasForeignKey(pm => pm.MemberId);
+
+
+
     }
 }

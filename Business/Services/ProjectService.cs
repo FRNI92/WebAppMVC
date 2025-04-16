@@ -20,11 +20,12 @@ namespace Business.Services;
 
 public class ProjectService
 {
-
+    private readonly ProjectMemberRepository _projectMemberRepository;
     private readonly ProjectRepository _projectRepository;
 
-    public ProjectService(ProjectRepository projectrepository)
+    public ProjectService(ProjectRepository projectrepository, ProjectMemberRepository projectMemberRepository)
     {
+        _projectMemberRepository = projectMemberRepository;
         _projectRepository = projectrepository;
     }
 
@@ -42,12 +43,22 @@ public class ProjectService
             StatusId = 1, // On hold
 
             ClientId = form.ClientId, // Tillfälligt (byt när du kopplar clientval)
-            MemberId = form.MemberId
         };
 
         var isSuccess = await _projectRepository.AddAsync(entity);
         if (isSuccess.Succeeded)
             await _projectRepository.SaveAsync();
+        if (form.MemberId.HasValue)
+        {
+            var projectMember = new ProjectMemberEntity
+            {
+                ProjectId = entity.Id,
+                MemberId = form.MemberId.Value
+            };
+
+            await _projectMemberRepository.AddAsync(projectMember);
+            await _projectMemberRepository.SaveAsync();
+        }
     }
 
 
@@ -75,7 +86,7 @@ public class ProjectService
         {
         project => project.Client,
         project => project.Status,
-        project => project.Members
+        project => project.ProjectMembers
         };
 
         var result = await _projectRepository.GetAllAsync(includes: includes);
@@ -107,8 +118,7 @@ public class ProjectService
             ClientName = e.Client?.ClientName,
             StatusId = e.StatusId,
             StatusName = e.Status?.StatusName,
-            MemberId = e.MemberId,
-            MemberNames = e.Members.Select(m => $"{m.FirstName} {m.LastName}").ToList()
+            MemberNames = e.ProjectMembers.Select(pm => $"{pm.Member.FirstName} {pm.Member.LastName}").ToList()
         });
     }
 
