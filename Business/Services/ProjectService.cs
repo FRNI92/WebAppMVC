@@ -16,6 +16,7 @@ using Database.Repos;
 using System.Linq.Expressions;
 using System.Diagnostics;
 using System.Collections.Immutable;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 namespace Business.Services;
 
 public class ProjectService
@@ -36,11 +37,11 @@ public class ProjectService
             Image = form.Image,
             ProjectName = form.ProjectName,
             Description = form.Description,
-            StartDate = form.StartDate ?? DateTime.Now,
-            EndDate = form.EndDate ?? DateTime.Now.AddDays(7),
+            StartDate = form.StartDate,
+            EndDate = form.EndDate,
             Created = DateTime.Now,
-            Budget = form.Budget ?? 0,
-            StatusId = 1, // On hold
+            Budget = form.Budget,
+            StatusId = 1, // On hold. user cant set status. only admin in future
 
             ClientId = form.ClientId, // Tillfälligt (byt när du kopplar clientval)
         };
@@ -48,17 +49,19 @@ public class ProjectService
         var isSuccess = await _projectRepository.AddAsync(entity);
         if (isSuccess.Succeeded)
             await _projectRepository.SaveAsync();
-        if (form.MemberId.HasValue)
-        {
-            var projectMember = new ProjectMemberEntity
-            {
-                ProjectId = entity.Id,
-                MemberId = form.MemberId.Value
-            };
 
-            await _projectMemberRepository.AddAsync(projectMember);
+        if (form.MemberIds != null && form.MemberIds.Any())
+            foreach (var memberId in form.MemberIds)
+            {
+                var projectMember = new ProjectMemberEntity
+                {
+                    ProjectId = entity.Id,
+                    MemberId = memberId
+                };
+
+                await _projectMemberRepository.AddAsync(projectMember);
+            }
             await _projectMemberRepository.SaveAsync();
-        }
     }
 
 
@@ -82,19 +85,9 @@ public class ProjectService
 
     public async Task<IEnumerable<ProjectFormDto>> GetAllWithRelationsAsync()
     {
-        var includes = new Expression<Func<ProjectEntity, object>>[]
-        {
-        project => project.Client,
-        project => project.Status,
-        project => project.ProjectMembers
-        };
+        var entities = await _projectRepository.GetAllWithFullRelationsAsync();
 
-        var result = await _projectRepository.GetAllAsync(includes: includes);
-
-        if (!result.Succeeded || result.Result == null)
-            return Enumerable.Empty<ProjectFormDto>();
-
-        return result.Result.Select(e => new ProjectFormDto
+        return entities.Select(e => new ProjectFormDto
         {
             Id = e.Id,
             Image = e.Image,
@@ -103,24 +96,57 @@ public class ProjectService
             StartDate = e.StartDate,
             EndDate = e.EndDate,
             Created = e.Created,
-
-            TimeLeftText = (e.EndDate.Date - DateTime.Today).Days switch
+            TimeLeftText = (e.EndDate.Date - DateTime.Today).Days 
+            
+            switch
             {
                 < 0 => "Past deadline",
                 0 => "Ends today",
                 < 7 => $"{(e.EndDate.Date - DateTime.Today).Days} days left",
                 _ => $"{(e.EndDate.Date - DateTime.Today).Days / 7} weeks left"
             },
-
-
             Budget = e.Budget,
             ClientId = e.ClientId,
             ClientName = e.Client?.ClientName,
             StatusId = e.StatusId,
             StatusName = e.Status?.StatusName,
+            MemberIds = e.ProjectMembers.Select(pm => pm.MemberId).ToList(),
             MemberNames = e.ProjectMembers.Select(pm => $"{pm.Member.FirstName} {pm.Member.LastName}").ToList()
         });
     }
+
+
+
+
+
+    public async Task<ReposResult<ProjectFormDto>> UpdateProjectAsync(ProjectFormDto dto)
+    {
+        var entity = dto.MapTo<ProjectEntity>();
+
+        var updatedEntity = await _projectRepository.UpdateAsync(p => p.Id == entity.Id, entity);
+
+        if (updatedEntity != null)
+        {
+            var result = await _projectRepository.SaveAsync();
+            var updatedDto = updatedEntity.MapTo<ProjectFormDto>();
+
+            return new ReposResult<ProjectFormDto>
+            {
+                Succeeded = true,
+                StatusCode = 200,
+                Result = updatedDto
+            };
+        }
+
+        return new ReposResult<ProjectFormDto>
+        {
+            Succeeded = false,
+            StatusCode = 404,
+            Error = "Could not update project"
+        };
+    }
+
+
 
     public async Task<ReposResult<bool>> DeleteProjectAsync(int id)
     {

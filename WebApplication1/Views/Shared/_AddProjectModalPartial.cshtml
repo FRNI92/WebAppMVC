@@ -13,6 +13,7 @@
                   asp-action="Add"
                   method="post"
                   enctype="multipart/form-data">
+                <input asp-for="FormModel.Id" type="hidden" />
                 <div class="form-group">
                     <div id="upload-trigger"
                          class="image-preview-container project-image">
@@ -74,7 +75,7 @@
                                 <li class="form-select-option" data-value="@members.Id"> @($"{members.FirstName} {members.LastName} {members.JobTitle}")</li>
                             }
                         </ul>
-                        <input type="hidden" name="FormModel.MemberId" asp-for="FormModel.MemberId" />
+                        <input type="hidden" name="FormModel.MemberIds" id="memberId-input" />
                     </div>
                 </div>
 

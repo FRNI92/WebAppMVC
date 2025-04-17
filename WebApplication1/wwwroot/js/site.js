@@ -117,6 +117,24 @@ document.querySelectorAll('.delete-project').forEach(button => {
     // project card. dropdown edit button
     document.querySelectorAll('.open-edit-modal').forEach(button => {
         button.addEventListener('click', e => {
+
+            const image = button.dataset.image;
+            if (image) {
+                // sätt hidden-fältet
+                document.querySelector('#add-edit-project-modal input[name="FormModel.Image"]').value = image;
+
+                // uppdatera preview
+                const preview = document.getElementById('image-preview-edit');
+                const previewContainer = document.getElementById('image-preview-icon-container-edit');
+                const icon = document.getElementById('image-preview-icon-edit');
+
+                preview.src = `/uploads/${image}`;
+                preview.classList.remove('hide');
+                previewContainer.classList.add('selected');
+                icon.classList.replace('fa-camera', 'fa-pen-to-square');
+            }
+
+
             // Grunder
             const name = button.dataset.name;
             const clientId = button.dataset.client;
@@ -125,29 +143,45 @@ document.querySelectorAll('.delete-project').forEach(button => {
             const budget = button.dataset.budget;
             const start = button.dataset.start;
             const end = button.dataset.end;
+            const members = button.dataset.members?.split(',') || [];
+
+
+            // ID
+            const id = button.dataset.id;
+            const idInput = document.querySelector('#add-edit-project-modal input[name="FormModel.Id"]');
+            if (idInput) idInput.value = id;
 
             // Project Name
-            document.querySelector('#add-edit-project-modal input[name="projectName"]').value = name;
+            document.querySelector('#add-edit-project-modal input[name="FormModel.ProjectName"]').value = name;
 
             // Client
-            const clientSelect = document.querySelector('#add-edit-project-modal input[name="clientId"]');
+            const clientSelect = document.querySelector('#add-edit-project-modal input[name="FormModel.ClientId"]');
             const clientWrapper = clientSelect.closest('.form-select');
             const clientOption = clientWrapper.querySelector(`.form-select-option[data-value="${clientId}"]`);
             clientSelect.value = clientId;
             clientWrapper.querySelector('.form-select-text').textContent = clientOption?.textContent ?? 'Choose a client';
 
             // Status
-            const statusSelect = document.querySelector('#add-edit-project-modal input[name="statusId"]');
+            const statusSelect = document.querySelector('#add-edit-project-modal input[name="FormModel.StatusId"]');
             const statusWrapper = statusSelect.closest('.form-select');
             const statusOption = statusWrapper.querySelector(`.form-select-option[data-value="${statusId}"]`);
             statusSelect.value = statusId;
             statusWrapper.querySelector('.form-select-text').textContent = statusOption?.textContent ?? 'Choose a status';
 
-            // Resten
-            document.querySelector('#add-edit-project-modal textarea[name="description"]').value = description;
-            document.querySelector('#add-edit-project-modal input[name="budget"]').value = budget;
-            document.querySelector('#add-edit-project-modal input[name="startDate"]').value = start;
-            document.querySelector('#add-edit-project-modal input[name="endDate"]').value = end;
+            // Member (för enkelhet just nu enstaka)
+            const memberSelect = document.querySelector('#add-edit-project-modal input[name="FormModel.MemberIds"]');
+            const memberWrapper = memberSelect.closest('.form-select');
+            if (members.length > 0) {
+                memberSelect.value = members[0];
+                const firstMember = memberWrapper.querySelector(`.form-select-option[data-value="${members[0]}"]`);
+                memberWrapper.querySelector('.form-select-text').textContent = firstMember?.textContent ?? 'Choose a member';
+            }
+
+            // Övriga fält
+            document.querySelector('#add-edit-project-modal textarea[name="FormModel.Description"]').value = description;
+            document.querySelector('#add-edit-project-modal input[name="FormModel.Budget"]').value = budget;
+            document.querySelector('#add-edit-project-modal input[name="FormModel.StartDate"]').value = start;
+            document.querySelector('#add-edit-project-modal input[name="FormModel.EndDate"]').value = end;
         });
     });
 

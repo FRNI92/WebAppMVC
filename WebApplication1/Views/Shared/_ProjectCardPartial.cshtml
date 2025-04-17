@@ -26,13 +26,16 @@
                            data-target="#add-edit-project-modal"
                            id="edit-project-open"
                            class="dropdown-action open-edit-modal"
+                           data-id="@Model.Id"
+                           data-image="@Model.Image"
                            data-name="@Model.ProjectName"
                            data-client="@Model.ClientId"
                            data-status="@Model.StatusId"
                            data-description="@Model.Description"
-                           data-budget="@Model.Budget"
                            data-start="@Model.StartDate.ToString("yyyy-MM-dd")"
-                           data-end="@Model.EndDate.ToString("yyyy-MM-dd")">
+                           data-end="@Model.EndDate.ToString("yyyy-MM-dd")"
+                           data-budget="@Model.Budget"
+                           data-members="@string.Join(",", Model.MemberIds)">
                             <i class="fa-duotone fa-solid fa-pen-to-square"></i>
                             <span>Edit</span>
                         </a>

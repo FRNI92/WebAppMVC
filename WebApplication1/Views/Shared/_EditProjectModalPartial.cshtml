@@ -1,4 +1,7 @@
-﻿<section id="add-edit-project-modal" class="modal">
+﻿@model ProjectViewModels
+
+
+<section id="add-edit-project-modal" class="modal">
     <div class="card">
         <div class="card-header">
             <h3>Edith projects</h3>
@@ -7,10 +10,13 @@
                     class="btn-close"></button>
         </div>
         <div class="card-body">
-            <form asp-controller=""
-                  asp-action=""
+            <form asp-controller="Projects"
+                  asp-action="Update"
                   method="post"
                   enctype="multipart/form-data">
+
+                <input asp-for="FormModel.Id" type="hidden" />
+
                 <div class="form-group">
                     <div id="upload-trigger-edit"
                          class="image-preview-container project-image">
@@ -21,11 +27,12 @@
                                class="fa-duotone fa-solid fa-camera"></i>
                         </div>
                     </div>
-                    <input type="file" id="image-upload-edit" accept="image/*" />
+                    <input asp-for="FormModel.ImageFile" type="file" id="image-upload-edit" accept="image/*" />
+                    <input type="hidden" asp-for="FormModel.Image" />
                 </div>
                 <div class="form-group">
                     <label class="form-label">Project Name</label>
-                    <input class="form-input" type="text" name="projectName" />
+                    <input class="form-input" asp-for="FormModel.ProjectName" />
                 </div>
 
 
@@ -41,7 +48,7 @@
                                 <li class="form-select-option" data-value="@status.Id">@status.StatusName</li>
                             }
                         </ul>
-                        <input type="hidden" name="statusId" />
+                        <input type="hidden" asp-for="FormModel.StatusId" />
                     </div>
                 </div>
 
@@ -58,23 +65,23 @@
                                 <li class="form-select-option" data-value="@client.Id">@client.ClientName</li>
                             }
                         </ul>
-                        <input type="hidden" name="clientId" />
+                        <input type="hidden" asp-for="FormModel.ClientId" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Description</label>
-                    <textarea class="form-input" name="description"></textarea>
+                    <textarea class="form-input" asp-for="FormModel.Description"></textarea>
                 </div>
 
                 <div class="form-horizontal-group">
                     <div class="form-group">
                         <label class="form-label">Start Date</label>
-                        <input class="form-input" type="date" />
+                        <input class="form-input" type="date" asp-for="FormModel.StartDate"/>
                     </div>
                     <div class="form-group">
                         <label class="form-label">End Date</label>
-                        <input class="form-input" type="date" />
+                        <input class="form-input" type="date" asp-for="FormModel.EndDate" />
                     </div>
                 </div>
 
@@ -85,14 +92,14 @@
                             <span class="form-select-text"></span>
                         </button>
                         <ul class="form-select-options">
-                            <li class="form-select-option" data-value="1">
-                                Fredrik Nilsson
-                            </li>
-                            <li class="form-select-option" data-value="2">
-                                Elin Andersson
-                            </li>
+                            @foreach (var Member in Model.Members)
+                            {
+                                <li class="form-select-option" data-value="@Member.Id">
+                                    @($"{Member.FirstName} {Member.LastName} {Member.JobTitle}")
+                                </li>
+                            }
                         </ul>
-                        <input type="hidden" name="member-select-value" />
+                        <input type="hidden" asp-for="FormModel.MemberIds" />
                     </div>
                 </div>
 
@@ -100,7 +107,7 @@
                     <label class="form-label">Budget</label>
                     <div class="form-input-extended">
                         <i class="fa-duotone fa-solid fa-dollar-sign"></i>
-                        <input class="form-input" type="text" />
+                        <input class="form-input" type="text"  asp-for="FormModel.Budget"/>
                     </div>
                 </div>
 

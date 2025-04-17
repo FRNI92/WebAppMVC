@@ -21,11 +21,16 @@ document.querySelectorAll('#add-project-modal .form-select').forEach(select => {
             .forEach(el => el !== select && el.classList.remove('open'));
         select.classList.toggle('open');
     });
-
     options.forEach(option => {
         option.addEventListener('click', () => {
             setValue(option.dataset.value, option.textContent);
             select.classList.remove('open');
+
+            // Extra kod för MemberId
+            const inputName = hiddenInput.getAttribute('name');
+            if (inputName === "FormModel.MemberIds") {
+                hiddenInput.value = option.dataset.value;
+            }
         });
     });
 

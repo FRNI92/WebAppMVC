@@ -83,33 +83,7 @@ public abstract class BaseRepository<TEntity>(AppDbContext context) where TEntit
 
     }
 
-    public virtual async Task<ReposResult<int>> SaveAsync()
-    {
-        try
-        {
-            //savechanges returns a value of how many rows were saved. so it can succed but make no changes if no rows were affected
-            Console.WriteLine("Saving Something");
-            var result = await _context.SaveChangesAsync();
-
-            return new ReposResult<int>
-            {
-                Succeeded = true,
-                StatusCode = 200,
-                Result = result
-            };
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error In SaveAsync: {ex.Message}");
-            return new ReposResult<int>
-            {
-                Succeeded = false,
-                StatusCode = 500,
-                Error = $"Error in SaveAsync: {ex.Message}",
-                Result = 0
-            };
-        }
-    }
+  
     //getallasync knows what type from <IEnumerable<TEntity>>
     public virtual async Task<ReposResult<IEnumerable<TEntity>>> GetAllAsync
         (
@@ -199,22 +173,56 @@ public abstract class BaseRepository<TEntity>(AppDbContext context) where TEntit
         }
     }
 
-    public virtual async Task<TEntity> UpdateAsync(Expression<Func<TEntity, bool>> expression, TEntity updatedEntity)
+    public virtual async Task<ReposResult<int>> SaveAsync()
     {
+        var result = new ReposResult<int>();
+        try
+        {
+            Console.WriteLine("Saving Something");
+            result.Result = await _context.SaveChangesAsync();
+            result.Succeeded = true;
+            result.StatusCode = 200;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error in SaveAsync: {ex.Message} | Inner: {ex.InnerException?.Message}");
+            result.Succeeded = false;
+            result.StatusCode = 500;
+            result.Error = $"Error in SaveAsync: {ex.Message}";
+            result.Result = 0;
+        }
+
+        return result;
+    }
+
+    
+    public virtual async Task<ReposResult<TEntity>> UpdateAsync(Expression<Func<TEntity, bool>> expression, TEntity updatedEntity)
+    {
+        var result = new ReposResult<TEntity>();
         try
         {
             var existingEntity = await _dbSet.FirstOrDefaultAsync(expression);
             if (existingEntity != null && updatedEntity != null)
             {
                 _context.Entry(existingEntity).CurrentValues.SetValues(updatedEntity);
-                return existingEntity;
+                
+                result.Succeeded = true;
+                result.StatusCode = 200;
+                result.Result = existingEntity;
+                return result;
             }
-            return null!;
+
+            result.Succeeded = false;
+            result.StatusCode = 404;
+            result.Error = "Entity not found";
+            return result;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error in UpdateAsync:{ex.Message}");
-            return null!;
+            result.Succeeded = false;
+            result.StatusCode = 500;
+            result.Error = $"Error in UpdateAsync: {ex.Message}";
+            return result;
         }
     }
 

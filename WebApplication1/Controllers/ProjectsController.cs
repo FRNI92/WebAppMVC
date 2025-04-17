@@ -78,6 +78,32 @@ namespace WebApplication1.Controllers
         }
 
 
+
+        [HttpPost]
+        public async Task<IActionResult> Update(ProjectViewModels form)
+        {
+            if (form.FormModel.ImageFile != null && form.FormModel.ImageFile.Length > 0)
+            {
+                var uploadFolder = Path.Combine(_env.WebRootPath, "uploads");
+                Directory.CreateDirectory(uploadFolder);
+
+                var originalName = Path.GetFileName(form.FormModel.ImageFile.FileName);
+                var fileName = $"{Guid.NewGuid()}_{originalName}";
+                var filePath = Path.Combine(uploadFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await form.FormModel.ImageFile.CopyToAsync(stream);
+                }
+
+                form.FormModel.Image = fileName;
+            }
+
+            var dto = form.FormModel.MapTo<ProjectFormDto>();
+            var result = await _projectService.UpdateProjectAsync(dto);
+            return RedirectToAction("Projects");
+        }
+
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

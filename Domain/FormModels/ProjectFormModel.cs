@@ -8,10 +8,12 @@ namespace Domain.FormModels;
 
 public class ProjectFormModel
 {
+    public int Id { get; set; }
+
     [DataType(DataType.ImageUrl)]
     [Display(Name = "Image", Prompt = "Select a image")]
-    public string? Image { get; set; }
-    public IFormFile? ImageFile { get; set; }
+    public string Image { get; set; }
+    public IFormFile ImageFile { get; set; }
 
     //[Required(ErrorMessage = "This field is required.")]
     [DataType(DataType.Text)]
@@ -30,10 +32,10 @@ public class ProjectFormModel
     public DateTime? EndDate { get; set; }
 
     public int ClientId { get; set; }
-    public int? MemberId { get; set; }
+    public List<int> MemberIds { get; set; } = new();
     public int StatusId { get; set; }
 
-    public decimal? Budget { get; set; }
+    public decimal Budget { get; set; }
 
     public IEnumerable<ClientDto> Clients { get; set; } = new List<ClientDto>();
 }
