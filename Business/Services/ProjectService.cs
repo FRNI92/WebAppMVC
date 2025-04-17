@@ -123,6 +123,13 @@ public class ProjectService
     {
         var entity = dto.MapTo<ProjectEntity>();
 
+ 
+        entity.ProjectMembers = dto.MemberIds.Select(id => new ProjectMemberEntity
+        {
+            ProjectId = entity.Id,
+            MemberId = id
+        }).ToList();
+
         var updatedEntity = await _projectRepository.UpdateAsync(p => p.Id == entity.Id, entity);
 
         if (updatedEntity != null)
