@@ -12,6 +12,8 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
 {
 
     private readonly UserService _userService = userService;
+
+          //use the entitity directly. has to do with identity
     private readonly SignInManager<AppUserEntity> _signInManager = signInManager;
 
     public IActionResult SignIn()
@@ -66,6 +68,15 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
         ModelState.AddModelError("NotCreated", "User could not be created.");
         return View(model);
     }
+
+
+    public new async Task<IActionResult> SignOut()
+    {
+
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("SignIn", "Account");
+    }
+    
 }
 
 

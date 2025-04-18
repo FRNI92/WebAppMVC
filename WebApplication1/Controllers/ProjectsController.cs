@@ -44,6 +44,8 @@ namespace WebApplication1.Controllers
             return View(model);
         }
 
+
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Add(ProjectViewModels model)
         {
@@ -78,8 +80,8 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Projects");
         }
 
-
-        [Authorize(Roles = "Admin")]
+        //authorize want you to be logged in. roles admin want you to be admin to access
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Update(ProjectViewModels form)
         {

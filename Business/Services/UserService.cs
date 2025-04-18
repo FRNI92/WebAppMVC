@@ -23,8 +23,6 @@ public class UserService(UserManager<AppUserEntity> userManager)
         {
             UserName = dto.Email,
             Email = dto.Email,
-            FirstName = dto.FirstName,
-            LastName = dto.LastName
         };
 
         var result = await _userManager.CreateAsync(appUser, dto.PassMord);

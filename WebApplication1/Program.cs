@@ -62,6 +62,42 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+//rolemanagement with seperate identity database
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUserEntity>>();
+
+    var adminEmail = "admin@admin.com";
+    var adminPassword = "Admin123!";
+
+    string[] roles = new[] { "Administrator", "User" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+            await roleManager.CreateAsync(new IdentityRole(role));
+    }
+
+    var existingUser = await userManager.FindByEmailAsync(adminEmail);
+    if (existingUser == null)
+    {
+        var adminUser = new AppUserEntity
+        {
+            UserName = adminEmail,
+            Email = adminEmail
+        };
+
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Administrator");
+        }
+    }
+}
+
+
+
 app.MapStaticAssets();
 
 app.MapControllerRoute(
