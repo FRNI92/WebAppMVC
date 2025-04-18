@@ -2,6 +2,7 @@
 using Domain.Dtos;
 using Domain.Extensions;
 using Domain.FormModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.Design.Serialization;
 using WebApplication1.ViewModels;
@@ -78,7 +79,7 @@ namespace WebApplication1.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Update(ProjectViewModels form)
         {
