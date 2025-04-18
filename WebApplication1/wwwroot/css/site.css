@@ -1155,7 +1155,7 @@ textarea {
     display: none;
 }
 
-/* shapes */
+/*  */
 .circle {
     height: 50px;
     width: 50px;
@@ -1529,6 +1529,20 @@ input:checked::before {
     transform: scale(1.2);
     transition: transform 0.2s ease;
 }
+
+
+#add-member-modal .card {
+    width: 550px;
+}
+
+#add-member-modal .btn {
+    margin-top: 2rem;
+}
+#add-member-modal input[type="date"].form-input::before {
+    display: none !important;
+    content: none;
+}
+
 
 #add-edit-project-modal {
     /* Eventuella stilar */

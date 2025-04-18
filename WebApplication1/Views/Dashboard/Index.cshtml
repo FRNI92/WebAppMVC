@@ -1,0 +1,50 @@
+﻿@using WebApplication1.ViewModels
+@* it will go to layout by default if I remove layout = "layout" *@
+@{
+    Layout = "_Layout";
+}
+@model ProjectViewModels
+<div class="backoffice-wrapper">
+    <aside id="sidebar">
+        <section class="logotype">
+            <a href="#">
+                <img src="~/Images/AlphaLogo.svg" alt="alpha" />
+                <span>alpha</span>
+            </a>
+        </section>
+        <partial name="_NavLinkPartial" />
+    </aside>
+    <main>
+        <partial name="_HeaderPartial" />
+        <div id="projects" class="page">
+            <div class="page-header">
+                <h1>Projects</h1>
+
+
+                @if (User.IsInRole("Administrator"))
+                {
+                <button type="button"
+                        class="btn"
+                        data-type="modal"
+                        data-target="#add-project-modal">
+                    <i class="fa-duotone fa-solid fa-plus"></i>
+                    <span>Add Project</span>
+                </button>
+                }
+                    
+            </div>
+
+            <section class="project-list">
+                @foreach (var project in Model.ProjectList) 
+                 { 
+                     @await Html.PartialAsync("_ProjectCardPartial", project) 
+                 }
+            </section>
+
+        </div>
+    </main>
+</div>
+
+ @await Html.PartialAsync("_AddProjectModalPartial", Model)  
+ @await Html.PartialAsync("_EditProjectModalPartial") 
+

@@ -1,0 +1,119 @@
+﻿@model MemberViewModel
+
+<section id="add-member-modal" class="modal">
+    <div class="card">
+        <div class="card-header">
+            <h3>Add Member</h3>
+            <button data-type="close"
+                    data-target="#add-member-modal"
+                    class="btn-close"></button>
+        </div>
+        <div class="card-body">
+            <form asp-controller="Members"
+                  asp-action="Add"
+                  method="post"
+                  enctype="multipart/form-data">
+                <input asp-for="FormModel.Id" type="hidden" />
+                <div class="form-group">
+                    <div id="upload-trigger"
+                         class="image-preview-container user-image">
+                        <img id="image-preview" src="#" class="hide" />
+                        <div id="image-preview-icon-container"
+                             class="circle circle-grey">
+                            <i id="image-preview-icon"
+                               class="fa-duotone fa-solid fa-camera"></i>
+                        </div>
+                    </div>
+                    <input asp-for="FormModel.ImageFile" type="file" id="image-upload" accept="image/*" />
+                </div>
+                <div class="form-horizontal-group">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input asp-for="FormModel.FirstName" class="form-input" />
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input asp-for="FormModel.LastName" class="form-input" />
+                    </div>
+                </div>
+
+                <div class="form-horizontal-group">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input asp-for="FormModel.Email" class="form-input" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input asp-for="FormModel.Phone" class="form-input" />
+                    </div>
+                </div>
+
+                <div class="form-horizontal-group">
+                    <div class="form-group">
+                        <label>Job Title</label>
+                        <input asp-for="FormModel.JobTitle" class="form-input" />
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input asp-for="FormModel.Address.City" class="form-input" />
+                    </div>
+                </div>
+
+
+                <div class="form-horizontal-group">
+                    <div class="form-group">
+                        <label>Street Name</label>
+                        <input asp-for="FormModel.Address.StreetName" class="form-input" />
+                    </div>
+                    <div class="form-group">
+                        <label>Street Number</label>
+                        <input asp-for="FormModel.Address.StreetNumber" class="form-input" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Postal Code</label>
+                    <input asp-for="FormModel.Address.PostalCode" class="form-input" />
+                </div>
+
+                <div class="form-group">
+                <input asp-for="FormModel.DateOfBirth" type="date" class="form-input" />
+                </div>
+
+                @* need js to make it work good, might add later *@
+                @* <div class="form-group"> *@
+                @*     <label class="form-label">Date of Birth</label> *@
+                @*     <div class="form-horizontal-group"> *@
+                @*         <select class="form-input" name="Day"> *@
+                @*             <option value="">Day</option> *@
+                @*             @for (int d = 1; d <= 31; d++) *@
+                @*             { *@
+                @*                 <option value="@d">@d</option> *@
+                @*             } *@
+                @*         </select> *@
+
+                @*         <select class="form-input" name="Month"> *@
+                @*             <option value="">Month</option> *@
+                @*             @for (int m = 1; m <= 12; m++) *@
+                @*             { *@
+                @*                 <option value="@m">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m)</option> *@
+                @*             } *@
+                @*         </select> *@
+
+                @*         <select class="form-input" name="Year"> *@
+                @*             <option value="">Year</option> *@
+                @*             @for (int y = DateTime.Now.Year; y >= 1900; y--) *@
+                @*             { *@
+                @*                 <option value="@y">@y</option> *@
+                @*             } *@
+                @*         </select> *@
+                @*     </div> *@
+                @* </div> *@
+
+
+
+                <button type="submit" class="btn">Create</button>
+            </form>
+        </div>
+    </div>
+</section>
+<script src="@Url.Content("~/js/AddMemberModal.js")" asp-append-version="true"></script>
