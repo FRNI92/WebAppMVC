@@ -5,6 +5,8 @@ namespace WebApplication1.ViewModels;
 public class MemberViewModel
 {
 
-    public MemberFormModel FormModel { get; set; } = new();
-
+    public MemberFormModel FormModel { get; set; } = new MemberFormModel
+    {
+        Address = new AddressFormModel()
+    };
 }

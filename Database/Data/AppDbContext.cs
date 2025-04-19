@@ -33,24 +33,24 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             new MemberEntity
             {
                 Id = 1,
+                Image = "/images/fredrik.png",
                 FirstName = "Fredrik",
                 LastName = "Nilsson",
                 JobTitle = "Developer",
                 Email = "fredrik@domain.com",
                 Phone = "070-123 45 67",
-                AvatarUrl = "/images/fredrik.png",
                 DateOfBirth = new DateTime(1990, 1, 1),
                 AddressId = 1
             },
             new MemberEntity
             {
                 Id = 2,
+                Image = "/images/elin.png",
                 FirstName = "Elin",
                 LastName = "Andersson",
                 JobTitle = "Designer",
                 Email = "elin@domain.com",
                 Phone = "070-987 65 43",
-                AvatarUrl = "/images/elin.png",
                 DateOfBirth = new DateTime(1992, 5, 10),
                 AddressId = 2
             }

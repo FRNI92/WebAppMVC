@@ -4,20 +4,32 @@ using Database.ReposResult;
 using Domain.Dtos;
 using Domain.Extensions;
 using Domain.FormModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Services;
 
-public class MemberService
+public class MemberService(MemberRepository memberRepository, AddressRepository addressRepository)
 {
-    private readonly MemberRepository _memberRepository;
+    private readonly MemberRepository _memberRepository = memberRepository;
+    private readonly AddressRepository _addressRepository = addressRepository;
 
-    public MemberService(MemberRepository memberRepository)
+
+    public async Task<ReposResult<bool>> CreateMemberAsync(MemberDto dto, AddressDto addressDto)
     {
-        _memberRepository = memberRepository;
-    }
-    public async Task<ReposResult<bool>> CreateMemberAsync(MemberFormModel form)
-    {
-        var entity = form.MapTo<MemberEntity>();
+        //addresses
+        var addressEntity = new AddressEntity
+        {
+
+            City = addressDto.City,
+            StreetName = addressDto.StreetName,
+            StreetNumber = addressDto.StreetNumber,
+            PostalCode = addressDto.PostalCode
+        };
+        await _addressRepository.AddAsync(addressEntity);
+        await _addressRepository.SaveAsync();
+        //addresses
+        dto.AddressId = addressEntity.Id;
+        var entity = dto.MapTo<MemberEntity>();
 
         var addResult = await _memberRepository.AddAsync(entity);
         if (!addResult.Succeeded)

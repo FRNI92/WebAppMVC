@@ -16,6 +16,7 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
           //use the entitity directly. has to do with identity
     private readonly SignInManager<AppUserEntity> _signInManager = signInManager;
 
+
     public IActionResult SignIn()
     {
 
@@ -35,7 +36,7 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
             model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
 
         if (result.Succeeded)
-            return RedirectToAction("Projects", "Projects");
+            return RedirectToAction("Index", "Dashboard");
         ViewBag.LoginError = "Invalid login attempt.";
         return View(model);
     }

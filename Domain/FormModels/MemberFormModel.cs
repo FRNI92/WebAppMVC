@@ -11,6 +11,8 @@ namespace Domain.FormModels
     {
         public int Id { get; set; }
         public string? Image { get; set; }
+
+        //not need in dto
         public IFormFile ImageFile { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
@@ -21,6 +23,9 @@ namespace Domain.FormModels
         
         
         public int AddressId { get; set; }
+
+
+        //not need in dto
         public AddressFormModel Address { get; set; }
 
 

@@ -1,4 +1,5 @@
 ﻿using Business.Services;
+using Domain.Dtos;
 using Domain.FormModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,8 +49,26 @@ namespace WebApplication1.Controllers
 
                 model.FormModel.Image = fileName;
             }
+            var addressDto = new AddressDto
+            {
+                StreetName = model.FormModel.Address.StreetName,
+                StreetNumber = model.FormModel.Address.StreetNumber,
+                PostalCode = model.FormModel.Address.PostalCode,
+                City = model.FormModel.Address.City
+            };
 
-            await memberService.CreateMemberAsync(model.FormModel);
+            var memberDto = new MemberDto
+            {
+                Image = model.FormModel.Image,
+                FirstName = model.FormModel.FirstName,
+                LastName = model.FormModel.LastName,
+                Email = model.FormModel.Email,
+                Phone = model.FormModel.Phone,
+                JobTitle = model.FormModel.JobTitle,
+                DateOfBirth = model.FormModel.DateOfBirth,
+                AddressId = 0 // sätts senare i servicen efter addressen sparas
+            };
+            await memberService.CreateMemberAsync(memberDto, addressDto);
             return RedirectToAction("Members", "Members");
         }
     }

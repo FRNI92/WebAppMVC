@@ -16,10 +16,10 @@ namespace WebApplication1.Controllers
         private readonly StatusService _statusService = statusService;
 
         private readonly MemberService _memberService = memberService;
-
-
         private readonly ProjectService _projectService = projectService;
         private readonly ClientService _clientService = clientService;
+
+
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Add(ProjectViewModels model)

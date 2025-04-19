@@ -39,6 +39,7 @@ builder.Services.ConfigureApplicationCookie(x =>
     x.SlidingExpiration = true;
 });
 
+
 //register services
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProjectService>();
@@ -51,6 +52,7 @@ builder.Services.AddScoped<ClientRepository>();
 builder.Services.AddScoped<MemberRepository>();
 builder.Services.AddScoped<ProjectMemberRepository>();
 builder.Services.AddScoped<StatusRepository>();
+builder.Services.AddScoped<AddressRepository>();
 
 var app = builder.Build();
 
@@ -95,8 +97,6 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
-
-
 
 app.MapStaticAssets();
 
