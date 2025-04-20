@@ -1,0 +1,58 @@
+﻿@model Domain.Dtos.MemberDto
+
+<div class="member-card">
+    <div class="member-card-header">
+        <button id="project-dropdown-menu"
+                id="member-dropdown-menu-@Model.Id"
+                type="button"
+                data-type="dropdown"
+                data-target="#edith-dropdown-member-@Model.Id"
+                class="btn-actions member-edith-trigger">
+            <i class="fa-duotone fa-solid fa-ellipsis"></i>
+        </button>
+        <div id="edith-dropdown-member-@Model.Id" class="edith-dropdown">
+            <div class="dropdown-body">
+                
+                @if (true)
+                {
+                    <nav class="dropdown-actions">
+                        <a data-type="modal"
+                           data-target="#add-edit-member-modal"
+                           class="dropdown-action open-edit-member-modal"
+                           data-id="@Model.Id"
+                           data-image="@Model.Image"
+                           data-firstname="@Model.FirstName"
+                           data-lastname="@Model.LastName"
+                           data-role="@Model.JobTitle"
+                           data-email="@Model.Email"
+                           data-phone="@Model.Phone">
+                            <i class="fa-duotone fa-solid fa-pen-to-square"></i>
+                            <span>Edit</span>
+                        </a>
+                        <div class="divider"></div>
+                        <form method="post" asp-action="Delete" asp-controller="Members">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="dropdown-button dropdown-button-danger">
+                                <i class="fa-duotone fa-solid fa-trash-can"></i>
+                                <span>Delete Member</span>
+                            </button>
+                        </form>
+                    </nav>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="member-card-body">
+        <img src="@Url.Content($"~/uploads/{Model.Image}")" class="member-img">
+        <div class="member-name">@Model.FirstName @Model.LastName</div>
+        <div class="member-role">@Model.JobTitle</div>
+        <div class="member-email">@Model.Email</div>
+        <div class="member-phone">@Model.Phone</div>
+    </div>
+    <div class="member-footer">
+        <div class="member-message">Message</div>
+    </div>
+
+</div>
+

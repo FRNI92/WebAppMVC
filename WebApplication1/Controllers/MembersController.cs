@@ -9,15 +9,17 @@ namespace WebApplication1.Controllers
 {
     public class MembersController(MemberService memberService, IWebHostEnvironment env) : Controller
     {
-        public IActionResult Members()
+        public async Task <IActionResult> Members()
         {
+
+            var members = await memberService.GetAllMembersAsync();
 
             var model = new MemberViewModel
             {
-
                 FormModel = new MemberFormModel(),
-            
+                MemberList = members.ToList()
             };
+
             return View(model);
         }
 
@@ -71,40 +73,19 @@ namespace WebApplication1.Controllers
             await memberService.CreateMemberAsync(memberDto, addressDto);
             return RedirectToAction("Members", "Members");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await memberService.DeleteMemberAsync(id);
+
+            if (!result.Succeeded)
+            {
+                TempData["Error"] = result.Error;
+                return RedirectToAction("Members");
+            }
+
+            return RedirectToAction("Members");
+        }
     }
 }
-
-//    [Authorize(Roles = "Administrator")]
-//    [HttpPost]
-//    public async Task<IActionResult> Add(ProjectViewModels model)
-//    {
-//        if (!ModelState.IsValid)
-//        {
-//            return BadRequest(new
-//            {
-//                errors = ModelState.ToDictionary(
-//                    x => x.Key,
-//                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-//                )
-//            });
-//        }
-//        if (model.FormModel.ImageFile != null && model.FormModel.ImageFile.Length > 0)
-//        {
-//            var uploadFolder = Path.Combine(_env.WebRootPath, "uploads");
-//            Directory.CreateDirectory(uploadFolder); // Skapa om den inte finns
-
-//            var originalName = Path.GetFileName(model.FormModel.ImageFile.FileName);
-//            var fileName = $"{Guid.NewGuid()}_{originalName}";
-//            var filePath = Path.Combine(uploadFolder, fileName);
-
-//            using (var stream = new FileStream(filePath, FileMode.Create))
-//            {
-//                await model.FormModel.ImageFile.CopyToAsync(stream);
-//            }
-
-//            model.FormModel.Image = fileName;
-//        }
-
-//        await _projectService.CreateAsync(model.FormModel);
-//        return RedirectToAction("Index", "Dashboard");
-//    }

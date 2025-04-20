@@ -391,6 +391,9 @@ html, body {
         background-color: var(--red);
     }
 
+
+
+
 .open-edith-trigger {
     width: 100%;
     min-height: 40px;
@@ -514,6 +517,66 @@ html, body {
     margin-right: 3rem;
     cursor: pointer;
 }
+
+/*buttons*/
+.dropdown-button {
+    all: unset;
+    background-color: var(--navlink-background-color);
+    border: 1px solid var(--navlink-border-color);
+    color: var(--navlink-text-color);
+    padding: 1rem 1.5rem;
+    border-radius: var(--link-border-radius);
+    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: var(--font-standard);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    position: relative;
+}
+
+    .dropdown-button:hover {
+        background-color: var(--navlink-background-hover-color);
+        border-color: var(--navlink-border-hover-color);
+        color: var(--navlink-text-hover-color);
+    }
+
+    .dropdown-button.active {
+        background-color: var(--navlink-background-active-color);
+        border-color: var(--navlink-border-active-color);
+        color: var(--navlink-text-active-color);
+    }
+/*button Danger */
+.dropdown-button-danger {
+    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+}
+
+    .dropdown-button-danger:hover {
+        background-color: var(--red-semilight);
+        border-color: var(--red-dark);
+        color: var(--red-dark);
+    }
+
+    .dropdown-button-danger::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: var(--red);
+        transform: translateX(-50%);
+        transition: width 0.3s ease;
+    }
+
+    .dropdown-button-danger:hover::after {
+        width: 90%;
+    }
+
+
+
 
 /* toggle button for dark mode */
 .toggle-darkmode {
@@ -937,6 +1000,17 @@ a {
     display: flex !important;
 }
 
+.hidden-delete-btn {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
 /* diiders*/
 .or-divider {
     display: flex;
@@ -1630,3 +1704,124 @@ input:checked::before {
                     width: 30px;
                     object-fit: contain;
                 }
+
+
+
+
+.center-member {
+    display: grid;
+    height: 100dvh;
+    justify-content: center;
+    align-items: center;
+}
+
+.member-card {
+    height: 460px;
+    width: 300px;
+    position: relative;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--card-border-color);
+    color: var(--card-text-color);
+    padding: 1.2rem 1rem 1.2rem 1.5rem;
+    border-radius: var(--card-border-radious);
+    box-shadow: var(--box-shadow);
+}
+
+.member-card-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.member-card-body {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+}
+
+    .member-card-body .member-img {
+        height: 150px;
+        width: 150px;
+        overflow: hidden;
+        display: flex;
+        justify-self: center;
+        border-radius: var(--border-btn-radius);
+    }
+
+        .member-card-body .member-img img {
+            height: 150px;
+            width: 150px;
+            object-fit: contain;
+        }
+
+.member-name {
+    font-weight: 700;
+}
+
+.member-role {
+    font-weight: 400;
+    display:flex;
+    justify-content: center;
+    background-color: var(--white-400);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-btn-radius);
+}
+
+.member-footer{
+    margin-top: 2rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+    .member-footer .member-message {
+        display: flex;
+        font-weight: 600;
+        text-align: center;
+        background-color: var(--white-400);
+        padding: 1rem 1rem;
+        border-radius: var(--border-btn-radius);
+        width: 100%;
+        justify-content: center;
+    }
+
+.member-edith-trigger {
+    min-height: 40px;
+    background-color: var(--form-input-background-color);
+    border: 1px solid var(--form-input-border-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-select-radius);
+    font-size: 1em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+    position: relative;
+}
+
+    .member-edith-trigger .form-select-text {
+        flex: 1;
+        text-align: left;
+    }
+
+    .member-edith-trigger::before {
+        content: '\f141';
+        font-family: var(--font-fontawesome-pro);
+        color: var(--form-input-text-color);
+        position: absolute;
+        right: 1rem;
+        pointer-events: none;
+    }
+
+    .member-edith-trigger:hover {
+        background-color: var(--navlink-background-hover-color);
+        border-color: var(--navlink-border-hover-color);
+        color: var(--navlink-text-hover-color);
+    }
+
+    .member-edith-trigger.active {
+        background-color: var(--navlink-background-active-color);
+        border-color: var(--navlink-border-active-color);
+        color: var(--navlink-text-active-color);
+    }

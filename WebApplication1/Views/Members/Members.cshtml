@@ -31,12 +31,15 @@
                     </button>
                 }
             </div>
+            @foreach (var member in Model.MemberList)
+            {
+                @await Html.PartialAsync("_MemberCard", member)
+            }
 
         </div>
     </main>
 </div>
 
-  
-
-@await Html.PartialAsync("_AddMemberModal", Model)
+@await Html.PartialAsync("_AddMemberModal", Model) 
+ @await Html.PartialAsync("_EditMemberModal") 
 

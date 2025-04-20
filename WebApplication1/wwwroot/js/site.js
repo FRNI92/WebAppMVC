@@ -123,7 +123,7 @@ document.querySelectorAll('.delete-project').forEach(button => {
                 // sätt hidden-fältet
                 document.querySelector('#add-edit-project-modal input[name="FormModel.Image"]').value = image;
 
-                // uppdatera preview
+                // update preview
                 const preview = document.getElementById('image-preview-edit');
                 const previewContainer = document.getElementById('image-preview-icon-container-edit');
                 const icon = document.getElementById('image-preview-icon-edit');
@@ -135,7 +135,7 @@ document.querySelectorAll('.delete-project').forEach(button => {
             }
 
 
-            // Grunder
+            // basic
             const name = button.dataset.name;
             const clientId = button.dataset.client;
             const statusId = button.dataset.status;
@@ -146,7 +146,7 @@ document.querySelectorAll('.delete-project').forEach(button => {
             const members = button.dataset.members?.split(',') || [];
 
 
-            // ID
+            // id
             const id = button.dataset.id;
             const idInput = document.querySelector('#add-edit-project-modal input[name="FormModel.Id"]');
             if (idInput) idInput.value = id;
@@ -168,7 +168,7 @@ document.querySelectorAll('.delete-project').forEach(button => {
             statusSelect.value = statusId;
             statusWrapper.querySelector('.form-select-text').textContent = statusOption?.textContent ?? 'Choose a status';
 
-            // Member (för enkelhet just nu enstaka)
+            // Member (need rewrite when adding more than 1 member)
             const memberSelect = document.querySelector('#add-edit-project-modal input[name="FormModel.MemberIds"]');
             const memberWrapper = memberSelect.closest('.form-select');
             if (members.length > 0) {
@@ -177,7 +177,7 @@ document.querySelectorAll('.delete-project').forEach(button => {
                 memberWrapper.querySelector('.form-select-text').textContent = firstMember?.textContent ?? 'Choose a member';
             }
 
-            // Övriga fält
+            // the rest of basic fields
             document.querySelector('#add-edit-project-modal textarea[name="FormModel.Description"]').value = description;
             document.querySelector('#add-edit-project-modal input[name="FormModel.Budget"]').value = budget;
             document.querySelector('#add-edit-project-modal input[name="FormModel.StartDate"]').value = start;
@@ -187,157 +187,31 @@ document.querySelectorAll('.delete-project').forEach(button => {
 
 
 
+
+    //Members minimenu
+
+     //Member card: dropdown edit button
+    document.querySelectorAll('.open-edit-member-modal').forEach(button => {
+        button.addEventListener('click', e => {
+            const id = button.dataset.id;
+            const firstName = button.dataset.firstname;
+            const lastName = button.dataset.lastname;
+            const role = button.dataset.role;
+            const email = button.dataset.email;
+            const phone = button.dataset.phone;
+
+            const modal = document.querySelector('#add-edit-member-modal');
+            modal?.classList.add('modal-show');
+
+            modal.querySelector('input[name="FormModel.Id"]').value = id;
+            modal.querySelector('input[name="FormModel.FirstName"]').value = firstName;
+            modal.querySelector('input[name="FormModel.LastName"]').value = lastName;
+            modal.querySelector('input[name="FormModel.JobTitle"]').value = role;
+            modal.querySelector('input[name="FormModel.Phone"]').value = phone;
+            modal.querySelector('input[name="FormModel.Email"]').value = email;
+
+        });
+    });
+
 });
 
-
-
-
-
-    //open modal
-
-    //close modal
-    //const closeButtons = document.querySelectorAll('[data-close="true"]')
-    //closeButtons.forEach(button => {
-    //    button.addEventListener('click', () => {
-    //        const modal = button.closest('.modal')
-    //        if (modal) {
-    //            modal.style.display = 'none'
-
-    //            //clear formdata
-    //            modal.querySelectorAll('form').forEach(form => {
-    //                form.reset()
-
-    //                const imagePreview = form.querySelector('.image-preview')
-    //                if (imagePreview)
-    //                    imagePreview.src = ''
-    //                const imagePreviewer = form.querySelector('.image-previewer')
-    //                if (imagePreviewer)
-    //                    imagePreviewer.classList.remove('selected')
-    //            })
-    //        }
-    //    })
-    //})
-    //close modal
-    //const previewSize = 150
-
-
-    // handle image-previewer
-    //document.querySelectorAll('.image-previewer').forEach(previewer => {
-    //    const fileInput = previewer.querySelector('input[type="file"]');
-    //    const imagePreview = previewer.querySelector('.image-preview');
-
-    //    previewer.addEventListener('click', () => fileInput.click());
-
-    //    fileInput.addEventListener('change', ({ target: { files } }) => {
-    //        const file = files[0]
-    //        if (file)
-    //            processImage(file, imagePreview, previewer, previewSize)
-
-    //    })    
-
-        // handle submit forms
-//        const forms = document.querySelectorAll('form')
-//        forms.forEach(form => {
-//            form.addEventListener('submit', async (e) => {
-//                e.preventDefault()
-
-//                clearErrorMessages(form)
-//                const formData = new FormData(form)
-
-//                try {
-//                    const res = await fetch(form.action, {
-//                        method: 'post',
-//                        body: formData
-//                    })
-
-//                    if (res.ok) {
-//                        const modal = form.closest('.modal')
-//                        if (modal)
-//                            modal.style.display = 'none';
-
-//                        window.location.reload()
-//                    }
-
-//                    else if (res.status === 400) {
-//                        const data = await res.json()
-
-//                        if (data.errors) {
-//                            Object.keys(data.errors).forEach(key => {
-
-//                                let input = form.querySelector(`[name="${key}"]`)
-//                                if (input) {
-//                                    input.classList.add('input-validation-error')
-//                                }
-
-//                                let span = form.querySelector(`[data-valmsg-for="${key}"]`)
-//                            if (span) {
-//                                span.innerText = data.errors[key].join('\n');
-//                                span.classList.add('field-validation-error')
-//                            }
-
-//                        })
-//        }
-//                    }
-//                }
-//                catch {
-//    console.log('error submitting form')
-//}
-//            })
-//        })
-
-
-//    });
-// handle submit forms
-//function clearErrorMessages(form) {
-//    form.querySelectorAll('[data-val="true"]').forEach(input => {
-//        input.classList.remove('input-validation-error')
-//    })
-
-//    form.querySelectorAll('[data-valmsg-for]').forEach(span => {
-//        span.innerText = ''
-//        span.classList.remove('field-validation-error')
-//    })
-//}
-
-
-//function addErrorMessages(key, errorMessage) {
-
-//}
-
-
-
-// image preview
-//async function loadImage(file) {
-//    return new Promise((resolve, reject) => {
-//        const reader = new FileReader()
-
-//        reader.onerror = () => reject(new Error("Failed to load file."))
-//        reader.onload = (e) => {
-//            const img = new Image()
-//            img.onerror = () => reject(new Error("failed to load image"))
-//            img.onload = () => resolve(img)
-//            img.src = e.target.result
-//        }
-//        reader.readAsDataURL(file)
-//    })
-//}
-
-
-//async function processImage(file, imagePreview, previewer, previewSize = 150) {
-//    try {
-//        const img = await loadImage(file)
-//        const canvas = document.createElement('canvas')
-//        canvas.width = previewSize
-//        canvas.height = previewSize
-
-//        const ctx = canvas.getContext('2d')
-//        ctx.drawImage(img, 0, 0, previewSize, previewSize)
-//        imagePreview.src = canvas.toDataURL('image/jpeg')
-//        previewer.classList.add('selected')
-//    }
-//    catch (error) {
-//        console.error('failed on image-processing:')
-//    }
-//}
-
-//})

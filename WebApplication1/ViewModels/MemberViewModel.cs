@@ -1,4 +1,5 @@
-﻿using Domain.FormModels;
+﻿using Domain.Dtos;
+using Domain.FormModels;
 
 namespace WebApplication1.ViewModels;
 
@@ -9,4 +10,6 @@ public class MemberViewModel
     {
         Address = new AddressFormModel()
     };
+
+    public List<MemberDto> MemberList { get; set; } = new();
 }
