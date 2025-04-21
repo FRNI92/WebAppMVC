@@ -1,37 +1,44 @@
-﻿@model Domain.Dtos.MemberDto
+﻿@model MemberCardViewModel
+
 
 <div class="member-card">
     <div class="member-card-header">
         <button id="project-dropdown-menu"
-                id="member-dropdown-menu-@Model.Id"
+                id="member-dropdown-menu-@Model.Member.Id"
                 type="button"
                 data-type="dropdown"
-                data-target="#edith-dropdown-member-@Model.Id"
+                data-target="#edith-dropdown-member-@Model.Member.Id"
                 class="btn-actions member-edith-trigger">
             <i class="fa-duotone fa-solid fa-ellipsis"></i>
         </button>
-        <div id="edith-dropdown-member-@Model.Id" class="edith-dropdown">
+        <div id="edith-dropdown-member-@Model.Member.Id" class="edith-dropdown">
             <div class="dropdown-body">
-                
-                @if (true)
+
+                @if (User.IsInRole("Administrator"))
                 {
                     <nav class="dropdown-actions">
                         <a data-type="modal"
                            data-target="#add-edit-member-modal"
                            class="dropdown-action open-edit-member-modal"
-                           data-id="@Model.Id"
-                           data-image="@Model.Image"
-                           data-firstname="@Model.FirstName"
-                           data-lastname="@Model.LastName"
-                           data-role="@Model.JobTitle"
-                           data-email="@Model.Email"
-                           data-phone="@Model.Phone">
+                           data-id="@Model.Member.Id"
+                           data-image="@Model.Member.Image"
+                           data-firstname="@Model.Member.FirstName"
+                           data-lastname="@Model.Member.LastName"
+                           data-email="@Model.Member.Email"
+                           data-phone="@Model.Member.Phone"
+                           data-jobtitle="@Model.Member.JobTitle"
+                           data-city="@Model.Address.City"
+                           data-streetname="@Model.Address.StreetName"
+                           data-streetnumber="@Model.Address.StreetNumber"
+                           data-postalcode="@Model.Address.PostalCode"
+                           data-dateofbirth="@Model.Member.DateOfBirth.ToString("yyyy-MM-dd")">
                             <i class="fa-duotone fa-solid fa-pen-to-square"></i>
                             <span>Edit</span>
                         </a>
                         <div class="divider"></div>
                         <form method="post" asp-action="Delete" asp-controller="Members">
-                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="id" value="@Model.Member.Id" />
+                            <span>@Model.Member.Id</span>
                             <button type="submit" class="dropdown-button dropdown-button-danger">
                                 <i class="fa-duotone fa-solid fa-trash-can"></i>
                                 <span>Delete Member</span>
@@ -39,16 +46,39 @@
                         </form>
                     </nav>
                 }
+                else
+                {
+                    <nav class="dropdown-actions">
+                        <a data-type="modal"
+                           data-target="#add-edit-member-modal"
+                           class="dropdown-action open-edit-member-modal"
+                           data-id="@Model.Member.Id"
+                           data-image="@Model.Member.Image"
+                           data-firstname="@Model.Member.FirstName"
+                           data-lastname="@Model.Member.LastName"
+                           data-email="@Model.Member.Email"
+                           data-phone="@Model.Member.Phone"
+                           data-jobtitle="@Model.Member.JobTitle"
+                           data-city="@Model.Address.City"
+                           data-streetname="@Model.Address.StreetName"
+                           data-streetnumber="@Model.Address.StreetNumber"
+                           data-postalcode="@Model.Address.PostalCode"
+                           data-dateofbirth="@Model.Member.DateOfBirth.ToString("yyyy-MM-dd")">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span>View Details</span>
+                        </a>
+                    </nav>
+                }
 
             </div>
         </div>
     </div>
     <div class="member-card-body">
-        <img src="@Url.Content($"~/uploads/{Model.Image}")" class="member-img">
-        <div class="member-name">@Model.FirstName @Model.LastName</div>
-        <div class="member-role">@Model.JobTitle</div>
-        <div class="member-email">@Model.Email</div>
-        <div class="member-phone">@Model.Phone</div>
+        <img src="@Url.Content($"~/uploads/{@Model.Member.Image}")" class="member-img">
+        <div class="member-name">@Model.Member.FirstName @Model.Member.LastName</div>
+        <div class="member-role">@Model.Member.JobTitle</div>
+        <div class="member-email">@Model.Member.Email</div>
+        <div class="member-phone">@Model.Member.Phone</div>
     </div>
     <div class="member-footer">
         <div class="member-message">Message</div>

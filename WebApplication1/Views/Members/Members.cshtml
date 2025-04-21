@@ -20,7 +20,7 @@
             <div class="page-header">
                 <h1>Members</h1>
 
-                @* @if (User.IsInRole("Administrator")) *@
+                 @if (User.IsInRole("Administrator"))
                 {
                     <button type="button"
                             class="btn"
@@ -31,10 +31,12 @@
                     </button>
                 }
             </div>
-            @foreach (var member in Model.MemberList)
+            <section class="member-list">
+            @foreach (var memberCard in Model.MemberCards)
             {
-                @await Html.PartialAsync("_MemberCard", member)
+                @await Html.PartialAsync("_MemberCard", memberCard)
             }
+            </section>
 
         </div>
     </main>

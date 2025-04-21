@@ -9,27 +9,16 @@ using System.Diagnostics;
 
 namespace Business.Services;
 
-public class MemberService(MemberRepository memberRepository, AddressRepository addressRepository)
+public class MemberService(MemberRepository memberRepository)
 {
     private readonly MemberRepository _memberRepository = memberRepository;
-    private readonly AddressRepository _addressRepository = addressRepository;
 
 
-    public async Task<ReposResult<bool>> CreateMemberAsync(MemberDto dto, AddressDto addressDto)
+
+    public async Task<ReposResult<bool>> CreateMemberAsync(MemberDto dto)
     {
-        //addresses
-        var addressEntity = new AddressEntity
-        {
+       
 
-            City = addressDto.City,
-            StreetName = addressDto.StreetName,
-            StreetNumber = addressDto.StreetNumber,
-            PostalCode = addressDto.PostalCode
-        };
-        await _addressRepository.AddAsync(addressEntity);
-        await _addressRepository.SaveAsync();
-        //addresses
-        dto.AddressId = addressEntity.Id;
         var entity = dto.MapTo<MemberEntity>();
 
         var addResult = await _memberRepository.AddAsync(entity);

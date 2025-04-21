@@ -5,24 +5,24 @@
         <div class="card-header">
             <h3>Edit Member</h3>
             <button data-type="close"
-                    data-target="#add-edit-member-modal"
-                    class="btn-close"></button>
+            data-target="#add-edit-member-modal"
+            class="btn-close"></button>
         </div>
         <div class="card-body">
             <form asp-controller="Members"
-                  asp-action="Edit"
-                  method="post"
-                  enctype="multipart/form-data">
+            asp-action="Edit"
+            method="post"
+            enctype="multipart/form-data">
                 <input asp-for="FormModel.Id" type="hidden" />
                 <input type="hidden" asp-for="FormModel.Image" />
                 <div class="form-group">
                     <div id="upload-trigger-edit"
-                         class="image-preview-container user-image">
+                    class="image-preview-container user-image">
                         <img id="image-preview" src="#" class="hide" />
                         <div id="image-preview-icon-container"
-                             class="circle circle-grey">
+                        class="circle circle-grey">
                             <i id="image-preview-icon"
-                               class="fa-duotone fa-solid fa-camera"></i>
+                            class="fa-duotone fa-solid fa-camera"></i>
                         </div>
                     </div>
                     <input asp-for="FormModel.ImageFile" type="file" id="image-upload" accept="image/*" />
@@ -77,10 +77,15 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Date Of Birth</label>
                     <input asp-for="FormModel.DateOfBirth" type="date" class="form-input" />
+                </div>
 
-
-                <button type="submit" class="btn">Create</button>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                    <button type="submit" class="btn">Update Member</button>
+                    }
+                        
             </form>
         </div>
     </div>

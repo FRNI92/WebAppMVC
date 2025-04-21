@@ -25,11 +25,17 @@ namespace WebApplication1.Controllers
 
             var dtos = await _projectService.GetAllWithRelationsAsync();
 
+            foreach (var project in dtos)
+            {
+                project.ProjectMembers = members
+                    .Where(m => project.MemberIds.Contains(m.Id))
+                    .ToList();
+            }
+
             var model = new ProjectViewModels
             {
-
                 FormModel = new ProjectFormModel(),
-                ProjectList = dtos, // detta är redan IEnumerable<ProjectFormDto>
+                ProjectList = dtos,
                 Clients = clients,
                 Members = members,
                 Status = status

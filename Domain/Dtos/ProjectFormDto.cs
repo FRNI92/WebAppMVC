@@ -30,5 +30,5 @@ public class ProjectFormDto
 
 
     public List<int> MemberIds { get; set; } = new();
-    public List<string> MemberNames { get; set; } = new();
+    public List<MemberDto> ProjectMembers { get; set; } = new();
 }

@@ -94,14 +94,12 @@
             <i class="fa-duotone fa-solid fa-clock"></i>
             <span class="javascript-badge-text">@Model.TimeLeftText</span>
         </div>
-        <div class="members">
+
+        @foreach (var member in Model.ProjectMembers)
+        {
             <div class="user-image">
-                @* <p>@string.Join(", ", Model.MemberNames)</p> *@
-                <img src="/Images/Avatar.svg">
+                <img src="@Url.Content($"~/uploads/{member.Image}")" alt="@member.FirstName" />
             </div>
-            <div class="user-image">
-                <img src="/Images/Avatar.svg">
-            </div>
-        </div>
+        }
     </div>
 </div>

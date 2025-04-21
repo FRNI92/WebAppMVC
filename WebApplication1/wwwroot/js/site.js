@@ -186,32 +186,5 @@ document.querySelectorAll('.delete-project').forEach(button => {
     });
 
 
-
-
-    //Members minimenu
-
-     //Member card: dropdown edit button
-    document.querySelectorAll('.open-edit-member-modal').forEach(button => {
-        button.addEventListener('click', e => {
-            const id = button.dataset.id;
-            const firstName = button.dataset.firstname;
-            const lastName = button.dataset.lastname;
-            const role = button.dataset.role;
-            const email = button.dataset.email;
-            const phone = button.dataset.phone;
-
-            const modal = document.querySelector('#add-edit-member-modal');
-            modal?.classList.add('modal-show');
-
-            modal.querySelector('input[name="FormModel.Id"]').value = id;
-            modal.querySelector('input[name="FormModel.FirstName"]').value = firstName;
-            modal.querySelector('input[name="FormModel.LastName"]').value = lastName;
-            modal.querySelector('input[name="FormModel.JobTitle"]').value = role;
-            modal.querySelector('input[name="FormModel.Phone"]').value = phone;
-            modal.querySelector('input[name="FormModel.Email"]').value = email;
-
-        });
-    });
-
 });
 

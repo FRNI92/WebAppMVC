@@ -17,13 +17,6 @@ document.querySelectorAll('.open-edit-member-modal').forEach(button => {
             previewContainer.classList.add('selected');
             icon.classList.replace('fa-camera', 'fa-pen-to-square');
         }
-
-        //editModal.querySelector('input[name="FormModel.Id"]').value = button.dataset.id;
-        //editModal.querySelector('input[name="FormModel.FirstName"]').value = button.dataset.firstname;
-        //editModal.querySelector('input[name="FormModel.LastName"]').value = button.dataset.lastname;
-        //editModal.querySelector('input[name="FormModel.JobTitle"]').value = button.dataset.role;
-        //editModal.querySelector('input[name="FormModel.Email"]').value = button.dataset.email;
-        //editModal.querySelector('input[name="FormModel.Phone"]').value = button.dataset.phone;
     });
 });
 
@@ -43,4 +36,43 @@ editModal.querySelector('#image-upload')?.addEventListener('change', function (e
         };
         reader.readAsDataURL(file);
     }
+});
+
+
+//Member card: dropdown edit button
+document.querySelectorAll('.open-edit-member-modal').forEach(button => {
+    button.addEventListener('click', e => {
+        const id = button.dataset.id;
+        const firstName = button.dataset.firstname;
+        const lastName = button.dataset.lastname;
+        const jobTitle = button.dataset.jobtitle;
+        const email = button.dataset.email;
+        const phone = button.dataset.phone;
+        const city = button.dataset.city;
+        const streetName = button.dataset.streetname;
+        const streetNumber = button.dataset.streetnumber;
+        const postalCode = button.dataset.postalcode;
+        const dateOfBirth = button.dataset.dateofbirth;
+
+
+        //for debugging
+        console.log(firstName, lastName, email, phone, jobTitle, city, streetName, dateOfBirth);
+
+
+        const modal = document.querySelector('#add-edit-member-modal');
+        modal?.classList.add('modal-show');
+
+        modal.querySelector('input[name="FormModel.Id"]').value = id;
+        modal.querySelector('input[name="FormModel.FirstName"]').value = firstName;
+        modal.querySelector('input[name="FormModel.LastName"]').value = lastName;
+        modal.querySelector('input[name="FormModel.Email"]').value = email;
+        modal.querySelector('input[name="FormModel.Phone"]').value = phone;
+        modal.querySelector('input[name="FormModel.JobTitle"]').value = jobTitle;
+        modal.querySelector('input[name="FormModel.Address.City"]').value = city;
+        modal.querySelector('input[name="FormModel.Address.StreetName"]').value = streetName;
+        modal.querySelector('input[name="FormModel.Address.StreetNumber"]').value = streetNumber;
+        modal.querySelector('input[name="FormModel.Address.PostalCode"]').value = postalCode;
+        modal.querySelector('input[name="FormModel.DateOfBirth"]').value = dateOfBirth;
+
+    });
 });

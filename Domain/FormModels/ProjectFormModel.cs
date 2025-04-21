@@ -21,7 +21,7 @@ public class ProjectFormModel
     public string? Image { get; set; }
     public IFormFile ImageFile { get; set; }
 
-    //[Required(ErrorMessage = "This field is required.")]
+    [Required(ErrorMessage = "This field is required.")]
     [DataType(DataType.Text)]
     [Display(Name = "Project Name", Prompt = "Enter project name")]
     public string ProjectName { get; set; } = null!;
@@ -35,7 +35,7 @@ public class ProjectFormModel
     public DateTime StartDate { get; set; }
     [DataType(DataType.Date)]
     public DateTime EndDate { get; set; }
-
+    [Required(ErrorMessage = "Choose a Client")]
     public int ClientId { get; set; }
     public List<int> MemberIds { get; set; } = new();
     public int StatusId { get; set; }

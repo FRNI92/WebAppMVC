@@ -7,23 +7,36 @@ using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    public class MembersController(MemberService memberService, IWebHostEnvironment env) : Controller
+    public class MembersController(MemberService memberService, IWebHostEnvironment env, AddressService addressService) : Controller
     {
-        public async Task <IActionResult> Members()
+
+
+        private readonly AddressService _addressService = addressService;
+        public async Task<IActionResult> Members()
         {
 
             var members = await memberService.GetAllMembersAsync();
 
             var model = new MemberViewModel
             {
-                FormModel = new MemberFormModel(),
-                MemberList = members.ToList()
+                MemberCards = new List<MemberCardViewModel>()
             };
+
+            foreach (var member in members)
+            {
+                var address = await _addressService.GetByIdAsync(member.AddressId) ?? new AddressDto();
+
+                model.MemberCards.Add(new MemberCardViewModel
+                {
+                    Member = member,
+                    Address = address
+                });
+            }
 
             return View(model);
         }
 
-    public async Task<IActionResult> Add(MemberViewModel model)
+        public async Task<IActionResult> Add(MemberViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -70,7 +83,10 @@ namespace WebApplication1.Controllers
                 DateOfBirth = model.FormModel.DateOfBirth,
                 AddressId = 0 // sätts senare i servicen efter addressen sparas
             };
-            await memberService.CreateMemberAsync(memberDto, addressDto);
+
+            var addressId = await _addressService.CreateAsync(addressDto);
+            memberDto.AddressId = addressId;
+            await memberService.CreateMemberAsync(memberDto);
             return RedirectToAction("Members", "Members");
         }
 

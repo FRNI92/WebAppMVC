@@ -111,7 +111,15 @@ public class ProjectService
             StatusId = e.StatusId,
             StatusName = e.Status?.StatusName,
             MemberIds = e.ProjectMembers.Select(pm => pm.MemberId).ToList(),
-            MemberNames = e.ProjectMembers.Select(pm => $"{pm.Member.FirstName} {pm.Member.LastName}").ToList()
+                    ProjectMembers = e.ProjectMembers
+            .Where(pm => pm.Member != null)
+            .Select(pm => new MemberDto
+            {
+                Id = pm.Member.Id,
+                Image = pm.Member.Image,
+                FirstName = pm.Member.FirstName,
+                LastName = pm.Member.LastName
+            }).ToList()
         });
     }
 
