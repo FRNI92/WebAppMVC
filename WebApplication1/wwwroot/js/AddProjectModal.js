@@ -1,25 +1,58 @@
-﻿document.querySelector('[data-target="#add-project-modal"]')?.addEventListener("click", () => {
-    const form = document.querySelector("#AddProjectForm");
-    if (!form) return;
+﻿// Dropdown select logik
+document.querySelectorAll('#add-project-modal .form-select').forEach(select => {
+    const trigger = select.querySelector('.form-select-trigger');
+    const triggerText = trigger.querySelector('.form-select-text');
+    const options = select.querySelectorAll('.form-select-option');
+    const hiddenInput = select.querySelector('input[type="hidden"]');
+    const placeholder = select.dataset.placeholder || "Choose";
 
-    const fields = form.querySelectorAll("input[data-val='true'], textarea[data-val='true']");
+    const setValue = (value = "0", text = placeholder) => {
+        triggerText.textContent = text;
+        hiddenInput.value = value;
+        select.classList.toggle('has-placeholder', value === "0");
+    };
 
-    fields.forEach(field => {
-        field.addEventListener("input", () => validateField(field));
+    setValue();
+
+    trigger.addEventListener('click', e => {
+        e.stopPropagation();
+        document.querySelectorAll('.form-select.open')
+            .forEach(el => el !== select && el.classList.remove('open'));
+        select.classList.toggle('open');
     });
 
-    form.addEventListener("submit", function (e) {
-        let hasErrors = false;
+    options.forEach(option => {
+        option.addEventListener('click', () => {
+            setValue(option.dataset.value, option.textContent);
+            select.classList.remove('open');
 
-        fields.forEach(field => {
-            const valid = validateField(field);
-            if (!valid) hasErrors = true;
+            if (hiddenInput.name === "FormModel.MemberIds[0]") {
+                // Ta bort gamla MemberIds
+                document.querySelectorAll("input[name^='FormModel.MemberIds']").forEach(e => e.remove());
+
+                const realInput = document.createElement("input");
+                realInput.type = "hidden";
+                realInput.name = "FormModel.MemberIds[0]";
+                realInput.value = option.dataset.value;
+                realInput.setAttribute("data-val", "true");
+                realInput.setAttribute("data-val-required", "Please choose a member.");
+                form.appendChild(realInput);
+
+                // Validera nya inputen
+                setTimeout(() => validateField(realInput), 0);
+            } else {
+                // Validera client hidden input
+                setTimeout(() => validateField(hiddenInput), 0);
+            }
         });
+    });
 
-        if (hasErrors) {
-            e.preventDefault();
+    document.addEventListener('click', e => {
+        if (!select.contains(e.target)) {
+            select.classList.remove('open');
         }
     });
+});
 
     function validateField(field) {
         const errorSpan = form.querySelector(`span[data-valmsg-for='${field.name}']`);
@@ -28,13 +61,23 @@
         let errorMessage = "";
         const value = field.value;
 
-        if (field.name === "FormModel.ClientId" && value === "0") {
-            errorMessage = "Please choose a client.";
-        } else if (field.hasAttribute("data-val-required") && value.trim() === "") {
+        if (field.name === "FormModel.ClientId") {
+            if (value === "0") {
+                errorMessage = "Please choose a client.";
+            }
+        }
+
+        if (field.name === "FormModel.MemberIds") {
+            if (!value || value === "0") {
+                errorMessage = "Please choose a member.";
+            }
+        }
+
+        if (field.hasAttribute("data-val-required") && value.trim() === "") {
             errorMessage = field.getAttribute("data-val-required");
         }
 
-        if (field.name === "FormModel.ClientId") {
+        if (field.name === "FormModel.ClientId" || field.name === "FormModel.MemberIds") {
             const selectWrapper = field.closest(".form-select");
             if (errorMessage) {
                 selectWrapper.classList.add("input-validation-error");
@@ -58,50 +101,99 @@
         }
     }
 
-    // Gör så dropdownen kan validera direkt:
-    document.querySelectorAll('#add-project-modal .form-select').forEach(select => {
-        const trigger = select.querySelector('.form-select-trigger');
-        const triggerText = trigger.querySelector('.form-select-text');
-        const options = select.querySelectorAll('.form-select-option');
-        const hiddenInput = select.querySelector('input[type="hidden"]');
-        const placeholder = select.dataset.placeholder || "Choose";
 
-        const setValue = (value = "0", text = placeholder) => {
-            triggerText.textContent = text;
-            hiddenInput.value = value;
-            select.classList.toggle('has-placeholder', value === "0");
-        };
+    document.querySelector('[data-target="#add-project-modal"]')?.addEventListener("click", () => {
+        const form = document.querySelector("#AddProjectForm");
+        if (!form) return;
 
-        setValue();
+        const fields = form.querySelectorAll("input[data-val='true'], textarea[data-val='true']");
 
-        trigger.addEventListener('click', e => {
-            e.stopPropagation();
-            document.querySelectorAll('.form-select.open')
-                .forEach(el => el !== select && el.classList.remove('open'));
-            select.classList.toggle('open');
+        fields.forEach(field => {
+            field.addEventListener("input", () => validateField(field));
         });
 
-        options.forEach(option => {
-            option.addEventListener('click', () => {
-                setValue(option.dataset.value, option.textContent);
-                select.classList.remove('open');
+        form.addEventListener("submit", function (e) {
+            let hasErrors = false;
 
-                setTimeout(() => validateField(hiddenInput), 0);
-
-                const inputName = hiddenInput.getAttribute('name');
-                if (inputName === "FormModel.MemberIds") {
-                    hiddenInput.value = option.dataset.value;
-                }
+            fields.forEach(field => {
+                const valid = validateField(field);
+                if (!valid) hasErrors = true;
             });
-        });
 
-        document.addEventListener('click', e => {
-            if (!select.contains(e.target)) {
-                select.classList.remove('open');
+            if (hasErrors) {
+                e.preventDefault();
             }
         });
+
+
+        //validate part
+        function validateField(field) {
+            const errorSpan = form.querySelector(`span[data-valmsg-for='${field.name}']`);
+            if (!errorSpan) return true;
+
+            let errorMessage = "";
+            const value = field.value;
+
+
+            //image checker
+            if (field.name === "FormModel.ImageFile") {
+                if (!field.value) {
+                    errorMessage = "Please upload an image.";
+                }
+                console.log("Budget value:", value);
+            }
+
+            if (field.name === "FormModel.ClientId" && value === "0") {
+                errorMessage = "Please choose a client.";
+            }
+
+            if (field.name === "FormModel.MemberIds[0]" && (!value || value === "0")) {
+                errorMessage = "Please choose a member.";
+            }
+
+            if (field.hasAttribute("data-val-required") && value.trim() === "") {
+                errorMessage = field.getAttribute("data-val-required");
+            }
+
+
+            //check the cliend and the member. client is a list. member is a intlist
+            if (
+                field.name === "FormModel.ClientId" ||
+                field.name === "FormModel.MemberIds[0]"
+            ) {
+                const selectWrapper = field.closest(".form-select");
+                if (errorMessage) {
+                    selectWrapper?.classList.add("input-validation-error");
+                } else {
+                    selectWrapper?.classList.remove("input-validation-error");
+                }
+            }
+
+            //check the budget
+            if (field.name === "FormModel.Budget") {
+                if (value.trim() === "" || isNaN(value) || parseFloat(value) <= 0) {
+                    errorMessage = "Please enter a valid budget.";
+                }
+            }
+            //console.log("Budget value:", value);
+
+            //control the classes
+            if (errorMessage) {
+                field.classList.add("input-validation-error");
+                errorSpan.textContent = errorMessage;
+                errorSpan.classList.add("field-validation-error");
+                errorSpan.classList.remove("field-validation-valid");
+                return false;
+            } else {
+                field.classList.remove("input-validation-error");
+                errorSpan.textContent = "";
+                errorSpan.classList.remove("field-validation-error");
+                errorSpan.classList.add("field-validation-valid");
+                return true;
+            }
+        }
     });
-});
+
 
     // EDITH IMAGE PREVIEW. 
     document.getElementById('upload-trigger')?.addEventListener('click', () => {

@@ -1089,6 +1089,26 @@ a {
     cursor: pointer;
 
 }
+/*image*/
+.form-group span[data-valmsg-for="FormModel.ImageFile"] {
+    position: absolute;
+    right: 120px;
+    top: 5px;
+}
+
+/*budget*/
+.form-input-extended span[data-valmsg-for="FormModel.Budget"] {
+    position: absolute;
+    right: 0;
+    top:3px; 
+}
+
+/*stop hadnle textarea desicription*/
+.form-group textarea + .field-validation-error {
+    top: 33px;
+    padding: 1rem 1rem;
+    transform: none;
+}
 
 /* FORMS  */
 form {
