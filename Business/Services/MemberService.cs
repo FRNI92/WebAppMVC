@@ -62,6 +62,42 @@ public class MemberService(MemberRepository memberRepository)
         return members.Result.Select(member => member.MapTo<MemberDto>()).ToList();
     }
 
+
+
+
+
+
+    public async Task<ReposResult<bool>> UpdateMemberAsync(MemberDto dto)
+    {
+        var entity = dto.MapTo<MemberEntity>();
+
+        var updateResult = await _memberRepository.UpdateAsync(m => m.Id == dto.Id, entity);
+        if (!updateResult.Succeeded)
+            return new ReposResult<bool>
+            {
+                Succeeded = false,
+                StatusCode = updateResult.StatusCode,
+                Error = updateResult.Error
+            };
+
+        var saveResult = await _memberRepository.SaveAsync();
+        return new ReposResult<bool>
+        {
+            Succeeded = saveResult.Succeeded,
+            StatusCode = saveResult.StatusCode,
+            Result = saveResult.Result > 0
+        };
+    }
+
+
+
+
+
+
+
+
+
+
     public async Task<ReposResult<bool>> DeleteMemberAsync(int id)
     {
         await _memberRepository.BeginTransactionAsync();

@@ -8,15 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers;
 
-public class AccountController(UserService userService, SignInManager<AppUserEntity> signInManager) : Controller
+public class AccountController(UserService userService, SignInManager<AppUserEntity> signInManager, UserManager<AppUserEntity> userManager) : Controller
 {
 
     private readonly UserService _userService = userService;
 
-          //use the entitity directly. has to do with identity
+    //use the entitity directly. has to do with identity
     private readonly SignInManager<AppUserEntity> _signInManager = signInManager;
 
-
+    private readonly UserManager<AppUserEntity> _userManager = userManager;
     public IActionResult SignIn()
     {
 
@@ -92,7 +92,7 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
         await _signInManager.SignOutAsync();
         return RedirectToAction("SignIn", "Account");
     }
-    
+
 }
 
 

@@ -20,22 +20,11 @@ namespace WebApplication1.Controllers
         private readonly ProjectService _projectService = projectService;
         private readonly ClientService _clientService = clientService;
 
-
-
         private readonly UserManager<AppUserEntity> _userManager = userManager;
-
 
 
         public async Task<IActionResult> Index()
         {
-            //get the correct user 
-            var appUser = await _userManager.GetUserAsync(User);
-            MemberDto? loggedInMember = null;
-
-            if (appUser?.MemberId is int memberId)
-            {
-                loggedInMember = await _memberService.GetByIdAsync(memberId);
-            }
 
 
 
@@ -59,7 +48,6 @@ namespace WebApplication1.Controllers
                 Clients = clients,
                 Members = members,
                 Status = status,
-                LoggedInUserMember = loggedInMember//this is the currently logged in user
             };
 
             return View(model);

@@ -13,20 +13,25 @@ namespace Domain.FormModels
         public string? Image { get; set; }
 
         //not need in dto
-        public IFormFile ImageFile { get; set; }
-        public string FirstName { get; set; } = null!;
-        public string LastName { get; set; } = null!;
+        public IFormFile? ImageFile { get; set; }
+        public string? FirstName { get; set; } = null!;
+        public string? LastName { get; set; } = null!;
         public string? JobTitle { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public DateTime DateOfBirth { get; set; }
         
         
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
 
         //not need in dto
-        public AddressFormModel Address { get; set; }
+        public AddressFormModel? Address { get; set; }
+
+
+
+        //to connect member to appuser
+        //public string? ConnectedAppUserId { get; set; }
 
 
     }

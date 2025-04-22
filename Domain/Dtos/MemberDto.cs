@@ -15,4 +15,7 @@ public class MemberDto
     public int AddressId { get; set; }
 
 
+
+    //to connect member to appuser
+    public string? ConnectedAppUserId { get; set; }
 }
