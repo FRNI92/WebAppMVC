@@ -2,14 +2,16 @@
 using Domain.Dtos;
 using Domain.Extensions;
 using Domain.FormModels;
+using IdentityDatabase.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.Design.Serialization;
 using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    public class DashboardController(ProjectService projectService, ClientService clientService, MemberService memberService, StatusService statusService) : Controller
+    public class DashboardController(ProjectService projectService, ClientService clientService, MemberService memberService, StatusService statusService, UserManager<AppUserEntity> userManager) : Controller
     {
 
         private readonly StatusService _statusService = statusService;
@@ -17,8 +19,26 @@ namespace WebApplication1.Controllers
 
         private readonly ProjectService _projectService = projectService;
         private readonly ClientService _clientService = clientService;
+
+
+
+        private readonly UserManager<AppUserEntity> _userManager = userManager;
+
+
+
         public async Task<IActionResult> Index()
         {
+            //get the correct user 
+            var appUser = await _userManager.GetUserAsync(User);
+            MemberDto? loggedInMember = null;
+
+            if (appUser?.MemberId is int memberId)
+            {
+                loggedInMember = await _memberService.GetByIdAsync(memberId);
+            }
+
+
+
             var status = await _statusService.GetAllStatusAsync();
             var members = await _memberService.GetAllMembersAsync();
             var clients = await _clientService.GetAllClientsAsync();
@@ -38,7 +58,8 @@ namespace WebApplication1.Controllers
                 ProjectList = dtos,
                 Clients = clients,
                 Members = members,
-                Status = status
+                Status = status,
+                LoggedInUserMember = loggedInMember//this is the currently logged in user
             };
 
             return View(model);

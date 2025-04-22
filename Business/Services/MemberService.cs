@@ -13,7 +13,15 @@ public class MemberService(MemberRepository memberRepository)
 {
     private readonly MemberRepository _memberRepository = memberRepository;
 
+    public async Task<MemberDto?> GetByIdAsync(int id)// how we get the currently logged in member
+    {
+        var result = await _memberRepository.GetAsync(m => m.Id == id);
 
+        if (!result.Succeeded || result.Result == null)
+            return null;
+
+        return result.Result.MapTo<MemberDto>();
+    }
 
     public async Task<ReposResult<bool>> CreateMemberAsync(MemberDto dto)
     {

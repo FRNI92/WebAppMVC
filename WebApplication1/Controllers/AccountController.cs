@@ -26,17 +26,25 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
     [HttpPost]
     public async Task<IActionResult> SignIn(SignInFormModel model)
     {
-
         if (!ModelState.IsValid)
         {
             ViewBag.LoginError = "Please fill in all required fields correctly.";
             return View(model);
         }
+
+        var user = await _userService.GetUserByEmailAsync(model.Email);
+        if (user == null)
+        {
+            ViewBag.LoginError = "User not found.";
+            return View(model);
+        }
+
         var result = await _signInManager.PasswordSignInAsync(
-            model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+            user, model.Password, isPersistent: false, lockoutOnFailure: false);
 
         if (result.Succeeded)
             return RedirectToAction("Index", "Dashboard");
+
         ViewBag.LoginError = "Invalid login attempt.";
         return View(model);
     }
@@ -53,6 +61,13 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
     {
         if (!ModelState.IsValid)
             return View(model);
+
+        var existingUser = await _userManager.FindByEmailAsync(model.Email);
+        if (existingUser != null)
+        {
+            ModelState.AddModelError("Email", "That email is already registered.");
+            return View(model);
+        }
 
         var dto = new SignUpDto
         {

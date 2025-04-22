@@ -57,7 +57,7 @@
                 data-type="dropdown"
                 data-target="#account-dropdown"
                 class="btn-account">
-            <img src="~/Images/tommy-avatar.svg" alt="template avatar" />
+            <img src="@Model.LoggedInUserMember?.Image" alt="profile image" />
         </button>
 
         <div id="account-dropdown" class="dropdown">

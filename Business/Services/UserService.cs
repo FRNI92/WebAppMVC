@@ -14,6 +14,11 @@ public class UserService(UserManager<AppUserEntity> userManager)
         return await _userManager.Users.AnyAsync(u => u.Email == email);
     }
 
+    public async Task<AppUserEntity?> GetUserByEmailAsync(string email)
+    {
+        return await _userManager.FindByEmailAsync(email);
+    }
+
     public async Task<bool> CreateAsync(SignUpDto dto)
     {
         if (dto == null)
@@ -26,6 +31,7 @@ public class UserService(UserManager<AppUserEntity> userManager)
         };
 
         var result = await _userManager.CreateAsync(appUser, dto.PassMord);
+
         return result.Succeeded;
     }
 }
