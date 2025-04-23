@@ -10,7 +10,9 @@
                     class="btn-close"></button>
         </div>
         <div class="card-body">
-            <form asp-controller="Projects"
+            <form id="EditProjectForm"
+                
+                asp-controller="Projects"
                   asp-action="Update"
                   method="post"
                   enctype="multipart/form-data">
@@ -33,6 +35,7 @@
                 <div class="form-group">
                     <label class="form-label">Project Name</label>
                     <input class="form-input" asp-for="FormModel.ProjectName" />
+                    <span asp-validation-for="FormModel.ProjectName"></span>
                 </div>
 
 
@@ -72,6 +75,7 @@
                 <div class="form-group">
                     <label class="form-label">Description</label>
                     <textarea class="form-input" asp-for="FormModel.Description"></textarea>
+                    <span asp-validation-for="FormModel.Description"></span>
                 </div>
 
                 <div class="form-horizontal-group">
@@ -108,6 +112,7 @@
                     <div class="form-input-extended">
                         <i class="fa-duotone fa-solid fa-dollar-sign"></i>
                         <input class="form-input" type="text"  asp-for="FormModel.Budget"/>
+                        <span asp-validation-for="FormModel.Budget"></span>
                     </div>
                 </div>
 

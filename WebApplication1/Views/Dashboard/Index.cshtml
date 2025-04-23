@@ -1,8 +1,19 @@
-﻿@using WebApplication1.ViewModels
+﻿
+@using WebApplication1.ViewModels
 @* it will go to layout by default if I remove layout = "layout" *@
 @{
     Layout = "_Layout";
 }
+
+@{
+    var current = (string)ViewBag.Filter;
+    var allC = ViewBag.AllCount;
+    var activeC = ViewBag.ActiveCount;
+    var completedC = ViewBag.CompletedCount;
+    var onholdC = ViewBag.OnHoldCount;
+}
+
+
 @model ProjectViewModels
 <div class="backoffice-wrapper">
     <aside id="sidebar">
@@ -15,11 +26,10 @@
         <partial name="_NavLinkPartial" />
     </aside>
     <main>
-        <partial name="_HeaderPartial" />
+        @await Html.PartialAsync("_HeaderPartial")
         <div id="projects" class="page">
             <div class="page-header">
                 <h1>Projects</h1>
-
 
                 @if (User.IsInRole("Administrator"))
                 {
@@ -33,6 +43,27 @@
                 }
                     
             </div>
+
+
+            <nav class="filter-box">
+                <a asp-action="Index" asp-route-filter="All"
+                   class="filter-box-tab @(current=="All" ? "active" : "")">
+                    ALL (@allC)
+                </a>
+                  <a asp-action="Index" asp-route-filter="Active"
+                     class="filter-box-tab @(current=="Active" ? "active" : "")">
+                    ACTIVE (@activeC)
+                  </a>
+                <a asp-action="Index" asp-route-filter="Completed"
+                   class="filter-box-tab @(current=="Completed" ? "active" : "")">COMPLETED(@completedC)</a>
+               
+                   
+                   
+                  <a asp-action="Index" asp-route-filter="OnHold"
+                     class="filter-box-tab @(current=="OnHold" ? "active" : "")">
+                    ON HOLD (@onholdC)
+                  </a>
+            </nav>
 
             <section class="project-list">
                 @foreach (var project in Model.ProjectList) 

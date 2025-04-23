@@ -20,24 +20,46 @@ namespace WebApplication1.Controllers
         private readonly AddressService _addressService = addressService;
         public async Task<IActionResult> Members()
         {
-            var users = await _userManager.Users.ToListAsync();
-            var members = await memberService.GetAllMembersAsync();
 
+            // Get all appusers
+            var users = await _userManager.Users.ToListAsync();
+
+            // Get all members
+            var members = await memberService.GetAllMembersAsync()
+                          ?? new List<MemberDto>();
+
+            // 3) Bygg MemberCards och koppla rätt user-id
             var model = new MemberViewModel
             {
                 MemberCards = new List<MemberCardViewModel>(),
-                AllUsers = users // 👈 Här får dropdownen sitt innehåll
+                AllUsers = users
             };
 
             foreach (var member in members)
             {
-                var address = await _addressService.GetByIdAsync(member.AddressId) ?? new AddressDto();
+                var address = await _addressService
+                                  .GetByIdAsync(member.AddressId)
+                                  .ConfigureAwait(false)
+                              ?? new AddressDto();
+
+                // Hitta redan kopplad AppUser
+                var linkedUser = users.FirstOrDefault(u => u.MemberId == member.Id);
 
                 model.MemberCards.Add(new MemberCardViewModel
                 {
                     Member = member,
-                    Address = address
+                    Address = address,
+                    ConnectedAppUserId = linkedUser?.Id   // här sätter vi värdet
                 });
+            }
+
+            // 4) (oförändrat) Hämta current member för inloggad user
+            var appUser = await _userManager.GetUserAsync(User);
+            if (appUser?.MemberId != null)
+            {
+                var cm = await memberService.GetByIdAsync(appUser.MemberId.Value);
+                if (cm != null)
+                    model.CurrentMember = cm;
             }
 
             return View(model);
@@ -104,59 +126,36 @@ namespace WebApplication1.Controllers
             if (!ModelState.IsValid)
                 return RedirectToAction("Members");
 
-            // 🖼 Hantera ny bild
+            // 1) Bild‐upload
             if (model.FormModel.ImageFile != null && model.FormModel.ImageFile.Length > 0)
             {
                 var uploadFolder = Path.Combine(_env.WebRootPath, "uploads");
                 Directory.CreateDirectory(uploadFolder);
-
-                var originalName = Path.GetFileName(model.FormModel.ImageFile.FileName);
-                var fileName = $"{Guid.NewGuid()}_{originalName}";
+                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(model.FormModel.ImageFile.FileName)}";
                 var filePath = Path.Combine(uploadFolder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await model.FormModel.ImageFile.CopyToAsync(stream);
-                }
-
-                model.FormModel.Image = fileName;  // Uppdatera FormModel.Image med det nya filnamnet
+                using var stream = new FileStream(filePath, FileMode.Create);
+                await model.FormModel.ImageFile.CopyToAsync(stream);
+                model.FormModel.Image = fileName;
             }
 
-            // Hämta medlem baserat på det ID som skickades i modellen
+            // 2) Hämta och uppdatera adress
             var member = await memberService.GetByIdAsync(model.FormModel.Id);
-            if (member == null)
-            {
-                return NotFound();
-            }
-
-            // Hämta adressen som är kopplad till medlemmen
+            if (member == null) return NotFound();
             var address = await _addressService.GetByIdAsync(member.AddressId);
-            if (address == null)
-            {
-                return NotFound();
-            }
+            if (address == null) return NotFound();
 
-            // Uppdatera adressen
-            var updatedAddress = new AddressDto
-            {
-                Id = address.Id,  // Använd det befintliga AddressId
-                StreetName = model.FormModel.Address.StreetName,
-                StreetNumber = model.FormModel.Address.StreetNumber,
-                PostalCode = model.FormModel.Address.PostalCode,
-                City = model.FormModel.Address.City
-            };
-
-            // Uppdatera adressen
-            var addressUpdateResult = await _addressService.UpdateAsync(updatedAddress);
-
-            // Kontrollera om adressen uppdaterades korrekt
-            if (!addressUpdateResult.Succeeded)
+            address.StreetName = model.FormModel.Address.StreetName;
+            address.StreetNumber = model.FormModel.Address.StreetNumber;
+            address.PostalCode = model.FormModel.Address.PostalCode;
+            address.City = model.FormModel.Address.City;
+            var addrRes = await _addressService.UpdateAsync(address);
+            if (!addrRes.Succeeded)
             {
                 TempData["Error"] = "Failed to update address.";
                 return RedirectToAction("Members");
             }
 
-            // Uppdatera medlemmen med det uppdaterade AddressId
+            // 3) Uppdatera member‐fält
             member.Image = model.FormModel.Image;
             member.FirstName = model.FormModel.FirstName;
             member.LastName = model.FormModel.LastName;
@@ -164,14 +163,32 @@ namespace WebApplication1.Controllers
             member.Phone = model.FormModel.Phone;
             member.JobTitle = model.FormModel.JobTitle;
             member.DateOfBirth = model.FormModel.DateOfBirth;
-            member.AddressId = addressUpdateResult.Result.Id;  // Uppdatera AddressId med det uppdaterade ID:t
-
-            // Uppdatera medlemmen
-            var updateResult = await memberService.UpdateMemberAsync(member);
-            if (!updateResult.Succeeded)
+            member.AddressId = addrRes.Result.Id;
+            var updateRes = await memberService.UpdateMemberAsync(member);
+            if (!updateRes.Succeeded)
             {
                 TempData["Error"] = "Failed to update member.";
                 return RedirectToAction("Members");
+            }
+
+            // 4) Koppla AppUser via dropdown
+            // Ta bort ev. gammal koppling
+            var oldUser = await _userManager.Users
+                .FirstOrDefaultAsync(u => u.MemberId == member.Id);
+            if (oldUser != null && oldUser.Id != model.FormModel.ConnectedAppUserId)
+            {
+                oldUser.MemberId = null;
+                await _userManager.UpdateAsync(oldUser);
+            }
+            // Sätt ny koppling om vald
+            if (!string.IsNullOrEmpty(model.FormModel.ConnectedAppUserId))
+            {
+                var newUser = await _userManager.FindByIdAsync(model.FormModel.ConnectedAppUserId);
+                if (newUser != null)
+                {
+                    newUser.MemberId = member.Id;
+                    await _userManager.UpdateAsync(newUser);
+                }
             }
 
             return RedirectToAction("Members");

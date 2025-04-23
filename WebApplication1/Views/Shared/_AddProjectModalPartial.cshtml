@@ -26,12 +26,12 @@
                         </div>
                     </div>
                     <input asp-for="FormModel.ImageFile" type="file" id="image-upload" accept="image/*" />
-                    <span asp-validation-for="FormModel.ImageFile" class="text-danger"></span>
+                    <span asp-validation-for="FormModel.ImageFile"></span>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Project Name</label>
                     <input class="form-input" type="text" asp-for="FormModel.ProjectName"/>
-                    <span asp-validation-for="FormModel.ProjectName" class="text-danger"></span>
+                    <span asp-validation-for="FormModel.ProjectName"></span>
                 </div>
 
                 <div class="form-group">
@@ -47,26 +47,26 @@
                             }
                         </ul>
                         <input type="hidden" name="FormModel.ClientId" asp-for="FormModel.ClientId" />
-                        <span asp-validation-for="FormModel.ClientId" class="text-danger"></span>
+                        <span asp-validation-for="FormModel.ClientId" ></span>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Description</label>
                     <textarea class="form-input" asp-for="FormModel.Description"></textarea>
-                     <span asp-validation-for="FormModel.Description" class="text-danger"></span>
+                     <span asp-validation-for="FormModel.Description" ></span>
                 </div>
 
                 <div class="form-horizontal-group">
                     <div class="form-group">
                         <label class="form-label">Start Date</label>
                         <input class="form-input" type="date" asp-for="FormModel.StartDate" />
-                        <span asp-validation-for="FormModel.StartDate" class="text-danger"></span>
+                        <span asp-validation-for="FormModel.StartDate" ></span>
                     </div>
                     <div class="form-group">
                         <label class="form-label">End Date</label>
                         <input class="form-input" type="date" asp-for="FormModel.EndDate" />
-                        <span asp-validation-for="FormModel.EndDate" class="text-danger"></span>
+                        <span asp-validation-for="FormModel.EndDate"></span>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
                         </ul>
                         <input type="hidden" name="FormModel.MemberIds[0]"  id="memberId-input" data-val="true"
                                data-val-required="Please choose a member." />
-                        <span data-valmsg-for="FormModel.MemberIds[0]" class="text-danger"></span>
+                        <span data-valmsg-for="FormModel.MemberIds[0]"></span>
                     </div>
                 </div>
 
@@ -93,7 +93,7 @@
                     <div class="form-input-extended">
                         <i class="fa-duotone fa-solid fa-dollar-sign"></i>
                         <input class="form-input" type="text" asp-for="FormModel.Budget" />
-                        <span asp-validation-for="FormModel.Budget" class="text-danger"></span>
+                        <span asp-validation-for="FormModel.Budget"></span>
                     </div>
                 </div>
 

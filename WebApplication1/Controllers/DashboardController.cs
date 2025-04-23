@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.Design.Serialization;
 using WebApplication1.ViewModels;
 
+
 namespace WebApplication1.Controllers
 {
+
     public class DashboardController(ProjectService projectService, ClientService clientService, MemberService memberService, StatusService statusService, UserManager<AppUserEntity> userManager) : Controller
     {
 
@@ -23,33 +25,44 @@ namespace WebApplication1.Controllers
         private readonly UserManager<AppUserEntity> _userManager = userManager;
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter = "All")
         {
-
-
-
+            // Hämta all data som tidigare
             var status = await _statusService.GetAllStatusAsync();
             var members = await _memberService.GetAllMembersAsync();
             var clients = await _clientService.GetAllClientsAsync();
-
             var dtos = await _projectService.GetAllWithRelationsAsync();
 
-            foreach (var project in dtos)
-            {
-                project.ProjectMembers = members
-                    .Where(m => project.MemberIds.Contains(m.Id))
-                    .ToList();
-            }
 
+            ViewBag.AllCount = dtos.Count();
+            ViewBag.ActiveCount = dtos.Count(p => p.StatusName == "Active");
+            ViewBag.CompletedCount = dtos.Count(p => p.StatusName == "Completed");
+            ViewBag.OnHoldCount = dtos.Count(p => p.StatusName == "On hold");
+
+
+            // Filtrera utifrån vald status
+            var filtered = filter switch
+            {
+                "Active" => dtos.Where(p => p.StatusName == "Active"),
+                "Completed" => dtos.Where(p => p.StatusName == "Completed"),
+                "OnHold"    => dtos.Where(p => p.StatusName == "On hold"),
+                _ => dtos
+            };
+            ViewBag.Filter = filter;
+
+            // Fyll på ProjectMembers‐fält om du behöver
+            foreach (var project in filtered)
+                project.ProjectMembers = members.Where(m => project.MemberIds.Contains(m.Id)).ToList();
+
+            // Skicka till vy
             var model = new ProjectViewModels
             {
                 FormModel = new ProjectFormModel(),
-                ProjectList = dtos,
+                ProjectList = filtered.ToList(),
                 Clients = clients,
                 Members = members,
-                Status = status,
+                Status = status
             };
-
             return View(model);
         }
     }

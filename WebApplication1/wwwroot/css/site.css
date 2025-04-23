@@ -817,6 +817,10 @@ a {
         object-fit: contain;
     }
 
+/*to hide text behind img.from viewcomponent*/
+    .btn-account span {
+        display: none;
+    }
 .btn-notification {
     transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
     background-color: var(--btn-notification-background-color);
@@ -1406,6 +1410,7 @@ textarea {
             border: 2px solid var(--account-name-image-border-color);
         }
 
+
 #gear-container {
     position: relative;
 }
@@ -1742,7 +1747,42 @@ input:checked::before {
                     object-fit: contain;
                 }
 
+.filter-box {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 3rem;
+    border-bottom: 1px solid var(--border-color);
+}
 
+.filter-box-tab {
+    font-weight: 700;
+    font-size: 1rem;
+    background-color: var(--navlink-background-color);
+    border: 1px solid var(--navlink-border-color);
+    color: var(--navlink-text-color);
+    padding: 1rem 1.5rem;
+    border-radius: var(--link-border-radius);
+    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+    font-size: 1em;
+    font-family: var(--font-standard);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.filter-box-tab:hover {
+    background-color: var(--navlink-background-hover-color);
+    border-color: var(--navlink-border-hover-color);
+    color: var(--navlink-text-hover-color);
+}
+
+.filter-box-tab.active {
+    background-color: var(--navlink-background-active-color);
+    border-color: var(--navlink-border-active-color);
+    color: var(--navlink-text-active-color);
+}
 
 
 .center-member {

@@ -57,3 +57,75 @@ document.getElementById('image-upload-edit')?.addEventListener('change', functio
         reader.readAsDataURL(file);
     }
 });
+
+
+
+
+
+const editForm = document.getElementById('EditProjectForm');
+if (editForm) {
+    // plocka ut de fält vi vill validera
+    const nameInput = editForm.querySelector('input[name="FormModel.ProjectName"]');
+    const descInput = editForm.querySelector('textarea[name="FormModel.Description"]');
+    const budgetInput = editForm.querySelector('input[name="FormModel.Budget"]');
+
+    // helper som sätter fel-span
+    function validateField(field, message) {
+        const span = editForm.querySelector(`span[data-valmsg-for='${field.name}']`);
+        if (!span) return true;
+        let ok = true;
+        let err = '';
+        if (field === nameInput || field === descInput) {
+            if (!field.value.trim()) {
+                ok = false;
+                err = field === nameInput
+                    ? 'Please enter a project name.'
+                    : 'Please enter a description.';
+            }
+        }
+        if (field === budgetInput) {
+            const v = parseFloat(field.value);
+            if (isNaN(v) || v <= 0) {
+                ok = false;
+                err = 'Please enter a valid budget.';
+            }
+        }
+        if (!ok) {
+            field.classList.add('input-validation-error');
+            span.textContent = err;
+            span.classList.add('field-validation-error');
+            span.classList.remove('field-validation-valid');
+        } else {
+            field.classList.remove('input-validation-error');
+            span.textContent = '';
+            span.classList.remove('field-validation-error');
+            span.classList.add('field-validation-valid');
+        }
+        return ok;
+    }
+
+    // validera på input
+    [nameInput, descInput, budgetInput].forEach(f => {
+        f.addEventListener('input', () => validateField(f));
+    });
+
+    // validera på submit
+    editForm.addEventListener('submit', function (e) {
+        let ok = true;
+        [nameInput, descInput, budgetInput].forEach(f => {
+            if (!validateField(f)) ok = false;
+        });
+        if (!ok) e.preventDefault();
+    });
+}
+
+
+
+
+
+
+
+
+
+
+

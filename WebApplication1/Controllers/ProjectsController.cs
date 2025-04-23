@@ -20,6 +20,7 @@ namespace WebApplication1.Controllers
         private readonly ClientService _clientService = clientService;
 
 
+
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Add(ProjectViewModels model)
@@ -60,6 +61,16 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(ProjectViewModels form)
         {
+            if (!ModelState.IsValid)
+            {
+                // Fyll på dropdown-listor igen
+                form.Status = await _statusService.GetAllStatusAsync();
+                form.Clients = await _clientService.GetAllClientsAsync();
+                form.Members = await _memberService.GetAllMembersAsync();
+                // VISA SAMMA VY – inte Redirect! Då bevaras ModelState och form-värdena
+                return RedirectToAction("Index", "Dashboard");
+            }
+
             if (form.FormModel.ImageFile != null && form.FormModel.ImageFile.Length > 0)
             {
                 var uploadFolder = Path.Combine(_env.WebRootPath, "uploads");

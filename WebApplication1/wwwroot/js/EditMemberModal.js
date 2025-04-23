@@ -4,6 +4,8 @@ document.querySelectorAll('.open-edit-member-modal').forEach(button => {
     button.addEventListener('click', () => {
         editModal.classList.add('modal-show');
 
+
+
         const image = button.dataset.image;
         if (image) {
             editModal.querySelector('input[name="FormModel.Image"]').value = image;
@@ -74,5 +76,21 @@ document.querySelectorAll('.open-edit-member-modal').forEach(button => {
         modal.querySelector('input[name="FormModel.Address.PostalCode"]').value = postalCode;
         modal.querySelector('input[name="FormModel.DateOfBirth"]').value = dateOfBirth;
 
+
+
+
+
+        //get the correct dropdown via connectappuserid
+        const select = modal.querySelector('select[name="FormModel.ConnectedAppUserId"]');
+
+        //set the value to nothing
+        select.value = "";
+        //console.log('Select after reset:', select.value);
+        // see if there is a value choosen earlier and set the select dropdown to that value
+        const linkedId = button.dataset.connectedappuserid;
+        if (linkedId) {
+            select.value = linkedId;
+            //console.log('Select is set to linkedId:', select.value);
+        }
     });
 });

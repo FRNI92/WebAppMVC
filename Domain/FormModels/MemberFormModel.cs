@@ -31,7 +31,7 @@ namespace Domain.FormModels
 
 
         //to connect member to appuser
-        //public string? ConnectedAppUserId { get; set; }
+        public string? ConnectedAppUserId { get; set; }
 
 
     }

@@ -11,5 +11,9 @@ namespace WebApplication1.ViewModels
             Address = new AddressFormModel()
         };
         public AddressDto Address { get; set; } = new();
+
+
+
+        public string? ConnectedAppUserId { get; set; }
     }
 }

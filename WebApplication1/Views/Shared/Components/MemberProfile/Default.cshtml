@@ -1,0 +1,16 @@
+﻿@using Domain.Dtos
+@model MemberDto
+@* cant find index, needs to be named Default.cshtml *@
+@if (Model != null)
+{
+    <img src="~/uploads/@Model.Image" class="avatar" alt="Profilbild" />
+    <span>@Model.FirstName @Model.LastName</span>
+}
+else if (User.Identity?.IsAuthenticated ?? false)
+{
+    <span>@User.Identity.Name</span>
+}
+else
+{
+    <a asp-controller="Account" asp-action="SignIn">Logga in</a>
+}

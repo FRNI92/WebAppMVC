@@ -1,4 +1,6 @@
-﻿<header id="header">
+﻿
+
+<header id="header">
     <form class="search-form"
           method="get"
           asp-controller=""
@@ -51,20 +53,19 @@
     </div>
 
     <div id="account-container">
-        <span>@User.Identity.Name</span>
+        @* <span>@User.Identity.Name</span> use this to verify correct user *@
         <button id="account-dropdown-menu"
                 type="button"
                 data-type="dropdown"
                 data-target="#account-dropdown"
                 class="btn-account">
-            <img alt="profile image" />
+            @await Component.InvokeAsync("MemberProfile")
         </button>
 
         <div id="account-dropdown" class="dropdown">
             <div class="dropdown-header">
                 <div class="account-name">
-                    <img src="~/Images/tommy-avatar.svg" alt="template avatar" />
-                    <span>Fredrik Nilsson</span>
+                    @await Component.InvokeAsync("MemberProfile")
                 </div>
             </div>
 

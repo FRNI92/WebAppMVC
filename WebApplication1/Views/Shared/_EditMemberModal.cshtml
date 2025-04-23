@@ -77,19 +77,19 @@
                     <input asp-for="FormModel.Address.PostalCode" class="form-input" />
                 </div>
 
-                @* @if (User.IsInRole("Administrator")) *@
-                @* { *@
-                @*     <div class="form-group"> *@
-                @*         <label>Connect App User</label> *@
-                @*         <select asp-for="FormModel.ConnectedAppUserId" class="form-input"> *@
-                @*             <option value="">-- Select User --</option> *@
-                @*             @foreach (var user in Model.AllUsers) *@
-                @*             { *@
-                @*                 <option value="@user.Id">@user.Email</option> *@
-                @*             } *@
-                @*         </select> *@
-                @*     </div> *@
-                @* } *@
+                @if (User.IsInRole("Administrator")) 
+                 { 
+                     <div class="form-group"> 
+                         <label>Connect App User</label> 
+                        <select asp-for="FormModel.ConnectedAppUserId" class="form-input"> 
+                             <option value="">-- Select User --</option> 
+                             @foreach (var user in Model.AllUsers) 
+                             { 
+                                 <option value="@user.Id">@user.Email</option> 
+                           } 
+                      </select> 
+                     </div> 
+                 }
 
                 <div class="form-group">
                     <label>Date Of Birth</label>

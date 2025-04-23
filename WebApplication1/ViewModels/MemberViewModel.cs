@@ -14,8 +14,12 @@ public class MemberViewModel
     public List<MemberCardViewModel> MemberCards { get; set; } = new();
 
 
-
-    //to connect member to appuser if we want
-    public string? ConnectedAppUserId { get; set; } // för bindning från dropdown
     public IEnumerable<AppUserEntity> AllUsers { get; set; } = new List<AppUserEntity>();
+    // Bindas från dropdown när admin väljer en AppUser
+    public string? ConnectedAppUserId { get; set; }
+
+    // För att i t.ex. layouten/vyn kunna visa namn/image
+    public MemberDto? CurrentMember { get; set; }
+
+    public MemberDto? LoggedInUserMember { get; set; }
 }
