@@ -1,5 +1,6 @@
 ﻿
 @using WebApplication1.ViewModels
+@model ProjectViewModels
 @* it will go to layout by default if I remove layout = "layout" *@
 @{
     Layout = "_Layout";
@@ -14,7 +15,6 @@
 }
 
 
-@model ProjectViewModels
 <div class="backoffice-wrapper">
     <aside id="sidebar">
         <section class="logotype">
@@ -75,7 +75,6 @@
         </div>
     </main>
 </div>
-
- @await Html.PartialAsync("_AddProjectModalPartial", Model)  
- @await Html.PartialAsync("_EditProjectModalPartial") 
+  @await Html.PartialAsync("_AddProjectModalPartial", Model)  
+ @await Html.PartialAsync("_EditProjectModalPartial")
 

@@ -1923,3 +1923,235 @@ input:checked::before {
     width: 100%;
 }
 
+
+.member-card {
+    height: 460px;
+    width: 300px;
+    position: relative;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--card-border-color);
+    color: var(--card-text-color);
+    padding: 1.2rem 1rem 1.2rem 1.5rem;
+    border-radius: var(--card-border-radious);
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+    .member-card:focus-within {
+        box-shadow: 0 0 0 2px var(--blue-semilight);
+        /*    transition: box-shadow 0.1s ease-in-out;*/
+    }
+
+    .member-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 0 0 2px var(--blue-semilight);
+        /*        transition: box-shadow 0.1s ease-in-out;*/
+    }
+
+.member-card-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.member-card-body {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+}
+
+    .member-card-body .member-img {
+        height: 150px;
+        width: 150px;
+        overflow: hidden;
+        display: flex;
+        justify-self: center;
+        border-radius: var(--border-btn-radius);
+    }
+
+        .member-card-body .member-img img {
+            height: 150px;
+            width: 150px;
+            object-fit: contain;
+        }
+
+
+
+
+
+
+
+.client-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem; /* eller mindre, t.ex. 0.5rem */
+}
+
+.client-card {
+    height: 150px;
+    width: 200px;
+    position: relative;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--card-border-color);
+    color: var(--card-text-color);
+    padding: 1.2rem 1rem 1.2rem 1.5rem;
+    border-radius: var(--card-border-radious);
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+}
+
+    .client-card:focus-within {
+        box-shadow: 0 0 0 2px var(--blue-semilight);
+        /*    transition: box-shadow 0.1s ease-in-out;*/
+    }
+
+    .client-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 0 0 2px var(--blue-semilight);
+        /*        transition: box-shadow 0.1s ease-in-out;*/
+    }
+
+.client-card-header {
+    display: flex;
+    justify-content: flex-end;
+}
+.client-card-body{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+
+}
+.client-name {
+    font-weight: 700;
+}
+
+
+.client-footer {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .client-footer .client-message {
+        display: flex;
+        font-weight: 600;
+        text-align: center;
+        background-color: var(--white-400);
+        padding: 1rem 1rem;
+        border-radius: var(--border-btn-radius);
+        width: 100%;
+        justify-content: center;
+    }
+
+.client-edith-trigger {
+    min-height: 40px;
+    background-color: var(--form-input-background-color);
+    border: 1px solid var(--form-input-border-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-select-radius);
+    font-size: 1em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+    position: relative;
+}
+
+    .client-edith-trigger .form-select-text {
+        flex: 1;
+        text-align: left;
+    }
+
+    .client-edith-trigger::before {
+        content: '\f141';
+        font-family: var(--font-fontawesome-pro);
+        color: var(--form-input-text-color);
+        position: absolute;
+        right: 1rem;
+        pointer-events: none;
+    }
+
+    .client-edith-trigger:hover {
+        background-color: var(--navlink-background-hover-color);
+        border-color: var(--navlink-border-hover-color);
+        color: var(--navlink-text-hover-color);
+    }
+
+    .client-edith-trigger.active {
+        background-color: var(--navlink-background-active-color);
+        border-color: var(--navlink-border-active-color);
+        color: var(--navlink-text-active-color);
+    }
+
+.client-edith-dropdown {
+    display: none;
+    position: absolute;
+    left: 50px;
+    top: 65px;
+    background-color: var(--drop-down-background-color);
+    border: 1px solid var(--drop-down-border-color);
+    color: var(--drop-down-text-color);
+    padding: 1rem;
+    border-radius: var(--card-border-radious);
+    box-shadow: var(--box-shadow);
+}
+
+    .edith-dropdown:hover,
+    .edith-dropdown:focus-within {
+        box-shadow: var(--drop-down-focus-withing-shadow);
+    }
+
+
+
+    .edith-dropdown .dropdown-header {
+        /* Eventuella stilar */
+    }
+
+    .edith-dropdown .dropdown-body {
+        /* Eventuella stilar */
+    }
+
+    .edith-dropdown .dropdown-footer {
+        /* Eventuella stilar */
+    }
+
+.client-edith-dropdown .dropdown-action {
+    background-color: var(--navlink-background-color);
+    border: 1px solid var(--navlink-border-color);
+    color: var(--navlink-text-color);
+    padding: 1rem 1.5rem;
+    border-radius: var(--link-border-radius);
+    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: var(--font-standard);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.client-edith-dropdown .dropdown-action:hover {
+    background-color: var(--navlink-background-hover-color);
+    border-color: var(--navlink-border-hover-color);
+    color: var(--navlink-text-hover-color);
+}
+
+.client-edith-dropdown .dropdown-action.active {
+    background-color: var(--navlink-background-active-color);
+    border-color: var(--navlink-border-active-color);
+    color: var(--navlink-text-active-color);
+}
+
+.client-edith-dropdown .dropdown-action span {
+    /* Vid behov */
+}
+
+.client-edith-dropdown.dropdown-show {
+    display: block;
+}

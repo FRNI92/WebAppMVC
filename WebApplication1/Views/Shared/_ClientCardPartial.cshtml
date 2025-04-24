@@ -1,0 +1,62 @@
+﻿@using Domain.Dtos
+@model ClientDto
+
+
+
+<div class="client-card">
+    <div class="client-card-header">
+        <button 
+                id="client-dropdown-menu-@Model.Id"
+                type="button"
+                data-type="dropdown"
+                data-target="#edith-dropdown-client-@Model.Id"
+                class="btn-actions client-edith-trigger">
+            <i class="fa-duotone fa-solid fa-ellipsis"></i>
+        </button>
+        <div id="edith-dropdown-client-@Model.Id" class="client-edith-dropdown">
+            <div class="dropdown-body">
+
+                @if (User.IsInRole("Administrator"))
+                {
+                    <nav class="dropdown-actions">
+                        <a data-type="modal"
+                           data-target="#add-edit-client-modal"
+                           class="dropdown-action open-edit-client-modal"
+                           data-id="@Model.Id"
+                           data-name="@Model.ClientName">
+                            <i class="fa-duotone fa-solid fa-pen-to-square"></i>
+                            <span>Edit</span>
+                        </a>
+                        <div class="divider"></div>
+                        <form method="post" asp-action="Delete" asp-controller="Client">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="dropdown-button dropdown-button-danger">
+                                <i class="fa-duotone fa-solid fa-trash-can"></i>
+                                <span>Delete Client</span>
+                            </button>
+                        </form>
+                    </nav>
+                }
+                else
+                {
+                    <nav class="dropdown-actions">
+                        <a data-type="modal"
+                           data-target="#add-edit-client-modal"
+                           class="dropdown-action open-edit-client-modal"
+                           data-id="@Model.Id"
+                           data-name="@Model.ClientName"
+>
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span>View Details</span>
+                        </a>
+                    </nav>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="client-card-body">
+        <div class="client-name">@Model.ClientName</div>
+    </div>
+           
+</div>

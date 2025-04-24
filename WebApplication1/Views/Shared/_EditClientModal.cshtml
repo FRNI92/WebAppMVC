@@ -1,0 +1,33 @@
+﻿@model ClientFormModel
+
+<section id="add-edit-client-modal" class="modal">
+    <div class="card">
+        <div class="card-header">
+            <h3>@(User.IsInRole("Administrator") ? "Edit Client" : "Client Details")</h3>
+            <button data-type="close"
+                    data-target="#add-edit-client-modal"
+                    class="btn-close"></button>
+        </div>
+        <div class="card-body">
+            <form asp-controller="Client"
+                  asp-action="Update"
+                  method="post"
+                  enctype="multipart/form-data">
+                <input asp-for="Id" type="hidden" />
+                <div class="form-horizontal-group">
+                    <div class="form-group">
+                        <label>Client Name</label>
+                        <input asp-for="ClientName" class="form-input" />
+                    </div>
+                </div>
+
+                @if (User.IsInRole("Administrator"))
+                {
+                    <button type="submit" class="btn">Update Client</button>
+                }
+
+            </form>
+        </div>
+    </div>
+</section>
+<script src="@Url.Content("~/js/EditClientModal.js")" asp-append-version="true"></script>

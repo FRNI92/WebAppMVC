@@ -1,0 +1,28 @@
+﻿@model ClientFormModel
+
+<section id="add-client-modal" class="modal">
+    <div class="card">
+        <div class="card-header">
+            <h3>Add Client</h3>
+            <button data-type="close"
+                    data-target="#add-client-modal"
+                    class="btn-close"></button>
+        </div>
+        <div class="card-body">
+            <form asp-controller="Client"
+                  asp-action="Add"
+                  method="post"
+                  enctype="multipart/form-data">
+                <input asp-for="@Model.Id" type="hidden" />
+                <div class="form-horizontal-group">
+                    <div class="form-group">
+                        <label>Client Name</label>
+                        <input asp-for="@Model.ClientName" class="form-input" />
+                    </div>
+                </div>
+                <button type="submit" class="btn">Add Client</button>
+            </form>
+        </div>
+    </div>
+</section>
+@* <script src="@Url.Content("~/js/AddClientModal.js")" asp-append-version="true"></script>  *@

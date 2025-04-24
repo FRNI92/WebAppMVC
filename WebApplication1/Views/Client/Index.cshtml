@@ -1,0 +1,47 @@
+﻿@using WebApplication1.ViewModels
+@* it will go to layout by default if I remove layout = "layout" *@
+@{
+    Layout = "_Layout";
+}
+@model ClientViewModel
+<div class="backoffice-wrapper">
+    <aside id="sidebar">
+        <section class="logotype">
+            <a href="#">
+                <img src="~/Images/AlphaLogo.svg" alt="alpha" />
+                <span>alpha</span>
+            </a>
+        </section>
+        <partial name="_NavLinkPartial" />
+    </aside>
+    <main>
+        @await Html.PartialAsync("_HeaderPartial", Model)
+        <div id="projects" class="page">
+            <div class="page-header">
+                <h1>Clients</h1>
+
+                @if (User.IsInRole("Administrator"))
+                {
+                    <button type="button"
+                            class="btn"
+                            data-type="modal"
+                            data-target="#add-client-modal">
+                        <i class="fa-duotone fa-solid fa-plus"></i>
+                        <span>Add Client</span>
+                    </button>
+                }
+            </div>
+            <section class="client-list">
+                @foreach (var client in Model.Clients)
+                {
+                    @await Html.PartialAsync("_ClientCardPartial", client)
+                }
+            </section>
+
+        </div>
+    </main>
+</div>
+@* the addclient dont want the whole view. it just want the form. VS does not say whats wrong only that some one is getting the wrong data *@
+@await Html.PartialAsync("_AddClientModal", Model.FormModel)
+ @await Html.PartialAsync("_EditClientModal", Model.FormModel) 
+

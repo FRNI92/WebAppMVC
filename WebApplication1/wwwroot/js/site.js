@@ -5,7 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Hjälpfunktion för att stänga alla dropdowns utom en
     function closeAllDropdowns(except = null) {
-        document.querySelectorAll('.dropdown, .edith-dropdown, #notification-dropdown, #account-dropdown')
+        document.querySelectorAll('.dropdown, .edith-dropdown, #notification-dropdown, #account-dropdown, .client-edith-dropdown')
             .forEach(dropdown => {
                 if (dropdown !== except) {
                     dropdown.classList.remove('show');
