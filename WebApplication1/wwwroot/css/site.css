@@ -214,6 +214,7 @@ body.dark-theme {
     --navlink-text-color: var(--blue-accent);
     --btn-notification-text-color: var(--blue-accent);
     /* Lägg till fler overrides vid behov */
+    --text-heading-color: var(--white-100);
 
 }
 
