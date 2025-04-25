@@ -188,3 +188,20 @@ document.querySelectorAll('.delete-project').forEach(button => {
 
 });
 
+
+
+
+//darkmode
+const toggle = document.getElementById("mini-menu-dark-mode-toggle");
+
+// Ladda inställning
+if (localStorage.getItem("darkMode") === "true") {
+    toggle.checked = true;
+    document.body.classList.add("dark-theme");
+}
+
+// Lyssna på ändringar
+toggle.addEventListener("change", () => {
+    document.body.classList.toggle("dark-theme", toggle.checked);
+    localStorage.setItem("darkMode", toggle.checked);
+});

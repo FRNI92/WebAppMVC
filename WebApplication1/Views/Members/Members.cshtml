@@ -3,6 +3,18 @@
 @{
     Layout = "_Layout";
 }
+@* this will show what fields are not correct *@
+
+<script>
+    $(document).ready(function () {
+        // Använd Razor för att korrekt rendera värdet från TempData
+        var showModal = '@TempData["ShowAddMemberModal"]';
+        if (showModal === "true") {
+            $('#add-member-modal').modal('show');
+        }
+    });
+</script>
+
 @model MemberViewModel
 <div class="backoffice-wrapper">
     <aside id="sidebar">

@@ -20,8 +20,8 @@ public class ProjectFormModel
     [Display(Name = "Image", Prompt = "Select a image")]
     public string? Image { get; set; }
 
-    [Required(ErrorMessage = "Please upload an image.")]
-    public IFormFile ImageFile { get; set; }
+    //[Required(ErrorMessage = "Please upload an image.")]
+    public IFormFile? ImageFile { get; set; }
 
     [Required(ErrorMessage = "This field is required.")]
     [DataType(DataType.Text)]
@@ -44,7 +44,7 @@ public class ProjectFormModel
     [Required(ErrorMessage = "Please choose a client.")]
     public int ClientId { get; set; }
 
-    [Required(ErrorMessage = "Please choose at least one member.")]
+    //[Required(ErrorMessage = "Please choose at least one member.")]
     public List<int> MemberIds { get; set; } = new();
     public int StatusId { get; set; }
 

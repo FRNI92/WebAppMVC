@@ -21,6 +21,9 @@ document.querySelectorAll('#add-project-modal .form-select').forEach(select => {
         select.classList.toggle('open');
     });
 
+    // need to define form before I cant useer form.appenchild realinput
+    // had a placeholder for index [0] that needed to be written over before adding to database
+    const form = document.querySelector("#AddProjectForm");
     options.forEach(option => {
         option.addEventListener('click', () => {
             setValue(option.dataset.value, option.textContent);

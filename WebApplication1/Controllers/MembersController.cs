@@ -69,14 +69,24 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new
-                {
-                    errors = ModelState.ToDictionary(
-                        x => x.Key,
-                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                        )
-                });
+                TempData["ShowAddMemberModal"] = true;
+                // Återvänd till Members-sidan och visa Add-member modal
+                return View("Members", model);  // För att skicka tillbaka till Members-sidan med model och fel
             }
+                TempData["ShowAddMemberModal"] = null;
+
+            // use this to see what fields are failing
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(new
+            //    {
+            //        errors = ModelState.ToDictionary(
+            //            x => x.Key,
+            //            x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+            //            )
+            //    });
+            //}
+
             if (model.FormModel.ImageFile != null && model.FormModel.ImageFile.Length > 0)
             {
                 var uploadFolder = Path.Combine(env.WebRootPath, "uploads");
@@ -110,7 +120,7 @@ namespace WebApplication1.Controllers
                 Phone = model.FormModel.Phone,
                 JobTitle = model.FormModel.JobTitle,
                 DateOfBirth = model.FormModel.DateOfBirth,
-                AddressId = 0 // sätts senare i servicen efter addressen sparas
+                AddressId = 0 // is set later when address is saved
             };
 
             var addressId = await _addressService.CreateAsync(addressDto);

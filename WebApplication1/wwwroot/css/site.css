@@ -195,7 +195,32 @@
     --user-notification-number-text-color: var(--white-100);
     --user-notification-text-muted-color: var(--grey-600);
     --user-notification-background-hover-color: var(--blue-light-opacity);
+
+
 }
+
+
+/*darkmode*/
+body.dark-theme {
+    --text-color: var(--white-100);
+    --background-color: #151517;
+    --card-background-color: var(--dark-200);
+    --card-text-color: var(--white-100);
+    --form-input-background-color: var(--dark-300);
+    --form-input-text-color: var(--white-100);
+    --border-color: var(--dark-500);
+    --btn-account-border-color: var(--dark-550);
+    --btn-account-text-color: var(--blue-accent);
+    --navlink-text-color: var(--blue-accent);
+    --btn-notification-text-color: var(--blue-accent);
+    /* Lägg till fler overrides vid behov */
+
+}
+
+
+
+
+
 
 *, *::before, *::after {
     margin: 0;
