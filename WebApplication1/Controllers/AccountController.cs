@@ -1,14 +1,17 @@
 ﻿using Business.Services;
+using Database.Entities;
 using Domain.Dtos;
 using Domain.FormModels;
 using Domain.FormModels.SignUpFormModel;
 using IdentityDatabase.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using WebApplication1.Hubs;
 
 namespace WebApplication1.Controllers;
 
-public class AccountController(UserService userService, SignInManager<AppUserEntity> signInManager, UserManager<AppUserEntity> userManager) : Controller
+public class AccountController(UserService userService, SignInManager<AppUserEntity> signInManager, UserManager<AppUserEntity> userManager, NotificationService notificationService, IHubContext<NotificationHub> notificationHub, MemberService memberService) : Controller
 {
 
     private readonly UserService _userService = userService;
@@ -17,6 +20,10 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
     private readonly SignInManager<AppUserEntity> _signInManager = signInManager;
 
     private readonly UserManager<AppUserEntity> _userManager = userManager;
+
+    private readonly MemberService _memberService = memberService;
+    private readonly NotificationService _notificationService = notificationService;
+    private readonly IHubContext<NotificationHub> _notificationHub = notificationHub;
     public IActionResult SignIn()
     {
 
@@ -43,12 +50,34 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
             user, model.Password, isPersistent: false, lockoutOnFailure: false);
 
         if (result.Succeeded)
+        {
+            if (user.MemberId != null)
+            {
+                var member = await _memberService.GetByIdAsync(user.MemberId.Value);
+
+                var notificationEntity = new NotificationEntity
+                {
+                    Message = $"{member.FirstName} {member.LastName} signed in.",
+                    NotificationTypeId = 1,
+                    TargetGroupId = 1
+                };
+
+                await _notificationService.AddNotificationAsync(notificationEntity);
+                var notifications = await _notificationService.GetNotificationsAsync(user.MemberId.Value);
+                var newNotification = notifications.OrderByDescending(x => x.Created).FirstOrDefault();
+
+                if (newNotification != null)
+                {
+                    await _notificationHub.Clients.All.SendAsync("ReceiveNotification", newNotification);
+                }
+            }
+
             return RedirectToAction("Index", "Dashboard");
+        }
 
         ViewBag.LoginError = "Invalid login attempt.";
         return View(model);
     }
-
     public IActionResult SignUp()
     {
         var model = new SignUpFormModel();

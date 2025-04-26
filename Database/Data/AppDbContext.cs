@@ -15,6 +15,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public DbSet<ProjectMemberEntity> ProjectMembers { get; set; }
 
+
+
+    public DbSet<NotificationEntity> Notifications { get; set; }
+    public DbSet<NotificationDismissedEntity> DismissedNotifications { get; set; }
+    public DbSet<NotificationTypeEntity> NotificationTypes { get; set; }
+    public DbSet<TargetGroupEntity> TargetGroup { get; set;  }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

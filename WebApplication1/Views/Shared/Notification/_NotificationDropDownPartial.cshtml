@@ -1,0 +1,130 @@
+﻿@using Database.Entities
+@inject UserManager<AppUserEntity> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var notifications = new List<NotificationEntity>();
+
+    if (user?.MemberId != null)
+    {
+        notifications = (await NotificationService.GetNotificationsAsync(user.MemberId.Value)).OrderByDescending(x => x.Created).ToList();
+    }
+}
+
+
+<div id="notification-container">
+    <button id="notification-dropdown-menu"
+    type="button"
+    data-type="dropdown"
+    data-target="#notification-dropdown"
+    class="btn-notification btn-notification-trigger">
+        @if (notifications.Any())
+        {
+            <i class="dot dot-red fa-solid fa-circle"></i>
+        }
+        <i class="fa-duotone fa-solid fa-bell"
+        style="--fa-primary-opacity: 0.4; --fa-secondary-opacity: 1"></i>
+    </button>
+
+    <div id="notification-dropdown" class="dropdown">
+        <div class="badge-dropdown-header">
+            <h4>Notifications</h4>
+            <div class="badge badge-red">@notifications.Count()</div>
+        </div>
+        <div class="divider"></div>
+        <div class="notifications">
+            @foreach(var notification in notifications)
+            
+            {
+            <div class="notification">
+                <div class="user-image">
+                    <img src="@notification.Icon" alt="template avatar" />
+                </div>
+                <span class="message">@notification.Message</span>
+                <span class="time" data-created="@notification.Created.ToString("s")">@notification.Created</span>
+                <button class="btn-close" onclick="dissmissNotification(@notification.Id)"></button>
+            </div>
+            }
+                
+        </div>
+    </div>
+</div>
+
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/notificationHub")
+        .build();
+
+    connection.on("ReceiveNotification", function (notification) {
+        const notifications = document.querySelector(".notifications");
+
+        const item = document.createElement("div");
+        item.className = "notification-item";
+        item.setAttribute("data-id", notification.id);
+        item.innerHTML = `
+            <img class="image" src="${notification.icon}" />
+            <div class="message">${notification.message}</div>
+            <div class="time" data-created="${new Date(notification.created).toISOString()}">${notification.created}</div>
+            <button class="btn-close" onclick="dismissNotification('${notification.id}')"></button>
+        `;
+
+        notifications.insertBefore(item, notifications.firstChild);
+
+        updateRelativeTimes();// add these functions
+        updateNotificationCount(); // add these functions
+    });
+
+    connection.on("NotificationDismissed", function (notificationId) {
+        const element = document.querySelector(`.notification-item[data-id='${notificationId}']`);
+        if (element) {
+            element.remove();
+            updateNotificationCount();
+        }
+    });
+
+    connection.start().catch(error => console.error(error));
+
+        async function dismissNotification(notificationId) {
+        try {
+            const res = await fetch(`/api/notifications/dismiss/${notificationId}`, { method: 'POST' });
+            if (res.ok) {
+                removeNotification(notificationId);
+            } else {
+                console.error('Error removing notification');
+            }
+        } catch (error) {
+            console.error('Error removing notification: ', error);
+        }
+    }
+
+    //so we can keep it DRY
+    function removeNotification(notificationId) {
+        const element = document.querySelector(`.notification-item[data-id="${notificationId}"]`);
+        if (element) {
+            element.remove();
+            updateNotificationCount();
+        }
+    }
+
+    function updateNotificationCount() {
+    const notifications = document.querySelector('.notifications');
+    const notificationNumber = document.querySelector('.notification-number');
+    const notificationDropdownButton = document.querySelector('#notification-dropdown-button');
+    const count = notifications.querySelectorAll('.notification-item').length;
+
+    if (notificationNumber) {
+        notificationNumber.textContent = count;
+    }
+
+    let dot = notificationDropdownButton.querySelector('.dot.dot-red');
+    if (count > 0 && !dot) {
+        dot = document.createElement('div');
+        dot.className = 'dot dot-red';
+        notificationDropdownButton.appendChild(dot);
+    }
+
+    if (count === 0 && dot) {
+        dot.remove();
+    }
+    
+
+</script>

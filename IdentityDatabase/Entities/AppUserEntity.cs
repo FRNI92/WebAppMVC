@@ -7,4 +7,5 @@ public class AppUserEntity : IdentityUser
 {
 
     public int? MemberId { get; set; }
+
 }

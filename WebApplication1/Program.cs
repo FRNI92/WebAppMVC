@@ -6,9 +6,11 @@ using IdentityDatabase.Data;
 using IdentityDatabase.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();//to work with notification entitites
 
 //add dbcontext via builder
 builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB")));
@@ -39,7 +41,8 @@ builder.Services.ConfigureApplicationCookie(x =>
     x.SlidingExpiration = true;
 });
 
-
+// register hub notification
+builder.Services.AddScoped<NotificationService>();
 //register services
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProjectService>();
@@ -105,6 +108,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Dashboard}/{action=Index}/{id?}")
     .WithStaticAssets();
-
+app.MapHub<NotificationHub>("/notoficationhub");
 
 app.Run();

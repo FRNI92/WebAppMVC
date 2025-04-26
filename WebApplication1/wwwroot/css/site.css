@@ -52,6 +52,7 @@
     --dark-500: #333333;
     --dark-600: #38383B;
     --dark-700: #414144;
+    --darkmode-dark:#151517;
     --dark-opacity-20: rgba(26, 25, 38, 0.2);
     --dark-opacity-60: rgba(26, 25, 38, 0.6);
     --drop-shadow-focus-withing: 0 0 10px rgba(0, 123, 255, 0.4);
@@ -215,7 +216,20 @@ body.dark-theme {
     --btn-notification-text-color: var(--blue-accent);
     /* Lägg till fler overrides vid behov */
     --text-heading-color: var(--white-100);
-
+    /*    notification-dropdown*/
+    /*    --user-notification-text-color: var(--white-100);*/
+    --drop-down-text-color: var(--white-100);
+    --drop-down-border-color: var(--darkmode-dark);
+    --drop-down-background-color: var(--dark-100);
+    --drop-down-focus-withing-shadow: var(--drop-shadow-focus-withing);
+    --user-notification-text-color: var(--white-100);
+    /*    --btn-close-background-color: var(--blue-accent);*/
+    --btn-close-border-color: var(--blue-accent);
+    --btn-close-text-color: var(--blue-accent);
+/*    outline: 1px solid var(--btn-focus-border-color);*/
+/*    background-color: var(--btn-hover-background-color);*/
+/*    border: 2px solid var(--btn-hover-border-color);*/
+    --btn-hover-text-color: var(--blue-accent);
 }
 
 

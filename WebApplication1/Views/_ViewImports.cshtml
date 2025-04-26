@@ -1,8 +1,14 @@
 ﻿
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Business.Services
 @using WebApplication1.ViewModels
 @using Domain.FormModels
 @using Domain.FormModels.SignUpFormModel
 @using IdentityDatabase.Entities
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<AppUserEntity> signInManager
+
+
+@* this is for signalr *@
+@inject NotificationService NotificationService
+@inject UserService UserService
