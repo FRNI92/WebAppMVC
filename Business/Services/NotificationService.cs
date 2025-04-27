@@ -18,10 +18,10 @@ public class NotificationService(AppDbContext context, IdentityAppContext identi
             switch (notificationEntity.NotificationTypeId)
             {
                 case 1:
-                    notificationEntity.Icon = "~/images/profiles/user-template.svg";
+                    notificationEntity.Icon = "/images/Logout.svg";
                     break;
                 case 2:
-                    notificationEntity.Icon = "~/images/projects/project-template.svg";
+                    notificationEntity.Icon = "/images/company_logo.svg";
                     break;
             }
         }

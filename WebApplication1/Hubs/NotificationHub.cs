@@ -11,10 +11,4 @@ public class NotificationHub : Hub
         //this will trigger the javascript in _notification dropdown partial
         await Clients.All.SendAsync("RecieveNotification", notification);
     }
-
-    //public async Task SendNotificationToAdmin(object notification)
-    //{
-        //this will trigger the javascript in _notification dropdown partial
-        //await Clients.All.SendAsync("AdminNewMemberNotification", notification);
-    //}
 }

@@ -1,4 +1,5 @@
 ﻿using Business.Services;
+using Database.Entities;
 using Domain.Dtos;
 using Domain.Extensions;
 using Domain.FormModels;
@@ -11,13 +12,14 @@ using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    public class MembersController(MemberService memberService, IWebHostEnvironment env, AddressService addressService, UserManager<AppUserEntity> userManager) : Controller
+    public class MembersController(MemberService memberService, IWebHostEnvironment env, AddressService addressService, UserManager<AppUserEntity> userManager, NotificationService notificationService) : Controller
     {
 
         private readonly IWebHostEnvironment _env = env;
         private readonly UserManager<AppUserEntity> _userManager = userManager;
 
         private readonly AddressService _addressService = addressService;
+        private readonly NotificationService _notificationService = notificationService;
         public async Task<IActionResult> Members()
         {
 
@@ -73,7 +75,7 @@ namespace WebApplication1.Controllers
                 // Återvänd till Members-sidan och visa Add-member modal
                 return View("Members", model);  // För att skicka tillbaka till Members-sidan med model och fel
             }
-                TempData["ShowAddMemberModal"] = null;
+            TempData["ShowAddMemberModal"] = null;
 
             // use this to see what fields are failing
             //if (!ModelState.IsValid)
@@ -122,6 +124,18 @@ namespace WebApplication1.Controllers
                 DateOfBirth = model.FormModel.DateOfBirth,
                 AddressId = 0 // is set later when address is saved
             };
+
+            //try adding signalR when member is created
+            var notificationEntity = new NotificationEntity
+            {
+                Message = $"New member {memberDto.FirstName} {memberDto.LastName} was created",
+                NotificationTypeId = 1, // User
+                TargetGroupId = 2 // Admins
+            };
+
+            await _notificationService.AddNotificationAsync(notificationEntity);
+
+
 
             var addressId = await _addressService.CreateAsync(addressDto);
             memberDto.AddressId = addressId;
@@ -205,7 +219,7 @@ namespace WebApplication1.Controllers
         }
 
 
-         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await memberService.DeleteMemberAsync(id);

@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
+
     // Modal: Öppna/stäng med data-type="modal"/"close"
     document.querySelectorAll('[data-type="modal"]').forEach(button => {
         button.addEventListener("click", () => {
@@ -66,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             target?.classList.remove("modal-show");
         });
     });
+
 
 
 //delete button in edit,add member, delete drop down
@@ -205,3 +208,54 @@ toggle.addEventListener("change", () => {
     document.body.classList.toggle("dark-theme", toggle.checked);
     localStorage.setItem("darkMode", toggle.checked);
 });
+
+
+
+
+// this part updates message count
+document.querySelectorAll('.notifications .btn-close').forEach(button => {
+    button.addEventListener('click', event => {
+        event.stopPropagation();
+
+        const notification = button.closest('.notification-item');
+        if (notification) {
+            notification.remove();
+            updateNotificationCount(); // <-- UPPDATERA siffran DIREKT
+        }
+    });
+});
+
+
+//handle the time when messages was added
+function updateRelativeTimes() {
+    const elements = document.querySelectorAll('.notification .time');
+    const now = new Date();
+
+    elements.forEach(el => {
+        const created = new Date(el.getAttribute('data-created'));
+        const diff = now - created;
+
+        const diffSeconds = Math.floor(diff / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+        const diffWeeks = Math.floor(diffDays / 7);
+
+        let relativeTime = '';
+
+        if (diffMinutes < 1) {
+            relativeTime = 'Just now';
+        } else if (diffMinutes < 60) {
+            relativeTime = `${diffMinutes} min ago`;
+        } else if (diffHours < 24) {
+            relativeTime = `${diffHours} hours ago`;
+        } else if (diffDays < 7) {
+            relativeTime = `${diffDays} days ago`;
+        } else {
+            relativeTime = `${diffWeeks} weeks ago`;
+        }
+
+        el.textContent = relativeTime;
+    });
+}
+

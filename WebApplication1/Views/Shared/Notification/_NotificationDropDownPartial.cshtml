@@ -28,20 +28,20 @@
     <div id="notification-dropdown" class="dropdown">
         <div class="badge-dropdown-header">
             <h4>Notifications</h4>
-            <div class="badge badge-red">@notifications.Count()</div>
+            <div class="badge badge-red notification-number">@notifications.Count()</div>
         </div>
         <div class="divider"></div>
         <div class="notifications">
             @foreach(var notification in notifications)
             
             {
-            <div class="notification">
+                <div class="notification notification-item" data-id="@notification.Id">
                 <div class="user-image">
                     <img src="@notification.Icon" alt="template avatar" />
                 </div>
                 <span class="message">@notification.Message</span>
                 <span class="time" data-created="@notification.Created.ToString("s")">@notification.Created</span>
-                <button class="btn-close" onclick="dissmissNotification(@notification.Id)"></button>
+                    <button class="btn-close" onclick="dismissNotification('@notification.Id')"></button>
             </div>
             }
                 
@@ -55,10 +55,10 @@
         .build();
 
     connection.on("ReceiveNotification", function (notification) {
-        const notifications = document.querySelector(".notifications");
+            const notifications = document.querySelector(".notifications");
 
         const item = document.createElement("div");
-        item.className = "notification-item";
+            item.className = "notification notification-item";
         item.setAttribute("data-id", notification.id);
         item.innerHTML = `
             <img class="image" src="${notification.icon}" />
@@ -74,7 +74,7 @@
     });
 
     connection.on("NotificationDismissed", function (notificationId) {
-        const element = document.querySelector(`.notification-item[data-id='${notificationId}']`);
+                const element = document.querySelector(`.notification-item[data-id='${notificationId}']`);
         if (element) {
             element.remove();
             updateNotificationCount();
@@ -85,7 +85,7 @@
 
         async function dismissNotification(notificationId) {
         try {
-            const res = await fetch(`/api/notifications/dismiss/${notificationId}`, { method: 'POST' });
+            const res = await fetch(`/api/notification/dismiss/${notificationId}`, { method: 'POST' });
             if (res.ok) {
                 removeNotification(notificationId);
             } else {
@@ -98,7 +98,7 @@
 
     //so we can keep it DRY
     function removeNotification(notificationId) {
-        const element = document.querySelector(`.notification-item[data-id="${notificationId}"]`);
+                    const element = document.querySelector(`.notification-item[data-id='${notificationId}']`);
         if (element) {
             element.remove();
             updateNotificationCount();
@@ -108,8 +108,8 @@
     function updateNotificationCount() {
     const notifications = document.querySelector('.notifications');
     const notificationNumber = document.querySelector('.notification-number');
-    const notificationDropdownButton = document.querySelector('#notification-dropdown-button');
-    const count = notifications.querySelectorAll('.notification-item').length;
+        const notificationDropdownButton = document.querySelector('#notification-dropdown-menu');
+        const count = notifications.querySelectorAll('.notification-item').length;
 
     if (notificationNumber) {
         notificationNumber.textContent = count;
@@ -125,6 +125,6 @@
     if (count === 0 && dot) {
         dot.remove();
     }
-    
+}// I dont know why but this is one made de id valid 
 
 </script>
