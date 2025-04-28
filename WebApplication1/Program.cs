@@ -108,6 +108,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Dashboard}/{action=Index}/{id?}")
     .WithStaticAssets();
-app.MapHub<NotificationHub>("/notoficationhub");
+app.MapHub<NotificationHub>("/notificationhub");
 
 app.Run();

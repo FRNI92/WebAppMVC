@@ -18,7 +18,7 @@
                 </div>
                 <div class="card-body">
 
-                    <!-- Google login form -->
+                     @* Google login *@
                     <form method="post" asp-controller="Account" asp-action="SignInWithGoogle">
                         <button class="btn-external" type="submit">
                             <img src="@Url.Content("~/Images/google-icon.svg")" alt="google icon" />
@@ -28,7 +28,7 @@
 
                     <div class="or-divider"><span>OR</span></div>
 
-                    <!-- Normal login form -->
+                    @* Normal login form *@
                     <form method="post" asp-controller="Account" asp-action="SignIn" novalidate>
                         <div class="form-group">
                             <label asp-for="Email" class="form-label"></label>
@@ -50,12 +50,15 @@
                             </label>
                         </div>
 
-                        <button type="submit" class="btn">Log In</button>
-
+                        <button type="submit" class="btn">Log In
+                        </button>
                         @if (ViewBag.LoginError != null)
                         {
                             <span class="login-error-message">@ViewBag.LoginError</span>
                         }
+
+
+
                     </form>
                 </div>
 

@@ -13,7 +13,12 @@
     var completedC = ViewBag.CompletedCount;
     var onholdC = ViewBag.OnHoldCount;
 }
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<AppUserEntity> UserManager
 
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
 
 <div class="backoffice-wrapper">
     <aside id="sidebar">
@@ -31,15 +36,15 @@
             <div class="page-header">
                 <h1>Projects</h1>
 
-                @if (User.IsInRole("Administrator"))
+                @if (user?.MemberId != null)
                 {
-                <button type="button"
-                        class="btn"
-                        data-type="modal"
-                        data-target="#add-project-modal">
-                    <i class="fa-duotone fa-solid fa-plus"></i>
-                    <span>Add Project</span>
-                </button>
+                    <button type="button"
+                            class="btn"
+                            data-type="modal"
+                            data-target="#add-project-modal">
+                        <i class="fa-duotone fa-solid fa-plus"></i>
+                        <span>Add Project</span>
+                    </button>
                 }
                     
             </div>

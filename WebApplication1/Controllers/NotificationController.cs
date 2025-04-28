@@ -18,6 +18,8 @@ public class NotificationController(UserManager<AppUserEntity> userManager, IHub
     private readonly NotificationService _notificationService = notificationService;
     private readonly UserManager<AppUserEntity> _userManager = userManager;
 
+
+    [HttpPost]// not in use. project and member goes straight to signalR
     public async Task<IActionResult> CreateNotification(NotificationEntity notificationEntity)
     {
         await _notificationService.AddNotificationAsync(notificationEntity);
@@ -33,7 +35,7 @@ public class NotificationController(UserManager<AppUserEntity> userManager, IHub
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetNotifications()
+    public async Task<IActionResult> GetNotifications()// not in use,project and member goes straight to signalR
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = await _userManager.FindByIdAsync(userId);
@@ -44,7 +46,7 @@ public class NotificationController(UserManager<AppUserEntity> userManager, IHub
         return Ok(notifications);
     }
 
-    [HttpPost("dismiss/{id}")]
+    [HttpPost("dismiss/{id}")]// this is the only API I user
     public async Task<IActionResult> DismissNotification(string id)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

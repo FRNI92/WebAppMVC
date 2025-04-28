@@ -9,6 +9,7 @@ public class NotificationHub : Hub
     public async Task SendNotification(object notification)
     {
         //this will trigger the javascript in _notification dropdown partial
-        await Clients.All.SendAsync("RecieveNotification", notification);
+        // connection.on("recieve") catches the messages and can work with it via javascript. no pagereload
+        await Clients.All.SendAsync("ReceiveNotification", notification);
     }
 }

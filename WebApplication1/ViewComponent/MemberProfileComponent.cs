@@ -27,8 +27,15 @@ public class MemberProfileViewComponent : ViewComponent
         if (user?.MemberId != null)
         {
             var member = await _memberService.GetByIdAsync(user.MemberId.Value);
+
+            if (string.IsNullOrEmpty(member.Image))
+            {
+                member.Image = "/Images/Avatar.svg";
+            }
+
             return View(member);
         }
+
         return View(new MemberDto { FirstName = "logged in not member - Guest", LastName = "", Image = "/Images/Avatar.svg" });
     }
 }

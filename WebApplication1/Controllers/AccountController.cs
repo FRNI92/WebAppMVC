@@ -4,6 +4,7 @@ using Domain.Dtos;
 using Domain.FormModels;
 using Domain.FormModels.SignUpFormModel;
 using IdentityDatabase.Entities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -117,7 +118,7 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
 
     public new async Task<IActionResult> SignOut()
     {
-
+        await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);// so I cant be mistaken for logged in not member - guest
         await _signInManager.SignOutAsync();
         return RedirectToAction("SignIn", "Account");
     }

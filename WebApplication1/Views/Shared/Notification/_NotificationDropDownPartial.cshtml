@@ -1,4 +1,5 @@
 ﻿@using Database.Entities
+
 @inject UserManager<AppUserEntity> UserManager
 @{
     var user = await UserManager.GetUserAsync(User);
@@ -19,7 +20,7 @@
     class="btn-notification btn-notification-trigger">
         @if (notifications.Any())
         {
-            <i class="dot dot-red fa-solid fa-circle"></i>
+                <i class="dot dot-red fa-solid fa-circle show"></i>
         }
         <i class="fa-duotone fa-solid fa-bell"
         style="--fa-primary-opacity: 0.4; --fa-secondary-opacity: 1"></i>
@@ -50,16 +51,23 @@
 </div>
 
 <script>
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/notificationHub")
-        .build();
+    //start new signlarR connection to my Hub
+    const connection = new signalR.HubConnectionBuilder()// have tried changeing url an rewriting this part but devtools still says refrenceerror signalR not defined
+        .withUrl("/notificationhub")// my dismiss part still goes to correct API so I dont think this error breaks the program
+        .build()
 
+
+        //Listen for incoming notification from server
     connection.on("ReceiveNotification", function (notification) {
+        console.log("entered ReceiveNotification", notification);
             const notifications = document.querySelector(".notifications");
 
+            // create a new notification item
         const item = document.createElement("div");
             item.className = "notification notification-item";
         item.setAttribute("data-id", notification.id);
+        
+        //fill it with the following structure
         item.innerHTML = `
             <img class="image" src="${notification.icon}" />
             <div class="message">${notification.message}</div>
@@ -67,20 +75,22 @@
             <button class="btn-close" onclick="dismissNotification('${notification.id}')"></button>
         `;
 
+        //insert new notification at top
         notifications.insertBefore(item, notifications.firstChild);
 
         updateRelativeTimes();// add these functions
         updateNotificationCount(); // add these functions
     });
 
+    // uses removeNotification function on line 105
     connection.on("NotificationDismissed", function (notificationId) {
-                const element = document.querySelector(`.notification-item[data-id='${notificationId}']`);
-        if (element) {
-            element.remove();
-            updateNotificationCount();
-        }
+        removeNotification(notificationId);
     });
 
+
+    //starts the signalR connection and logs the error if fail
+    // goes to the api controller
+    
     connection.start().catch(error => console.error(error));
 
         async function dismissNotification(notificationId) {
@@ -95,36 +105,38 @@
             console.error('Error removing notification: ', error);
         }
     }
-
+    //same hub. just a different message it can catch
+    // removes item. the  innterHTML I made before
     //so we can keep it DRY
     function removeNotification(notificationId) {
-                    const element = document.querySelector(`.notification-item[data-id='${notificationId}']`);
+        console.log("Removing notification with ID:", notificationId);
+        const element = document.querySelector(`.notification-item[data-id='${notificationId}']`);
         if (element) {
             element.remove();
             updateNotificationCount();
         }
     }
 
-    function updateNotificationCount() {
-    const notifications = document.querySelector('.notifications');
-    const notificationNumber = document.querySelector('.notification-number');
+     function updateNotificationCount() {
+        const notifications = document.querySelector('.notifications');
+        const notificationNumber = document.querySelector('.notification-number');
         const notificationDropdownButton = document.querySelector('#notification-dropdown-menu');
+        const dot = notificationDropdownButton.querySelector('.dot.dot-red');
         const count = notifications.querySelectorAll('.notification-item').length;
+        console.log("Current notification count:", count);
 
-    if (notificationNumber) {
-        notificationNumber.textContent = count;
+        if (notificationNumber) {
+            notificationNumber.textContent = count;
+        }
+
+        if (dot) {
+            if (count > 0) {
+                dot.classList.add('show'); // could not see dot so I remade it with show
+            } else {
+                dot.classList.remove('show'); // hides dot
+            }
+        }
     }
 
-    let dot = notificationDropdownButton.querySelector('.dot.dot-red');
-    if (count > 0 && !dot) {
-        dot = document.createElement('div');
-        dot.className = 'dot dot-red';
-        notificationDropdownButton.appendChild(dot);
-    }
-
-    if (count === 0 && dot) {
-        dot.remove();
-    }
-}// I dont know why but this is one made de id valid 
 
 </script>

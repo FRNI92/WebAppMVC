@@ -1,13 +1,18 @@
 ﻿using Business.Services;
+using Database.Entities;
 using Domain.Dtos;
 using Domain.Extensions;
+using IdentityDatabase.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using WebApplication1.Hubs;
 using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    public class ProjectsController(ProjectService projectService,IWebHostEnvironment env, ClientService clientService, MemberService memberService, StatusService statusService): Controller
+    public class ProjectsController(ProjectService projectService, IWebHostEnvironment env, ClientService clientService, MemberService memberService, StatusService statusService, NotificationService notificationService, IHubContext<NotificationHub> notificationHub, UserManager<AppUserEntity> userManager) : Controller
     {
 
         private readonly IWebHostEnvironment _env = env;
@@ -19,12 +24,22 @@ namespace WebApplication1.Controllers
         private readonly ProjectService _projectService = projectService;
         private readonly ClientService _clientService = clientService;
 
+        private readonly NotificationService _notificationService = notificationService;
+        private readonly IHubContext<NotificationHub> _notificationHub = notificationHub;
 
+        private readonly UserManager<AppUserEntity> _userManager = userManager;
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize]// so that members and admin can create project
         [HttpPost]
         public async Task<IActionResult> Add(ProjectViewModels model)
         {
+            var appUser = await _userManager.GetUserAsync(User);
+
+            if (appUser?.MemberId == null)
+            {
+                return RedirectToAction("AdminLogin", "AdminController"); // Eller visa en snygg "Access denied"-vy om du vill
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(new
@@ -53,6 +68,26 @@ namespace WebApplication1.Controllers
             }
 
             await _projectService.CreateAsync(model.FormModel);
+
+            var notification = new NotificationEntity
+            {
+                Message = $"New project {model.FormModel.ProjectName} was created",
+                NotificationTypeId = 2,
+                TargetGroupId = 1, // AllUsers!
+                Icon = "/uploads/" + model.FormModel.Image
+            };
+
+            await _notificationService.AddNotificationAsync(notification);
+
+            await _notificationHub.Clients.All.SendAsync("ReceiveNotification", new
+            {
+                id = notification.Id,
+                message = notification.Message,
+                icon = "/uploads/" + model.FormModel.Image,
+                created = notification.Created
+            });
+
+
             return RedirectToAction("Index", "Dashboard");
         }
 

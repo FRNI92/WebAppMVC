@@ -24,7 +24,7 @@ namespace WebApplication1.Controllers
 
         private readonly UserManager<AppUserEntity> _userManager = userManager;
 
-
+        [Authorize]
         public async Task<IActionResult> Index(string filter = "All")
         {
             // Hämta all data som tidigare

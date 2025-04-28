@@ -1120,6 +1120,35 @@ a {
     border: 1px solid var(--red)!important;
 }
 
+.login-error-message {
+    z-index: 1;
+    text-align: center;
+    display: inline-flex;
+    top: 60px;
+    right: 0.2rem;
+    font-size: 0.8em;
+    color: var(--red);
+    background-color: var(--red-semilight);
+    border-radius: 14px;
+    padding: 0.5rem 1rem;
+    text-align: right;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+    .login-error-message::before {
+        content: '\f071';
+        font-family: var(--font-fontawesome-pro);
+        font-size: 1.1em;
+        font-weight: var(--font-standard);
+    }
+
+.login-error-message {
+    border: 1px solid var(--red) !important;
+}
+
+
 /*//dropdown error*/
 .form-select.input-validation-error {
     border: 1px solid var(--red);
