@@ -4,8 +4,10 @@ using Database.Entities;
 using Database.Repos;
 using IdentityDatabase.Data;
 using IdentityDatabase.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WebApplication1.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,7 +41,23 @@ builder.Services.ConfigureApplicationCookie(x =>
     x.Cookie.IsEssential = true;
     //x.Cookie.Expiration = TimeSpan.FromHours(1);
     x.SlidingExpiration = true;
+
+    x.Cookie.SameSite = SameSiteMode.None; //third party setup. is created by third party
+    x.Cookie.SecurePolicy = CookieSecurePolicy.Always; //third party setup
 });
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+    .AddCookie()
+    .AddGoogle(x =>
+    {
+        x.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        x.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]; ;
+    });
+
+
 
 // register hub notification
 builder.Services.AddScoped<NotificationService>();

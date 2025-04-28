@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging.Abstractions;
+using System.Security.Claims;
 using WebApplication1.Hubs;
 
 namespace WebApplication1.Controllers;
@@ -123,6 +125,79 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
         return RedirectToAction("SignIn", "Account");
     }
 
+
+
+    [HttpPost]
+    public IActionResult ExternalSignInWithGoogle(string provider, string returnUrl = null!)
+    {
+        if(string.IsNullOrEmpty(provider))
+        {
+            ModelState.AddModelError("", "Invalid provider");
+            return View("SignIn");
+        }
+
+        var redirectUrl = Url.Action("ExternalSignInWithGoogleCallBack", "Account", new { returnUrl })!;
+        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        return Challenge(properties, provider);
+    }
+
+
+    //rename and reuse this if I have time to add more 3rd login
+    public async Task <IActionResult> ExternalSignInWithGoogleCallBack(string returnUrl = null!, string remoteError = null!)
+    {
+        returnUrl ??= Url.Content("~/");
+        if(!string.IsNullOrEmpty(remoteError))
+        {
+            ModelState.AddModelError("", $"Error from external proider: {remoteError}");
+            return View("SignIn");
+        }
+        var info = await _signInManager.GetExternalLoginInfoAsync();
+        if (info == null)
+            return RedirectToAction("SignIn");
+
+        var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+        if (signInResult.Succeeded)
+        {
+            return LocalRedirect(returnUrl);
+        }
+        else
+        {
+
+            // If I change my entity and add more fields I can implement this 
+            // add firstname and lastname in the new appuserentity in that case
+            //string firstName = string.Empty;
+            //string lastName = string.Empty;
+
+            //try
+            //{
+            //    firstName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "";
+            //    lastName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "";
+            //}
+            //catch {  }
+
+
+
+
+            string email = info.Principal.FindFirstValue(ClaimTypes.Email)!;
+            string username = $"ext_{info.LoginProvider.ToLower()}_{email}";
+
+            var user = new AppUserEntity { UserName = username, Email = email };
+
+            var indentityResult = await _userManager.CreateAsync(user);
+            if (indentityResult.Succeeded)
+            {
+                await _userManager.AddLoginAsync(user, info);
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return LocalRedirect(returnUrl);
+            }
+            foreach(var error in indentityResult.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+            return View("SignIn");
+
+        }
+    }
 }
 
 

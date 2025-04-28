@@ -19,8 +19,9 @@
                 <div class="card-body">
 
                      @* Google login *@
-                    <form method="post" asp-controller="Account" asp-action="SignInWithGoogle">
-                        <button class="btn-external" type="submit">
+                    <form method="post" asp-controller="Account" asp-action="ExternalSignInWithGoogle" novalidate>
+                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                        <button class="btn-external" type="submit" name="provider" value="Google">
                             <img src="@Url.Content("~/Images/google-icon.svg")" alt="google icon" />
                             <span>Login with Google</span>
                         </button>

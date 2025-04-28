@@ -24,6 +24,15 @@ public class MemberProfileViewComponent : ViewComponent
             return View(new MemberDto { FirstName = "Not logged in", LastName = "", Image = "/Images/Avatar.svg" });
 
         var user = await _userManager.GetUserAsync(HttpContext.User);
+
+        var externalLogins = await _userManager.GetLoginsAsync(user);// to handle showing from what you logged in with
+        string loginMethod = externalLogins.Any()
+            ? $"Logged in with {externalLogins.First().LoginProvider}"
+            : "Logged in with email and password";
+
+        ViewBag.LoginMethod = loginMethod;
+
+        
         if (user?.MemberId != null)
         {
             var member = await _memberService.GetByIdAsync(user.MemberId.Value);
