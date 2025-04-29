@@ -71,20 +71,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Member</label>
-                    <div class="form-select" data-val="0" data-placeholder="Choose a Member">
+                    <label class="form-label">Members</label>
+                    <div id="member-select" class="form-select" data-val="0" data-placeholder="Choose a member">
                         <button type="button" class="form-select-trigger">
                             <span class="form-select-text"></span>
                         </button>
                         <ul class="form-select-options">
-                            @foreach (var members in Model.Members)
+                            @foreach (var member in Model.Members)
                             {
-                                <li class="form-select-option" data-value="@members.Id"> @($"{members.FirstName} {members.LastName} {members.JobTitle}")</li>
+                                <li class="form-select-option" data-value="@member.Id">
+                                    @($"{member.FirstName} {member.LastName} ({member.JobTitle})")
+                                </li>
                             }
                         </ul>
-                        <input type="hidden" name="FormModel.MemberIds[0]"  id="memberId-input" data-val="true"
-                               data-val-required="Please choose a member." />
-                        <span data-valmsg-for="FormModel.MemberIds[0]"></span>
+                        <div id="selected-members-container"></div> <!-- Här skapas hidden inputs för varje vald member -->
+                        <span asp-validation-for="FormModel.MemberIds"></span>
                     </div>
                 </div>
 

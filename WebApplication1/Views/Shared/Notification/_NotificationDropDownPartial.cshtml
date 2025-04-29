@@ -51,35 +51,36 @@
 </div>
 
 <script>
+
     //start new signlarR connection to my Hub
     const connection = new signalR.HubConnectionBuilder()// have tried changeing url an rewriting this part but devtools still says refrenceerror signalR not defined
-        .withUrl("/notificationhub")// my dismiss part still goes to correct API so I dont think this error breaks the program
-        .build()
+    .withUrl("/notificationhub")// my dismiss part still goes to correct API so I dont think this error breaks the program
+    .build()
 
 
-        //Listen for incoming notification from server
+    //Listen for incoming notification from server
     connection.on("ReceiveNotification", function (notification) {
         console.log("entered ReceiveNotification", notification);
-            const notifications = document.querySelector(".notifications");
+    const notifications = document.querySelector(".notifications");
 
-            // create a new notification item
-        const item = document.createElement("div");
-            item.className = "notification notification-item";
-        item.setAttribute("data-id", notification.id);
-        
-        //fill it with the following structure
-        item.innerHTML = `
-            <img class="image" src="${notification.icon}" />
-            <div class="message">${notification.message}</div>
-            <div class="time" data-created="${new Date(notification.created).toISOString()}">${notification.created}</div>
-            <button class="btn-close" onclick="dismissNotification('${notification.id}')"></button>
-        `;
+    // create a new notification item
+    const item = document.createElement("div");
+    item.className = "notification notification-item";
+    item.setAttribute("data-id", notification.id);
 
-        //insert new notification at top
-        notifications.insertBefore(item, notifications.firstChild);
+    //fill it with the following structure
+    item.innerHTML = `
+<img class="image" src="${notification.icon}" />
+<div class="message">${notification.message}</div>
+<div class="time" data-created="${new Date(notification.created).toISOString()}">${notification.created}</div>
+<button class="btn-close" onclick="dismissNotification('${notification.id}')"></button>
+    `;
 
-        updateRelativeTimes();// add these functions
-        updateNotificationCount(); // add these functions
+    //insert new notification at top
+    notifications.insertBefore(item, notifications.firstChild);
+
+    updateRelativeTimes();// add these functions
+    updateNotificationCount(); // add these functions
     });
 
     // uses removeNotification function on line 105
@@ -90,19 +91,19 @@
 
     //starts the signalR connection and logs the error if fail
     // goes to the api controller
-    
+
     connection.start().catch(error => console.error(error));
 
-        async function dismissNotification(notificationId) {
+    async function dismissNotification(notificationId) {
         try {
-            const res = await fetch(`/api/notification/dismiss/${notificationId}`, { method: 'POST' });
-            if (res.ok) {
-                removeNotification(notificationId);
+            const res = await fetch(`/api/notification/dismiss/${notificationId}`, {method: 'POST' });
+    if (res.ok) {
+        removeNotification(notificationId);
             } else {
-                console.error('Error removing notification');
+        console.error('Error removing notification');
             }
         } catch (error) {
-            console.error('Error removing notification: ', error);
+        console.error('Error removing notification: ', error);
         }
     }
     //same hub. just a different message it can catch
@@ -110,33 +111,31 @@
     //so we can keep it DRY
     function removeNotification(notificationId) {
         console.log("Removing notification with ID:", notificationId);
-        const element = document.querySelector(`.notification-item[data-id='${notificationId}']`);
-        if (element) {
-            element.remove();
-            updateNotificationCount();
+    const element = document.querySelector(`.notification-item[data-id='${notificationId}']`);
+    if (element) {
+        element.remove();
+    updateNotificationCount();
         }
     }
 
-     function updateNotificationCount() {
+    function updateNotificationCount() {
         const notifications = document.querySelector('.notifications');
-        const notificationNumber = document.querySelector('.notification-number');
-        const notificationDropdownButton = document.querySelector('#notification-dropdown-menu');
-        const dot = notificationDropdownButton.querySelector('.dot.dot-red');
-        const count = notifications.querySelectorAll('.notification-item').length;
-        console.log("Current notification count:", count);
+    const notificationNumber = document.querySelector('.notification-number');
+    const notificationDropdownButton = document.querySelector('#notification-dropdown-menu');
+    const dot = notificationDropdownButton.querySelector('.dot.dot-red');
+    const count = notifications.querySelectorAll('.notification-item').length;
+    console.log("Current notification count:", count);
 
-        if (notificationNumber) {
-            notificationNumber.textContent = count;
+    if (notificationNumber) {
+        notificationNumber.textContent = count;
         }
 
-        if (dot) {
+    if (dot) {
             if (count > 0) {
-                dot.classList.add('show'); // could not see dot so I remade it with show
+        dot.classList.add('show'); // could not see dot so I remade it with show
             } else {
-                dot.classList.remove('show'); // hides dot
+        dot.classList.remove('show'); // hides dot
             }
         }
     }
-
-
 </script>

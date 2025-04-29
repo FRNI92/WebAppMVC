@@ -5,13 +5,14 @@
 {
     var imagePath = Model.Image.StartsWith("/Images/") ? Model.Image : $"/uploads/{Model.Image}";
     <img src="@imagePath" class="avatar" alt="Profilbild" />
-    <span>@Model.FirstName @Model.LastName</span> @* If a Member and connected AppUser exist *@
+    <span>@Model.FirstName @Model.LastName
+        @if (ViewBag.LoginMethod != null && ViewBag.LoginMethod.ToString().Contains("Google"))
+        {
+            <small>@ViewBag.LoginMethod</small>
+        }
+    </span> @* If a Member and connected AppUser exist *@
 
 
-    @if (ViewBag.LoginMethod != null)// here I show that you logged in with google
-    {
-        <div class="login-method">@ViewBag.LoginMethod</div>
-    }
 }
 else if (User.Identity?.IsAuthenticated ?? false)
 {

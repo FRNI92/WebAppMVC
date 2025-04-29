@@ -1286,6 +1286,12 @@ form {
         padding-left: 2rem;
     }
 
+.selected-option {
+    background-color: #e0f0ff;
+    font-weight: bold;
+}
+
+
 textarea {
     resize: none;
     min-height: 150px;
