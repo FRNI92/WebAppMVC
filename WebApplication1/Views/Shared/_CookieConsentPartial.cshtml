@@ -1,0 +1,82 @@
+﻿<div id="cookieModal">
+    <div class="card-cookie">
+        <div class="cookie-content">
+            <h3>Du har kontroll över dina uppgifter</h3>
+            <p>Vi och våra affärspartners använder teknik, inklusive cookies, för att samla in information om dig för olika ändamål.</p>
+            <p>Genom att klicka ”Godkänn” ger du ditt samtycke till samtliga syften. Du kan också välja att uppge vilka syften du samtycker till.</p>
+            <p>Du kan när som helst ta tillbaka ditt samtycke genom att klicka på den lilla ikonen i det nedre vänstra hörnet på sidan.</p>
+            <p>Klicka på länken för att läsa mer om hur vi använder kakor och andra tekniska lösningar och hur vi inhämtar och behandlar data.</p>
+            <p><a href="#">Läs mer här</a></p>
+        </div>
+        <form id="cookieConsentForm" class="cookie-settings">
+            <h4>Cookies</h4>
+            <div class="cookie-options">
+
+                <div class="cookie-option">
+                    <label class="cookie-switch-label" for="cookieDarkMode">
+                        <i class="fa-solid fa-moon"></i>
+                        Dark Mode
+                    </label>
+                    <label class="cookie-switch cookie-toggle" for="cookieDarkMode">
+                        <input type="checkbox" id="cookieDarkMode" name="darkMode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+
+                <div class="cookie-option">
+                    <label class="cookie-switch-label" for="cookieEssential">
+                        <i class="fa-solid fa-chevron-down"></i>
+                        Nödvändiga (alltid aktiva)
+                    </label>
+                    <label class="cookie-switch cookie-toggle">
+                        <input type="checkbox" id="cookieEssential" name="essential" checked disabled>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="cookie-option">
+                    <label class="cookie-switch-label" for="cookieFunctional">
+                        <i class="fa-solid fa-chevron-down"></i>
+                        Funktionella
+                    </label>
+                    <label class="cookie-switch cookie-toggle">
+                        <input type="checkbox" id="cookieFunctional" name="functional">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="cookie-option">
+                    <label class="cookie-switch-label" for="cookieAnalytics">
+                        <i class="fa-solid fa-chevron-down"></i>
+                        Analys & Statistik
+                    </label>
+                    <label class="cookie-switch cookie-toggle">
+                        <input type="checkbox" id="cookieAnalytics" name="analytics">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="cookie-option">
+                    <label class="cookie-switch-label" for="cookieMarketing">
+                        <i class="fa-solid fa-chevron-down"></i>
+                        Marknadsföring
+                    </label>
+                    <label class="cookie-switch cookie-toggle">
+                        <input type="checkbox" id="cookieMarketing" name="marketing">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="cookie-buttons">
+                <button type="button" class="cookie-btn" onclick="acceptAll()">GODKÄNN ALLA</button>
+                <button type="button" class="cookie-btn" onclick="acceptSelected()">SPARA VALDA INSTÄLLNINGAR</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="cookieConsentIcon" onclick="showCookieModal()">
+    <i class="fa-solid fa-cookie-bite"></i>
+</div>

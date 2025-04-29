@@ -12,6 +12,15 @@ using WebApplication1.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
+
+//cookieconscent
+builder.Services.Configure<CookiePolicyOptions>(x =>
+{
+    x.CheckConsentNeeded = context => !context.Request.Cookies.ContainsKey("Consent");
+    x.MinimumSameSitePolicy = SameSiteMode.Lax;
+});
+
+
 builder.Services.AddSignalR();//to work with notification entitites
 
 //add dbcontext via builder
@@ -81,6 +90,9 @@ var app = builder.Build();
 app.UseHsts();
 app.UseHttpsRedirection();
 app.UseRouting();
+
+//cookieconsent
+app.UseCookiePolicy();
 
 
 app.UseAuthentication();
