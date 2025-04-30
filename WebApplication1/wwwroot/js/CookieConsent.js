@@ -13,6 +13,7 @@ function showCookieModal() {
     if (!consentValue) return
     try {
         const consent = JSON.parse(consentValue)
+        document.getElementById("cookieDarkMode").checked = consent.darkmode
         document.getElementById("cookieFunctional").checked = consent.functional
         document.getElementById("cookieAnalytics").checked = consent.analytics
         document.getElementById("cookieMarketing").checked = consent.marketing
@@ -42,8 +43,6 @@ function getCookie(name) {
     return null;
 }
 
-
-//is set in controller. can use either
 function setCookie(name, value, days) {
     let expires = ""
     if (days) {
@@ -59,6 +58,7 @@ function setCookie(name, value, days) {
 async function acceptAll() {
     const consent = {
         essential: true,
+        darkmode: true,
         functional: true,
         analytics: true,
         marketing: true
@@ -74,6 +74,7 @@ async function acceptSelected() {
     const formData = new FormData(form);
 
     const consent = {
+        darkmode: formData.get("darkMode") === "on",
         essential: true,
         functional: formData.get("functional") === "on",
         analytics: formData.get("analytics") === "on",
@@ -84,18 +85,18 @@ async function acceptSelected() {
     hideCookieModal()
 
 }
-async function setDarkModeCookie(isDark) {
-    await fetch('/cookies/set-darkmode', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(isDark)
-    });
-}
+//async function setDarkModeCookie(isDark) {
+//    await fetch('/cookies/set-darkmode', {
+//        method: 'POST',
+//        headers: { 'Content-Type': 'application/json' },
+//        body: JSON.stringify(isDark)
+//    });
+//}
 
 //this should go to a controller
 async function handleConsent(consent) {
     try {
-        const res = await fetch ('/cookies/setcookies', {
+        const res = await fetch('/cookie-consent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

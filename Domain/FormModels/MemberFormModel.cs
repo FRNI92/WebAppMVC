@@ -21,16 +21,15 @@ namespace Domain.FormModels
         [Required(ErrorMessage = "Last name is required")]
         public string? LastName { get; set; } = null!;
         public string? JobTitle { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
+        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Invalid email format")]
         public string? Email { get; set; }
-        [Required(ErrorMessage = "email is required")]
+       
         public string? Phone { get; set; }
 
         [Required(ErrorMessage = "Date of birth is required")]
         public DateTime DateOfBirth { get; set; }
-        
-        
-
-
 
 
         public int? AddressId { get; set; }

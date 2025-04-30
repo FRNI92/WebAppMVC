@@ -15,11 +15,11 @@ public class MemberViewModel
 
 
     public IEnumerable<AppUserEntity> AllUsers { get; set; } = new List<AppUserEntity>();
-    // Bindas från dropdown när admin väljer en AppUser
-    public string? ConnectedAppUserId { get; set; }
+    
+    public string? ConnectedAppUserId { get; set; } // Admin can connect member to appuser
 
-    // För att i t.ex. layouten/vyn kunna visa namn/image
-    public MemberDto? CurrentMember { get; set; }
+
+    public MemberDto? CurrentMember { get; set; }    // to be able to show correct logged in user
 
     public MemberDto? LoggedInUserMember { get; set; }
 }

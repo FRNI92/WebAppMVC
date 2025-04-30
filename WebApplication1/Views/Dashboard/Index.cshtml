@@ -5,7 +5,7 @@
 @{
     Layout = "_Layout";
 }
-
+@* take the filter and save data in var to clean up the filter buttons further down *@
 @{
     var current = (string)ViewBag.Filter;
     var allC = ViewBag.AllCount;
@@ -15,7 +15,7 @@
 }
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<AppUserEntity> UserManager
-
+@* see if user har MemberId and alow them to see button *@
 @{
     var user = await UserManager.GetUserAsync(User);
 }

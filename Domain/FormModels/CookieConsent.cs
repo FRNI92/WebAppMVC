@@ -7,7 +7,7 @@ namespace Domain.FormModels;
 public class CookieConsent
 {
 
-    [JsonPropertyName("darkMode")]
+    [JsonPropertyName("darkmode")]
     public bool DarkMode { get; set; }
     
     [JsonPropertyName("essential")]

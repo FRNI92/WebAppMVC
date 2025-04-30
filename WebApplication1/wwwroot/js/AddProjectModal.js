@@ -5,7 +5,7 @@
     const hiddenInput = select.querySelector('input[type="hidden"]');
     const placeholder = select.dataset.placeholder || "Choose";
 
-    const form = document.querySelector("#AddProjectForm");
+    //const form = document.querySelector("#AddProjectForm");
 
     const setValue = (value = "0", text = placeholder) => {
         triggerText.textContent = text;
@@ -85,6 +85,15 @@
                     setTimeout(() => validateField(hiddenInput), 0);
                 }
             }
+
+            //added this to access the validate in real time
+            triggerText.textContent = option.textContent;
+            if (hiddenInput) {
+                hiddenInput.value = option.dataset.value;
+                setTimeout(() => {
+                    validateClientId(hiddenInput);
+                }, 0);
+            }
         });
     });
 
@@ -134,6 +143,7 @@ document.querySelector('[data-target="#add-project-modal"]')?.addEventListener("
             }
             if (clientId.value === "0") {
                 showError(clientId, "Please choose a client.");
+                console.log("client not chosen on submit.");
                 hasErrors = true;
             }
             if (selectedMembers.length === 0) {
@@ -185,6 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const description = document.querySelector('textarea[name="FormModel.Description"]'); // dont use input, use textarea
     const budget = document.querySelector('input[name="FormModel.Budget"]'); // find budget
     const imageFile = document.querySelector('input[name="FormModel.ImageFile"]');// find image
+
+
+    //this was not working correctly. try like I did with the others. 
+    // tried eventlistener and input
+    const clientId = document.querySelector('input[name="FormModel.ClientId"]');
+    clientId?.addEventListener("change", () => validateClientId(clientId));
+    console.log(`ClientId value: ${clientId.value}`);
     // Lägg till event listener för realtidsvalidering
     projectName.addEventListener('input', (e) => {
         validateProjectName(e.target);  // Anropa valideringsfunktionen vid varje input
@@ -211,26 +228,25 @@ function validateProjectName(field) {
     const errorSpan = form.querySelector(`span[data-valmsg-for='${field.name}']`);
     let errorMessage = "";
 
-    // Trimma inputen för att ta bort eventuella extra mellanslag
+    // trim input and remove space
     const value = field.value.trim();
 
-    // Kontrollera om Project Name är tomt
+    // see it its empty
     if (!value) {
-        errorMessage = "Project Name is required.";  // Felmeddelande
+        errorMessage = "Project Name is required.";  // errormessage
     }
 
-    // Om det finns ett fel
     if (errorMessage) {
-        field.classList.add("input-validation-error");  // Lägg till felklass
+        field.classList.add("input-validation-error");  // add errorclass
         if (errorSpan) {
-            errorSpan.textContent = errorMessage;  // Sätt felmeddelande
+            errorSpan.textContent = errorMessage;  // set message
             errorSpan.classList.add("field-validation-error");
             errorSpan.classList.remove("field-validation-valid");
         }
     } else {
-        field.classList.remove("input-validation-error");  // Ta bort felklass
+        field.classList.remove("input-validation-error");  // remove class
         if (errorSpan) {
-            errorSpan.textContent = "";  // Rensa felmeddelandet
+            errorSpan.textContent = "";  // clear message. 
             errorSpan.classList.remove("field-validation-error");
             errorSpan.classList.add("field-validation-valid");
         }
@@ -333,14 +349,45 @@ function validateImageFile(field) {
     }
 }
 
-// Realtidsvalidering för medlemmar
-document.addEventListener('DOMContentLoaded', () => {
-    const memberSelect = document.querySelector('#member-select'); // Hitta dropdownen för medlemmar
-    const selectedMembersContainer = document.getElementById("selected-members-container"); // För att hålla reda på valda medlemmar
 
-    // Lägg till event listener för realtidsvalidering på dropdownen
-    memberSelect.addEventListener('change', () => {
-        validateMembers(); // Anropa valideringsfunktionen när en medlem väljs
+//this is the latest one. build like the others to handle realtime
+// if I submit I get error. if I make choice it should remove error
+// cant see console log on line 347
+// added domcontentloaded, removed domconent and only use the main one
+function validateClientId(field) {
+    console.log("real time client")
+    const form = document.querySelector("#AddProjectForm");
+    const errorSpan = form.querySelector(`span[data-valmsg-for='${field.name}']`);
+    const value = field.value;
+
+    if (value === "0") {
+        field.classList.add("input-validation-error");
+        if (errorSpan) {
+            errorSpan.textContent = "Please choose a client.";
+            errorSpan.classList.add("field-validation-error");
+            errorSpan.classList.remove("field-validation-valid");
+        }
+    } else {
+        field.classList.remove("input-validation-error");
+        if (errorSpan) {
+            errorSpan.textContent = "";
+            errorSpan.classList.remove("field-validation-error");
+            errorSpan.classList.add("field-validation-valid");
+        }
+    }
+}
+
+
+
+
+// real time fo members
+document.addEventListener('DOMContentLoaded', () => {
+    const memberSelect = document.querySelector('#member-select'); // find drop down for members
+    const selectedMembersContainer = document.getElementById("selected-members-container"); //to keep track of chosen member
+
+   
+    memberSelect.addEventListener('change', () => { // listen for change in dropdown
+        validateMembers(); // call the validate function
     });
 });
 
@@ -348,16 +395,15 @@ function validateMembers() {
     console.log("real time member")
     const selectedMembersContainer = document.getElementById("selected-members-container");
     const memberSelect = document.querySelector('#member-select');
-    const errorSpan = memberSelect.querySelector('span[data-valmsg-for="FormModel.MemberIds"]'); // Hämta felmeddelande för medlemmar
+    const errorSpan = memberSelect.querySelector('span[data-valmsg-for="FormModel.MemberIds"]');
     let errorMessage = "";
 
-    // Kolla om det finns några valda medlemmar
+    // see if some member is chosen
     const memberInputs = selectedMembersContainer.querySelectorAll('input');
     if (memberInputs.length === 0) {
-        errorMessage = "Please choose at least one member."; // Felmeddelande om ingen medlem är vald
+        errorMessage = "Please choose at least one member."; // message if none chosen
     }
 
-    // Om det finns ett fel, visa det
     if (errorMessage) {
         memberSelect.classList.add("input-validation-error");
         if (errorSpan) {

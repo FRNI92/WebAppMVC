@@ -68,6 +68,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             new AddressEntity { Id = 1, StreetName = "Testgatan", StreetNumber = "1", PostalCode = "12345", City = "Stockholm" },
             new AddressEntity { Id = 2, StreetName = "Exempelvägen", StreetNumber = "2", PostalCode = "54321", City = "Göteborg" }
         );
+        //might need another migration and add this
+        //        modelBuilder.Entity<NotificationTypeEntity>().HasData(
+        //    new NotificationTypeEntity { Id = 1, NotificationType = "User" },
+        //    new NotificationTypeEntity { Id = 2, NotificationType = "Project" }
+        //);
 
 
 

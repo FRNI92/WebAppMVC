@@ -40,10 +40,10 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
                 return result;
             }
 
-            // Uppdatera main properties
+            // update main properties
             _context.Entry(existing).CurrentValues.SetValues(updatedEntity);
 
-            // Uppdatera ProjectMembers
+            // update project members
             existing.ProjectMembers.Clear();
             foreach (var pm in updatedEntity.ProjectMembers)
             {

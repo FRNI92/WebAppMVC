@@ -75,6 +75,7 @@ builder.Services.AddScoped<MemberService>();
 builder.Services.AddScoped<StatusService>();
 builder.Services.AddScoped<AddressService>();
 //register repos
+builder.Services.AddScoped<NoificationRepository>();
 builder.Services.AddScoped<ProjectRepository>();
 builder.Services.AddScoped<ClientRepository>();
 builder.Services.AddScoped<MemberRepository>();

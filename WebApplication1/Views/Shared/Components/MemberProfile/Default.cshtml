@@ -16,11 +16,11 @@
 }
 else if (User.Identity?.IsAuthenticated ?? false)
 {
-    @* Should never happen — ViewComponent always returns a MemberDto *@
+    @* Should never happen viewcomponent always returns a MemberDto *@
     <span>@User.Identity.Name</span>
 }
 else
 {
-    @* Not logged in — show login link *@
-    <a asp-controller="Account" asp-action="SignIn">Logga in</a>
+    @* this migth be usefull in future if dashboard should be awailable for everyone *@
+    <a asp-controller="Account" asp-action="SignIn">Log In</a>
 }

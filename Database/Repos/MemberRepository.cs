@@ -18,7 +18,7 @@ public class MemberRepository(AppDbContext context) : BaseRepository<MemberEntit
         try
         {
             var existing = await _context.Members
-                .Include(m => m.Address) // om Address är navigation property
+                .Include(m => m.Address)
                 .FirstOrDefaultAsync(expression);
 
             if (existing == null)
@@ -29,10 +29,7 @@ public class MemberRepository(AppDbContext context) : BaseRepository<MemberEntit
                 return result;
             }
 
-            // Uppdatera huvuddata
             _context.Entry(existing).CurrentValues.SetValues(updatedEntity);
-
-            // Du kan också uppdatera address manuellt om det behövs
 
             result.Succeeded = true;
             result.StatusCode = 200;

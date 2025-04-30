@@ -7,7 +7,7 @@
 
 <script>
     $(document).ready(function () {
-        // Använd Razor för att korrekt rendera värdet från TempData
+        // tried populating and openinge membermodal with this part after modelstate is false
         var showModal = '@TempData["ShowAddMemberModal"]';
         if (showModal === "true") {
             $('#add-member-modal').modal('show');

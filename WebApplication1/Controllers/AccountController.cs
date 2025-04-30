@@ -174,10 +174,6 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
             //    lastName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "";
             //}
             //catch {  }
-
-
-
-
             string email = info.Principal.FindFirstValue(ClaimTypes.Email)!;
             string username = $"ext_{info.LoginProvider.ToLower()}_{email}";
 

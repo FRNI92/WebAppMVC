@@ -8,8 +8,16 @@ public class CookieController : Controller
 {
 
     [HttpPost]
+    [Route("cookie-consent")]
+    [Route("cookie/setcookies")]
     public IActionResult SetCookies([FromBody] CookieConsent consent)
     {
+
+        Response.Cookies.Append("SessionCookie", "Essential", new CookieOptions
+        {
+            IsEssential = true,
+            Expires = DateTime.UtcNow.AddYears(1)
+        });
         //dont return a view
 
         if (consent == null)
@@ -18,7 +26,7 @@ public class CookieController : Controller
 
         if (consent.DarkMode)
         {
-            Response.Cookies.Append("DarkMode", "true", new CookieOptions
+            Response.Cookies.Append("DarkModeCookie", "Non-Essential", new CookieOptions
             {
                 IsEssential = false,
                 Expires = DateTimeOffset.UtcNow.AddDays(100),
@@ -28,7 +36,7 @@ public class CookieController : Controller
         }
         else
         {
-            Response.Cookies.Append("DarkMode", "false", new CookieOptions
+            Response.Cookies.Append("DarkModeCookie", "Non-Essential", new CookieOptions
             {
                 IsEssential = false,
                 Expires = DateTimeOffset.UtcNow.AddDays(100),
@@ -84,7 +92,7 @@ public class CookieController : Controller
         {
             Response.Cookies.Delete("MarketingCookie");
         }
-        Response.Cookies.Append("cookieConsent", JsonSerializer.Serialize(consent), new CookieOptions
+        Response.Cookies.Append("Consent", JsonSerializer.Serialize(consent), new CookieOptions
         {
             Expires = DateTimeOffset.UtcNow.AddDays(100),
             SameSite = SameSiteMode.Lax,

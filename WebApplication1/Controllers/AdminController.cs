@@ -12,8 +12,6 @@ namespace WebApplication1.Controllers
         private readonly UserManager<AppUserEntity> _userManager = userManager;
         private readonly MemberService _memberService = memberService;
 
-
-
         public IActionResult AdminLogin()
         {
             return View();

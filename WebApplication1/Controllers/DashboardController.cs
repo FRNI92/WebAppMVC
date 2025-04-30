@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string filter = "All")
         {
-            // Hämta all data som tidigare
+            // get all data required for the view
             var status = await _statusService.GetAllStatusAsync();
             var members = await _memberService.GetAllMembersAsync();
             var clients = await _clientService.GetAllClientsAsync();
@@ -40,7 +40,7 @@ namespace WebApplication1.Controllers
             ViewBag.OnHoldCount = dtos.Count(p => p.StatusName == "On hold");
 
 
-            // Filtrera utifrån vald status
+            // filter the order byt status. 
             var filtered = filter switch
             {
                 "Active" => dtos.Where(p => p.StatusName == "Active"),
@@ -50,11 +50,11 @@ namespace WebApplication1.Controllers
             };
             ViewBag.Filter = filter;
 
-            // Fyll på ProjectMembers‐fält om du behöver
+            // projectmembers for user when I add the logic for more than 1 member per project
             foreach (var project in filtered)
                 project.ProjectMembers = members.Where(m => project.MemberIds.Contains(m.Id)).ToList();
 
-            // Skicka till vy
+            // send to view
             var model = new ProjectViewModels
             {
                 FormModel = new ProjectFormModel(),

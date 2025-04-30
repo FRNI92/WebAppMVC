@@ -3,47 +3,49 @@ using Microsoft.EntityFrameworkCore;
 using Database.Data;
 using Database.Entities;
 using IdentityDatabase.Data;
+using Database.Repos;
+using Database.ReposResult;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Business.Services;
 
-public class NotificationService(AppDbContext context, IdentityAppContext identityContext)
+public class NotificationService(NoificationRepository notificationRepository, IdentityAppContext identityContext)
 {
-    private readonly AppDbContext _context = context;
+    private readonly NoificationRepository _notificationRepository = notificationRepository;
     private readonly IdentityAppContext _identityContext = identityContext;
 
-    public async Task AddNotificationAsync(NotificationEntity notificationEntity)
+    public async Task<ReposResult<bool>> AddNotificationAsync(NotificationEntity entity)
     {
-        if (string.IsNullOrEmpty(notificationEntity.Icon))
+        if (string.IsNullOrEmpty(entity.Icon))
         {
-            switch (notificationEntity.NotificationTypeId)
+            entity.Icon = entity.NotificationTypeId switch
             {
-                case 1:
-                    notificationEntity.Icon = "/images/Logout.svg";
-                    break;
-                case 2:
-                    notificationEntity.Icon = "/images/company_logo.svg";
-                    break;
-            }
+                1 => "/images/Logout.svg",
+                2 => "/images/company_logo.svg",
+                _ => entity.Icon
+            };
         }
 
-        _context.Add(notificationEntity);
-        await _context.SaveChangesAsync();
+        var addResult = await _notificationRepository.AddAsync(entity);
+        if (!addResult.Succeeded)
+            return new ReposResult<bool> { Succeeded = false, StatusCode = addResult.StatusCode, Error = addResult.Error };
+
+        var saveResult = await _notificationRepository.SaveAsync();
+        return new ReposResult<bool>
+        {
+            Succeeded = saveResult.Succeeded,
+            StatusCode = saveResult.StatusCode,
+            Error = saveResult.Error,
+            Result = saveResult.Result > 0
+        };
     }
 
     public async Task<IEnumerable<NotificationEntity>> GetNotificationsAsync(int memberId, int take = 10)
     {
-        var dismissedIds = await _context.DismissedNotifications
-            .Where(x => x.MemberId == memberId)
-            .Select(x => x.NotificationId)
-            .ToListAsync();
+        var dismissedResult = await _notificationRepository.GetDismissedIdsAsync(memberId);
+        var dismissedIds = dismissedResult.Succeeded ? dismissedResult.Result! : new List<string>();
 
-        var notifications = await _context.Notifications
-            .Where(x => !dismissedIds.Contains(x.Id))
-            .OrderByDescending(x => x.Created)
-            .Take(take)
-            .ToListAsync();
-
-        return notifications;
+        return await _notificationRepository.GetRecentUndismissedAsync(dismissedIds, take);
     }
 
     public async Task<int> GetMemberIdFromUserIdAsync(string userId)
@@ -54,21 +56,13 @@ public class NotificationService(AppDbContext context, IdentityAppContext identi
             .FirstOrDefaultAsync();
     }
 
-    public async Task DismissNotificationAsync(string notificationId, int memberId)
+    public async Task<ReposResult<bool>> DismissNotificationAsync(string notificationId, int memberId)
     {
-        var alreadyDismissed = await _context.DismissedNotifications
-            .AnyAsync(x => x.NotificationId == notificationId && x.MemberId == memberId);
-
-        if (!alreadyDismissed)
-        {
-            var dismissed = new NotificationDismissedEntity
-            {
-                NotificationId = notificationId,
-                MemberId = memberId
-            };
-
-            _context.Add(dismissed);
-            await _context.SaveChangesAsync();
-        }
+        return await _notificationRepository.DismissNotificationAsync(notificationId, memberId);
     }
 }
+
+
+
+
+
