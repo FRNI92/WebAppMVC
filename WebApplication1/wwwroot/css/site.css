@@ -775,7 +775,7 @@ a {
         }
 
         .nav-links .nav-link span {
-            /* om du vill dölja texten: exempelvis display:none; */
+            /* if I want to hide text with display none in future */
         }
 
 /* buttonts */
@@ -2266,6 +2266,7 @@ input:checked::before {
     z-index: 10000;
     opacity: 0;
     transition: transform 0.5s ease, opacity 0.5s ease;
+
 }
     #cookieModal.active {
         transform: translate(-50%, -50%) scale(1);
@@ -2279,7 +2280,7 @@ input:checked::before {
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 20px;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(15px);
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
     padding: 40px;
     color: #162938;
@@ -2378,3 +2379,31 @@ input:checked::before {
     .cookie-toggle input[type="checkbox"]:checked + .slider {
         background-color: var(--white-100);
     }
+
+.cookie-nav-link {
+    background-color: var(--navlink-background-color);
+    border: 1px solid var(--navlink-border-color);
+    color: green;
+    padding: 1rem 1.5rem;
+    border-radius: var(--link-border-radius);
+    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+    font-size: 1em;
+    font-family: var(--font-standard);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+
+.cookie-nav-link:hover {
+    background-color: var(--navlink-background-color);
+    border-color: var(--navlink-border-hover-color);
+    color: green;
+}
+
+.cookie-nav-link.active {
+    background-color: var(--navlink-background-active-color);
+    border-color: var(--navlink-border-active-color);
+    color: var(--navlink-text-active-color);
+}
