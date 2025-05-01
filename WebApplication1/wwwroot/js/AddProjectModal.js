@@ -1,4 +1,19 @@
-﻿document.querySelectorAll('#add-project-modal .form-select').forEach(select => {
+﻿// I was making changes to edit modal and the members I chose kept showing up here aswell.
+// so I listen for the addproject modal clear the innehtml in members container. and remove the highlightclass
+// after that I add choose, so the select is not empty
+document.querySelector('[data-type="modal"][data-target="#add-project-modal"]')?.addEventListener("click", () => {
+    const selectedContainer = document.getElementById("selected-members-container");
+    selectedContainer.innerHTML = "";
+
+    document.querySelectorAll('#add-project-modal .form-select-option.selected-option')
+        .forEach(option => option.classList.remove('selected-option'));
+
+    const memberTriggerText = document.querySelector('#add-project-modal #member-select .form-select-text');
+    if (memberTriggerText) memberTriggerText.textContent = "Choose";
+});
+
+
+document.querySelectorAll('#add-project-modal .form-select').forEach(select => {
     const trigger = select.querySelector('.form-select-trigger');
     const triggerText = trigger.querySelector('.form-select-text');
     const options = select.querySelectorAll('.form-select-option');

@@ -91,7 +91,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Member</label>
-                    <div class="form-select" data-placeholder="Choose a Member">
+                    <div class="form-select" id="member-select" data-placeholder="Choose a Member">
                         <button type="button" class="form-select-trigger">
                             <span class="form-select-text"></span>
                         </button>
@@ -103,7 +103,9 @@
                                 </li>
                             }
                         </ul>
-                        <input type="hidden" asp-for="FormModel.MemberIds" />
+                       <input type="hidden" asp-for="FormModel.MemberIds" /> 
+                        <div id="selected-members-container-edit"></div> 
+                         <span asp-validation-for="FormModel.MemberIds"></span>
                     </div>
                 </div>
 

@@ -1,20 +1,22 @@
-﻿
-// Form select
-document.querySelectorAll('#add-edit-project-modal .form-select').forEach(select => {
+﻿document.querySelectorAll('#add-edit-project-modal .form-select').forEach(select => {
     const trigger = select.querySelector('.form-select-trigger');
     const triggerText = trigger.querySelector('.form-select-text');
     const options = select.querySelectorAll('.form-select-option');
     const hiddenInput = select.querySelector('input[type="hidden"]');
     const placeholder = select.dataset.placeholder || "Choose";
+    //const selectedContainer = select.querySelector('#selected-members-container-edit'); // För att hålla koll på valda medlemmar
 
+    // Funktion för att sätta värdet och texten för triggern
     const setValue = (value = "", text = placeholder) => {
         triggerText.textContent = text;
         hiddenInput.value = value;
         select.classList.toggle('has-placeholder', !value);
     };
 
+    // Initiera med standardvärde (kan vara tomt eller ett valt värde)
     setValue();
 
+    // Öppna dropdown när man klickar på triggern
     trigger.addEventListener('click', e => {
         e.stopPropagation();
         document.querySelectorAll('.form-select.open')
@@ -22,13 +24,36 @@ document.querySelectorAll('#add-edit-project-modal .form-select').forEach(select
         select.classList.toggle('open');
     });
 
+    // När ett alternativ väljs
     options.forEach(option => {
         option.addEventListener('click', () => {
-            setValue(option.dataset.value, option.textContent);
-            select.classList.remove('open');
+            // Kontrollera om dropdownen är för medlemmar och behandla det
+            if (select.id === "member-select") {
+                const value = option.dataset.value;
+                const name = option.textContent.trim();
+                console.log("right before adding class to selected members")
+                // Uppdatera valda medlemmar
+                if (!hiddenInput.value.includes(value)) {
+                    hiddenInput.value += value + ",";
+                    triggerText.textContent = `${name} selected`;
+                    option.classList.add("selected-option");
+                    console.log("adding selected option class")
+                }
+                else {
+                    hiddenInput.value = hiddenInput.value.replace(value + ",", "");
+                    triggerText.textContent = "Choose a member";
+                    option.classList.remove("selected-option"); // <-- Ta bort klass om avmarkerad
+                }
+            }
+            else {
+                // Uppdatera andra dropdowns
+                setValue(option.dataset.value, option.textContent);
+            }
+            select.classList.remove('open'); // Stänger dropdownen
         });
     });
 
+    // Stäng dropdown om man klickar utanför
     document.addEventListener('click', e => {
         if (!select.contains(e.target)) {
             select.classList.remove('open');
