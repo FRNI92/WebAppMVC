@@ -5,15 +5,15 @@
 }
 @* this will show what fields are not correct *@
 
-<script>
-    $(document).ready(function () {
-        // tried populating and openinge membermodal with this part after modelstate is false
-        var showModal = '@TempData["ShowAddMemberModal"]';
-        if (showModal === "true") {
-            $('#add-member-modal').modal('show');
-        }
-    });
-</script>
+@* <script> *@
+@*     $(document).ready(function () { *@
+@*         // tried populating and openinge membermodal with this part after modelstate is false *@
+@*         var showModal = '@TempData["ShowAddMemberModal"]'; *@
+@*         if (showModal === "true") { *@
+@*             $('#add-member-modal').modal('show'); *@
+@*         } *@
+@*     }); *@
+@* </script> *@
 
 @model MemberViewModel
 <div class="backoffice-wrapper">

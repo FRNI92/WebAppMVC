@@ -103,8 +103,15 @@
                                 </li>
                             }
                         </ul>
-                       <input type="hidden" asp-for="FormModel.MemberIds" /> 
-                        <div id="selected-members-container-edit"></div> 
+                       @* <input type="hidden" asp-for="FormModel.MemberIds" /> this one can only handle 1 member  *@
+                        <div id="selected-members-container-edit">
+
+                                @for (int i = 0; i < Model.FormModel.MemberIds.Count; i++)
+                                {
+                                    <input type="hidden" name="FormModel.MemberIds[@i]" value="@Model.FormModel.MemberIds[i]" />
+                                }
+
+                        </div> 
                          <span asp-validation-for="FormModel.MemberIds"></span>
                     </div>
                 </div>

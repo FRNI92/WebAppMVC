@@ -2,14 +2,16 @@
     const trigger = select.querySelector('.form-select-trigger');
     const triggerText = trigger.querySelector('.form-select-text');
     const options = select.querySelectorAll('.form-select-option');
+    console.log(`options are: ${options}`);
     const hiddenInput = select.querySelector('input[type="hidden"]');
+    console.log(`hidden input is ${hiddenInput}`);
     const placeholder = select.dataset.placeholder || "Choose";
     //const selectedContainer = select.querySelector('#selected-members-container-edit'); // För att hålla koll på valda medlemmar
 
     // Funktion för att sätta värdet och texten för triggern
     const setValue = (value = "", text = placeholder) => {
         triggerText.textContent = text;
-        hiddenInput.value = value;
+        if (hiddenInput) hiddenInput.value = value;
         select.classList.toggle('has-placeholder', !value);
     };
 
@@ -33,17 +35,28 @@
                 const name = option.textContent.trim();
                 console.log("right before adding class to selected members")
                 // Uppdatera valda medlemmar
-                if (!hiddenInput.value.includes(value)) {
-                    hiddenInput.value += value + ",";
-                    triggerText.textContent = `${name} selected`;
+                const selectedContainer = document.getElementById("selected-members-container-edit");
+                const alreadySelected = Array.from(selectedContainer.querySelectorAll('input'))
+                    .some(input => input.value === value);
+
+                if (alreadySelected) {
+                    const inputToRemove = Array.from(selectedContainer.querySelectorAll('input'))
+                        .find(input => input.value === value);
+                    if (inputToRemove) selectedContainer.removeChild(inputToRemove);
+                    option.classList.remove("selected-option");
+                } else {
+                    const index = selectedContainer.querySelectorAll('input').length;
+                    const newInput = document.createElement("input");
+                    newInput.type = "hidden";
+                    newInput.name = `FormModel.MemberIds[${index}]`;
+                    newInput.value = value;
+                    selectedContainer.appendChild(newInput);
                     option.classList.add("selected-option");
-                    console.log("adding selected option class")
                 }
-                else {
-                    hiddenInput.value = hiddenInput.value.replace(value + ",", "");
-                    triggerText.textContent = "Choose a member";
-                    option.classList.remove("selected-option"); // <-- Ta bort klass om avmarkerad
-                }
+
+                // uppdatera text
+                const count = selectedContainer.querySelectorAll('input').length;
+                triggerText.textContent = count > 0 ? `${count} member${count > 1 ? 's' : ''} selected` : "Choose a member";
             }
             else {
                 // Uppdatera andra dropdowns

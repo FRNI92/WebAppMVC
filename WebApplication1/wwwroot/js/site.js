@@ -116,7 +116,7 @@ document.querySelectorAll('.delete-project').forEach(button => {
     // project card. dropdown edit button
     document.querySelectorAll('.open-edit-modal').forEach(button => {
         button.addEventListener('click', e => {
-
+            console.log("opening edit modal");
             const image = button.dataset.image;
             if (image) {
                 // sätt hidden-fältet
@@ -144,31 +144,107 @@ document.querySelectorAll('.delete-project').forEach(button => {
             const end = button.dataset.end;
             const members = button.dataset.members?.split(',') || [];
 
+            console.log("fetched from database");
+            console.log({name, clientId, statusId, description, budget, start, end, members});
 
-            console.log('this is the members', members);
-            document.querySelectorAll('#member-select .form-select-option.selected-option')
-                .forEach(option => option.classList.remove('selected-option'));
-            members.forEach(id => {
-                console.log(`${id}`)
-                console.log("im giving member select class to the member id that was chosen when creating project")
-                const option = document.querySelector(`#member-select .form-select-option[data-value="${id}"]`);
-                if (option) {
-                    option.classList.add("selected-option");
-                }
-            });
+            //console.log('this is the members', members);
+            //document.querySelectorAll('#member-select .form-select-option.selected-option')
+            //    .forEach(option => option.classList.remove('selected-option'));
+            //members.forEach(id => {
+            //    console.log(`${id}`)
+            //    console.log("im giving member select class to the member id that was chosen when creating project")
+            //    const option = document.querySelector(`#member-select .form-select-option[data-value="${id}"]`);
+            //    if (option) {
+            //        option.classList.add("selected-option");
+            //    }
+            //});
 
 
 
             // so that I cant see what members are already chosen
+            //const selectedContainer = document.querySelector('#selected-members-container-edit');
+            //if (selectedContainer) {
+            //    selectedContainer.innerHTML = "";
+
+                // Ta bort endast selected-option från member-listan i edit
+            //    document.squerySelectorAll('#add-edit-project-modal #member-select .form-select-option.selected-option')
+            //        .forEach(option => option.classList.remove('selected-option'));
+
+            //    // Lägg till inputs och markera valda
+            //    members.forEach((id, index) => {
+            //        const option = document.querySelector(`#add-edit-project-modal #member-select .form-select-option[data-value="${id}"]`);
+            //        if (option) {
+            //            option.classList.add('selected-option');
+
+            //            const input = document.createElement("input");
+            //            input.type = "hidden";
+            //            input.name = `FormModel.MemberIds[${index}]`;
+            //            input.value = id;
+            //            selectedContainer.appendChild(input);
+            //        }
+            //    });
+
+            //    // update the text in dropdonw
+            //    const triggerText = document.querySelector('#add-edit-project-modal #member-select .form-select-text');
+            //    if (triggerText) {
+            //        triggerText.textContent = members.length > 0
+            //            ? `${members.length} member${members.length > 1 ? "s" : ""} selected`
+            //            : "Choose a member";
+            //    }
+            //}
+
+
+
+            // id
+            const id = button.dataset.id;
+            const idInput = document.querySelector('#add-edit-project-modal input[name="FormModel.Id"]');
+            if (idInput)
+            {
+                idInput.value = id;
+                console.log(`id set to ${id}`);
+            } 
+
+            // Project Name
+            document.querySelector('#add-edit-project-modal input[name="FormModel.ProjectName"]').value = name;
+            console.log(`project name is set to: ${name}`)
+
+
+            // Client. 
+            const clientSelect = document.querySelector('#add-edit-project-modal input[name="FormModel.ClientId"]');
+            console.log(`found the cllientselect: ${clientSelect.value}`)
+            const clientWrapper = clientSelect.closest('.form-select');
+            console.log(`found the clientWrapper:  ${clientWrapper.innerHTML}`)
+            const clientOption = clientWrapper.querySelector(`.form-select-option[data-value="${clientId}"]`);
+            console.log(`searching fo options with client id:${clientId}`);
+            clientSelect.value = clientId;
+            console.log(`sets clientselect.value:${clientSelect.value}`);
+
+
+            const clientTextElement = clientWrapper.querySelector('.form-select-text');
+            if (clientTextElement) {
+                clientTextElement.textContent = clientOption?.textContent ?? 'Choose a client';
+                console.log(`shows clientname: ${clientTextElement.textContent}`);// needs to get the data before I cant consol.log it
+            } else {
+                console.log("could not find form select for client")
+            }
+
+
+            // Status
+            const statusSelect = document.querySelector('#add-edit-project-modal input[name="FormModel.StatusId"]');
+            const statusWrapper = statusSelect.closest('.form-select');
+            const statusOption = statusWrapper.querySelector(`.form-select-option[data-value="${statusId}"]`);
+            statusSelect.value = statusId;
+            statusWrapper.querySelector('.form-select-text').textContent = statusOption?.textContent ?? 'Choose a status';
+
+            // Member (need rewrite when adding more than 1 member)
+            // Lägg till inputs och markera valda
             const selectedContainer = document.querySelector('#selected-members-container-edit');
             if (selectedContainer) {
                 selectedContainer.innerHTML = "";
 
-                // Ta bort endast selected-option från member-listan i edit
                 document.querySelectorAll('#add-edit-project-modal #member-select .form-select-option.selected-option')
                     .forEach(option => option.classList.remove('selected-option'));
 
-                // Lägg till inputs och markera valda
                 members.forEach((id, index) => {
                     const option = document.querySelector(`#add-edit-project-modal #member-select .form-select-option[data-value="${id}"]`);
                     if (option) {
@@ -182,54 +258,12 @@ document.querySelectorAll('.delete-project').forEach(button => {
                     }
                 });
 
-                // update the text in dropdonw
                 const triggerText = document.querySelector('#add-edit-project-modal #member-select .form-select-text');
                 if (triggerText) {
                     triggerText.textContent = members.length > 0
                         ? `${members.length} member${members.length > 1 ? "s" : ""} selected`
                         : "Choose a member";
                 }
-            }
-
-
-
-
-
-
-
-
-
-
-
-            // id
-            const id = button.dataset.id;
-            const idInput = document.querySelector('#add-edit-project-modal input[name="FormModel.Id"]');
-            if (idInput) idInput.value = id;
-
-            // Project Name
-            document.querySelector('#add-edit-project-modal input[name="FormModel.ProjectName"]').value = name;
-
-            // Client
-            const clientSelect = document.querySelector('#add-edit-project-modal input[name="FormModel.ClientId"]');
-            const clientWrapper = clientSelect.closest('.form-select');
-            const clientOption = clientWrapper.querySelector(`.form-select-option[data-value="${clientId}"]`);
-            clientSelect.value = clientId;
-            clientWrapper.querySelector('.form-select-text').textContent = clientOption?.textContent ?? 'Choose a client';
-
-            // Status
-            const statusSelect = document.querySelector('#add-edit-project-modal input[name="FormModel.StatusId"]');
-            const statusWrapper = statusSelect.closest('.form-select');
-            const statusOption = statusWrapper.querySelector(`.form-select-option[data-value="${statusId}"]`);
-            statusSelect.value = statusId;
-            statusWrapper.querySelector('.form-select-text').textContent = statusOption?.textContent ?? 'Choose a status';
-
-            // Member (need rewrite when adding more than 1 member)
-            const memberSelect = document.querySelector('#add-edit-project-modal input[name="FormModel.MemberIds"]');
-            const memberWrapper = memberSelect.closest('.form-select');
-            if (members.length > 0) {
-                memberSelect.value = members[0];
-                const firstMember = memberWrapper.querySelector(`.form-select-option[data-value="${members[0]}"]`);
-                memberWrapper.querySelector('.form-select-text').textContent = firstMember?.textContent ?? 'Choose a member';
             }
 
             // the rest of basic fields

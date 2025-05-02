@@ -59,19 +59,19 @@ document.getElementById('image-upload')?.addEventListener('change', function (e)
         reader.readAsDataURL(file);
     }
 });
-$(document).ready(function () {
-    // Kontrollera om vi ska visa modalen efter form submission
-    var showModal = '@TempData["ShowAddMemberModal"]';
-    if (showModal === "true") {
-        // Öppna modalen
-        document.getElementById('add-member-modal').style.display = 'block';  // Öppna modalen
-    }
+//$(document).ready(function () {
+//    // Kontrollera om vi ska visa modalen efter form submission
+//    var showModal = '@TempData["ShowAddMemberModal"]';
+//    if (showModal === "true") {
+//        // Öppna modalen
+//        document.getElementById('add-member-modal').style.display = 'block';  // Öppna modalen
+//    }
 
-    // Event för att stänga modalen (kanske knappen med 'data-type="close"')
-    document.querySelector('.btn-close').addEventListener('click', function () {
-        document.getElementById('add-member-modal').style.display = 'none'; // Stäng modalen
-    });
-});
+//    // Event för att stänga modalen (kanske knappen med 'data-type="close"')
+//    document.querySelector('.btn-close').addEventListener('click', function () {
+//        document.getElementById('add-member-modal').style.display = 'none'; // Stäng modalen
+//    });
+//});
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector("#add-member-form");

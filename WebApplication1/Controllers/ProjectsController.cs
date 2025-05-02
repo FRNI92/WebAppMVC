@@ -102,7 +102,7 @@ namespace WebApplication1.Controllers
                 form.Status = await _statusService.GetAllStatusAsync();
                 form.Clients = await _clientService.GetAllClientsAsync();
                 form.Members = await _memberService.GetAllMembersAsync();
-                // VISA SAMMA VY – inte Redirect! Då bevaras ModelState och form-värdena
+                // unsure if I should return form or not
                 return RedirectToAction("Index", "Dashboard");
             }
 
