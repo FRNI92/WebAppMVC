@@ -30,7 +30,6 @@ namespace WebApplication1.Controllers
             var members = await memberService.GetAllMembersAsync()
                           ?? new List<MemberDto>();
 
-            // 3) Bygg MemberCards och koppla rätt user-id
             var model = new MemberViewModel
             {
                 MemberCards = new List<MemberCardViewModel>(),
@@ -44,7 +43,7 @@ namespace WebApplication1.Controllers
                                   .ConfigureAwait(false)
                               ?? new AddressDto();
 
-                // Hitta redan kopplad AppUser
+                // find connected appuser
                 var linkedUser = users.FirstOrDefault(u => u.MemberId == member.Id);
 
                 model.MemberCards.Add(new MemberCardViewModel
@@ -55,7 +54,7 @@ namespace WebApplication1.Controllers
                 });
             }
 
-            // 4) (oförändrat) Hämta current member för inloggad user
+            // get current member for logged in user
             var appUser = await _userManager.GetUserAsync(User);
             if (appUser?.MemberId != null)
             {
@@ -150,7 +149,6 @@ namespace WebApplication1.Controllers
             if (!ModelState.IsValid)
                 return RedirectToAction("Members");
 
-            // 1) Bild‐upload
             if (model.FormModel.ImageFile != null && model.FormModel.ImageFile.Length > 0)
             {
                 var uploadFolder = Path.Combine(_env.WebRootPath, "uploads");
@@ -162,7 +160,7 @@ namespace WebApplication1.Controllers
                 model.FormModel.Image = fileName;
             }
 
-            // 2) Hämta och uppdatera adress
+            // get an update address
             var member = await memberService.GetByIdAsync(model.FormModel.Id);
             if (member == null) return NotFound();
             var address = await _addressService.GetByIdAsync(member.AddressId);
@@ -179,7 +177,7 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("Members");
             }
 
-            // 3) Uppdatera member‐fält
+            // update member fields
             member.Image = model.FormModel.Image;
             member.FirstName = model.FormModel.FirstName;
             member.LastName = model.FormModel.LastName;
@@ -195,8 +193,7 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("Members");
             }
 
-            // 4) Koppla AppUser via dropdown
-            // Ta bort ev. gammal koppling
+            //connect appuser via dropdown. remove possible old user
             var oldUser = await _userManager.Users
                 .FirstOrDefaultAsync(u => u.MemberId == member.Id);
             if (oldUser != null && oldUser.Id != model.FormModel.ConnectedAppUserId)
@@ -204,7 +201,7 @@ namespace WebApplication1.Controllers
                 oldUser.MemberId = null;
                 await _userManager.UpdateAsync(oldUser);
             }
-            // Sätt ny koppling om vald
+            // set the new connection if chosen
             if (!string.IsNullOrEmpty(model.FormModel.ConnectedAppUserId))
             {
                 var newUser = await _userManager.FindByIdAsync(model.FormModel.ConnectedAppUserId);

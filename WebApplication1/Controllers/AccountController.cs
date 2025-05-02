@@ -5,6 +5,7 @@ using Domain.FormModels;
 using Domain.FormModels.SignUpFormModel;
 using IdentityDatabase.Entities;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -13,7 +14,7 @@ using System.Security.Claims;
 using WebApplication1.Hubs;
 
 namespace WebApplication1.Controllers;
-
+[Authorize]// demands you to be logged in. allowanonymous gives user that is not logged in acces anyways
 public class AccountController(UserService userService, SignInManager<AppUserEntity> signInManager, UserManager<AppUserEntity> userManager, NotificationService notificationService, IHubContext<NotificationHub> notificationHub, MemberService memberService) : Controller
 {
 
@@ -27,6 +28,9 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
     private readonly MemberService _memberService = memberService;
     private readonly NotificationService _notificationService = notificationService;
     private readonly IHubContext<NotificationHub> _notificationHub = notificationHub;
+
+
+    [AllowAnonymous]
     public IActionResult SignIn()
     {
 
@@ -34,6 +38,7 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> SignIn(SignInFormModel model)
     {
         if (!ModelState.IsValid)
@@ -81,6 +86,8 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
         ViewBag.LoginError = "Invalid login attempt.";
         return View(model);
     }
+
+    [AllowAnonymous]
     public IActionResult SignUp()
     {
         var model = new SignUpFormModel();
@@ -89,6 +96,7 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
 
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> SignUp(SignUpFormModel model)
     {
         if (!ModelState.IsValid)
@@ -128,6 +136,7 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
 
 
     [HttpPost]
+    [AllowAnonymous]
     public IActionResult ExternalSignInWithGoogle(string provider, string returnUrl = null!)
     {
         if(string.IsNullOrEmpty(provider))
@@ -143,6 +152,8 @@ public class AccountController(UserService userService, SignInManager<AppUserEnt
 
 
     //rename and reuse this if I have time to add more 3rd login
+
+    [AllowAnonymous]
     public async Task <IActionResult> ExternalSignInWithGoogleCallBack(string returnUrl = null!, string remoteError = null!)
     {
         returnUrl ??= Url.Content("~/");

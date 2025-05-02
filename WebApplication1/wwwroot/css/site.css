@@ -52,7 +52,7 @@
     --dark-500: #333333;
     --dark-600: #38383B;
     --dark-700: #414144;
-    --darkmode-dark:#151517;
+    --darkmode-dark: #151517;
     --dark-opacity-20: rgba(26, 25, 38, 0.2);
     --dark-opacity-60: rgba(26, 25, 38, 0.6);
     --drop-shadow-focus-withing: 0 0 10px rgba(0, 123, 255, 0.4);
@@ -196,10 +196,16 @@
     --user-notification-number-text-color: var(--white-100);
     --user-notification-text-muted-color: var(--grey-600);
     --user-notification-background-hover-color: var(--blue-light-opacity);
-
     --login-error-message-text-color: var(--red);
     --field-alidation-error-text-color: var(--red);
-
+    /*    cookies*/
+    --card-cookie-text-color: #162938;
+    /*    roles*/
+    --role-background-color: var(--white-400);
+    --role-text-color: var(--dark-400);
+    /*members*/
+    --member-background-color: var(--white-400);
+    --member-text-color: var(--dark-400);
 }
 
 
@@ -234,13 +240,19 @@ body.dark-theme {
     --btn-hover-text-color: var(--blue-accent);
     --login-error-message-text-color: var(--white-100);
     --field-validation-error-text-color: var(--white-100);
-    --btn-external-background-color: var(--blue-light-opacity); 
+    --btn-external-background-color: var(--blue-light-opacity);
     --btn-external-hover-text-color: var(--grey-200);
     --btn-external-text-color: var(--white-100);
-
     --badge-normal-background-color: var(--dark-400);
     --badge-normal-text-color: var(--white-100);
-
+    --card-cookie-text-color: var(--white-200);
+    --form-label-color: var(--white-200);
+    --btn-close-text-hover-color: var(--blue-accent);
+    --btn-close-border-hover-color: var(--blue-accent);
+    --role-background-color: var(--grey-800);
+    --role-text-color: var(--white-500);
+    --member-background-color: var(--grey-800);
+    --member-text-color: var(--white-500);
 }
 
 
@@ -1937,7 +1949,8 @@ input:checked::before {
     font-weight: 400;
     display:flex;
     justify-content: center;
-    background-color: var(--white-400);
+    background-color: var(--role-background-color);
+    color: var(--role-text-color);
     padding: 0.5rem 1rem;
     border-radius: var(--border-btn-radius);
 }
@@ -1952,7 +1965,8 @@ input:checked::before {
         display: flex;
         font-weight: 600;
         text-align: center;
-        background-color: var(--white-400);
+        background-color: var(--member-background-color);
+        color: var(--member-text-color);
         padding: 1rem 1rem;
         border-radius: var(--border-btn-radius);
         width: 100%;
@@ -2286,7 +2300,7 @@ input:checked::before {
 .card-cookie {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 90%; /* eller t.ex. 800px */
+    width: 90%;
     max-width: 1000px;
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -2294,7 +2308,7 @@ input:checked::before {
     backdrop-filter: blur(15px);
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
     padding: 40px;
-    color: #162938;
+    color: var(--card-cookie-text-color);
     transform: scale(0.8);
     opacity: 0;
     transition: transform 0.5s ease, opacity 0.5s ease;
