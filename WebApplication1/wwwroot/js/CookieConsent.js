@@ -67,6 +67,8 @@ async function acceptAll() {
     setCookie("Consent", JSON.stringify(consent), 100)
     await handleConsent(consent)
     hideCookieModal()
+    document.body.classList.add("dark-theme");
+    if (toggle) toggle.checked = true;
 }
 
 async function acceptSelected() {
@@ -83,6 +85,13 @@ async function acceptSelected() {
     setCookie("Consent", JSON.stringify(consent), 100)
     await handleConsent(consent)
     hideCookieModal()
+    if (consent.darkmode) {
+        document.body.classList.add("dark-theme");
+        if (toggle) toggle.checked = true;
+    } else {
+        document.body.classList.remove("dark-theme");
+        if (toggle) toggle.checked = false;
+    }
 
 }
 //async function setDarkModeCookie(isDark) {

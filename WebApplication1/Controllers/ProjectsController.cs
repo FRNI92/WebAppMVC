@@ -17,9 +17,7 @@ namespace WebApplication1.Controllers
 
         private readonly IWebHostEnvironment _env = env;
 
-
         private readonly StatusService _statusService = statusService;
-
         private readonly MemberService _memberService = memberService;
         private readonly ProjectService _projectService = projectService;
         private readonly ClientService _clientService = clientService;
@@ -37,7 +35,7 @@ namespace WebApplication1.Controllers
 
             if (appUser?.MemberId == null)
             {
-                return RedirectToAction("AdminLogin", "AdminController"); // Eller visa en snygg "Access denied"-vy om du vill
+                return RedirectToAction("AdminLogin", "AdminController");
             }
 
             if (!ModelState.IsValid)
@@ -134,7 +132,7 @@ namespace WebApplication1.Controllers
 
             if (!result.Succeeded)
             {
-                // Visa ett felmeddelande på samma vy eller annan vy
+                // show error message
                 TempData["Error"] = result.Error;
                 return RedirectToAction("Index", "Dashboard");
             }

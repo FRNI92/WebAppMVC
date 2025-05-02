@@ -4,6 +4,20 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // Hjälpfunktion för att stänga alla dropdowns utom en
+
+    // if user sets it from cookies, it will trigger to remember
+    const darkCookie = getCookie("DarkModeCookie");
+    console.log(`setting the darkmode via cookie:${darkCookie}`)
+    if (darkCookie === "true") {
+        document.body.classList.add("dark-theme");
+    }
+    //darkmode
+    const toggle = document.getElementById("mini-menu-dark-mode-toggle");
+
+    if (localStorage.getItem("darkMode") === "true") {
+        toggle.checked = true;
+        document.body.classList.add("dark-theme");
+    }
     function closeAllDropdowns(except = null) {
         document.querySelectorAll('.dropdown, .edith-dropdown, #notification-dropdown, #account-dropdown, .client-edith-dropdown')
             .forEach(dropdown => {
@@ -147,53 +161,6 @@ document.querySelectorAll('.delete-project').forEach(button => {
             console.log("fetched from database");
             console.log({name, clientId, statusId, description, budget, start, end, members});
 
-            //console.log('this is the members', members);
-            //document.querySelectorAll('#member-select .form-select-option.selected-option')
-            //    .forEach(option => option.classList.remove('selected-option'));
-            //members.forEach(id => {
-            //    console.log(`${id}`)
-            //    console.log("im giving member select class to the member id that was chosen when creating project")
-            //    const option = document.querySelector(`#member-select .form-select-option[data-value="${id}"]`);
-            //    if (option) {
-            //        option.classList.add("selected-option");
-            //    }
-            //});
-
-
-
-            // so that I cant see what members are already chosen
-            //const selectedContainer = document.querySelector('#selected-members-container-edit');
-            //if (selectedContainer) {
-            //    selectedContainer.innerHTML = "";
-
-                // Ta bort endast selected-option från member-listan i edit
-            //    document.squerySelectorAll('#add-edit-project-modal #member-select .form-select-option.selected-option')
-            //        .forEach(option => option.classList.remove('selected-option'));
-
-            //    // Lägg till inputs och markera valda
-            //    members.forEach((id, index) => {
-            //        const option = document.querySelector(`#add-edit-project-modal #member-select .form-select-option[data-value="${id}"]`);
-            //        if (option) {
-            //            option.classList.add('selected-option');
-
-            //            const input = document.createElement("input");
-            //            input.type = "hidden";
-            //            input.name = `FormModel.MemberIds[${index}]`;
-            //            input.value = id;
-            //            selectedContainer.appendChild(input);
-            //        }
-            //    });
-
-            //    // update the text in dropdonw
-            //    const triggerText = document.querySelector('#add-edit-project-modal #member-select .form-select-text');
-            //    if (triggerText) {
-            //        triggerText.textContent = members.length > 0
-            //            ? `${members.length} member${members.length > 1 ? "s" : ""} selected`
-            //            : "Choose a member";
-            //    }
-            //}
-
-
 
             // id
             const id = button.dataset.id;
@@ -281,14 +248,6 @@ document.querySelectorAll('.delete-project').forEach(button => {
 
 
 
-
-//darkmode
-const toggle = document.getElementById("mini-menu-dark-mode-toggle");
-
-if (localStorage.getItem("darkMode") === "true") {
-    toggle.checked = true;
-    document.body.classList.add("dark-theme");
-}
 
 toggle.addEventListener("change", async () => {
     const isDark = toggle.checked;

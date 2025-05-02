@@ -26,7 +26,7 @@ public class CookieController : Controller
 
         if (consent.DarkMode)
         {
-            Response.Cookies.Append("DarkModeCookie", "Non-Essential", new CookieOptions
+            Response.Cookies.Append("DarkModeCookie", "true", new CookieOptions
             {
                 IsEssential = false,
                 Expires = DateTimeOffset.UtcNow.AddDays(100),
@@ -36,13 +36,7 @@ public class CookieController : Controller
         }
         else
         {
-            Response.Cookies.Append("DarkModeCookie", "Non-Essential", new CookieOptions
-            {
-                IsEssential = false,
-                Expires = DateTimeOffset.UtcNow.AddDays(100),
-                SameSite = SameSiteMode.Lax,
-                Path = "/"
-            });
+            Response.Cookies.Delete("DarkModeCookie");
         }
 
 
