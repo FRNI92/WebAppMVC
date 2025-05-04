@@ -1782,12 +1782,19 @@ input:checked::before {
 
     #projects .project-list {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: clamp(2rem, 4vw, 6rem);
+        width: 100%;
     }
 
     #projects .project.card {
         width: 350px;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    #projects .project-list .project.card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 0 0 2px var(--blue-semilight);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     }
 
         #projects .project.card .card-header {
