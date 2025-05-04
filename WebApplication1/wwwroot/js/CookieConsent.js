@@ -87,10 +87,8 @@ async function acceptSelected() {
     hideCookieModal()
     if (consent.darkmode) {
         document.body.classList.add("dark-theme");
-        if (toggle) toggle.checked = true;
     } else {
         document.body.classList.remove("dark-theme");
-        if (toggle) toggle.checked = false;
     }
 
 }
