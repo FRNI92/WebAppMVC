@@ -43,7 +43,7 @@ public class ProjectService
             Budget = form.Budget,
             StatusId = 1, // On hold. user cant set status. only admin in future
 
-            ClientId = form.ClientId, // Tillfälligt (byt när du kopplar clientval)
+            ClientId = form.ClientId,
         };
 
         var isSuccess = await _projectRepository.AddAsync(entity);

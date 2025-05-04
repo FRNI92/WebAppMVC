@@ -96,7 +96,7 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // Fyll på dropdown-listor igen
+                // populate the dropdown again
                 form.Status = await _statusService.GetAllStatusAsync();
                 form.Clients = await _clientService.GetAllClientsAsync();
                 form.Members = await _memberService.GetAllMembersAsync();

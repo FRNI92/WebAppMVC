@@ -13,6 +13,7 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
 
     public async Task<List<ProjectEntity>> GetAllWithFullRelationsAsync()
     {
+        // get all projects and include related data
         return await _context.Projects
             .Include(p => p.Client)
             .Include(p => p.Status)
@@ -22,12 +23,14 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
     }
 
 
+    // override to include updating connection table projectembers
     public override async Task<ReposResult<ProjectEntity>> UpdateAsync(Expression<Func<ProjectEntity, bool>> expression, ProjectEntity updatedEntity)
     {
         var result = new ReposResult<ProjectEntity>();
 
         try
         {
+            // get curernt project and include its members
             var existing = await _context.Projects
                 .Include(p => p.ProjectMembers)
                 .FirstOrDefaultAsync(expression);
@@ -43,7 +46,7 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
             // update main properties
             _context.Entry(existing).CurrentValues.SetValues(updatedEntity);
 
-            // update project members
+            // clear old and update project members
             existing.ProjectMembers.Clear();
             foreach (var pm in updatedEntity.ProjectMembers)
             {

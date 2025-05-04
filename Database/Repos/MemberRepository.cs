@@ -18,7 +18,7 @@ public class MemberRepository(AppDbContext context) : BaseRepository<MemberEntit
         try
         {
             var existing = await _context.Members
-                .Include(m => m.Address)
+                .Include(m => m.Address) //inclued Address to access related address data 
                 .FirstOrDefaultAsync(expression);
 
             if (existing == null)

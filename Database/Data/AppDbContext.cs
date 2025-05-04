@@ -6,7 +6,7 @@ namespace Database.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 
-{
+{// normal tables
     public DbSet<ProjectEntity> Projects { get; set; }
     public DbSet<ClientEntity> Clients { get; set; }
     public DbSet<MemberEntity> Members { get; set; }
@@ -16,13 +16,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<ProjectMemberEntity> ProjectMembers { get; set; }
 
 
-
+    // notification tables
     public DbSet<NotificationEntity> Notifications { get; set; }
     public DbSet<NotificationDismissedEntity> DismissedNotifications { get; set; }
     public DbSet<NotificationTypeEntity> NotificationTypes { get; set; }
     public DbSet<TargetGroupEntity> TargetGroup { get; set;  }
 
 
+
+    // creating some starting values during developement. admin is seeded in presentation in AdminSetup
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -68,7 +70,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             new AddressEntity { Id = 1, StreetName = "Testgatan", StreetNumber = "1", PostalCode = "12345", City = "Stockholm" },
             new AddressEntity { Id = 2, StreetName = "Exempelvägen", StreetNumber = "2", PostalCode = "54321", City = "Göteborg" }
         );
-        //might need another migration and add this
+        // I added NotificationTypeEntity directly in to database with serverexplorer.
+        // might need to include this in future migration if database is recreated
         //        modelBuilder.Entity<NotificationTypeEntity>().HasData(
         //    new NotificationTypeEntity { Id = 1, NotificationType = "User" },
         //    new NotificationTypeEntity { Id = 2, NotificationType = "Project" }

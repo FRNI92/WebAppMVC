@@ -40,7 +40,7 @@ namespace WebApplication1.Controllers
             ViewBag.OnHoldCount = dtos.Count(p => p.StatusName == "On hold");
 
 
-            // filter the order byt status. 
+            // filter the order by status. 
             var filtered = filter switch
             {
                 "Active" => dtos.Where(p => p.StatusName == "Active"),
