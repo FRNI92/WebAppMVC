@@ -18,10 +18,10 @@
             </div>
             <div class="card-body">
                 @* google *@
-                <form method="post" asp-controller="Account" asp-action="SignInWithGoogle">
+                <form method="post" asp-controller="Account" asp-action="ExternalSignInWithGoogle">
                     <button class="btn-external" type="submit">
                         <img src="@Url.Content("~/Images/google-icon.svg")" alt="google icon" />
-                        <span>Login with Google</span>
+                        <span>Login with Google from regular login page</span>
                     </button>
                 </form>
                 <div class="or-divider"><span>OR</span></div>

@@ -1,11 +1,14 @@
 ﻿using Business.Services;
 using Domain.Dtos;
 using Domain.FormModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
+
+    [Authorize(Roles = "Administrator")]
     public class ClientController(ClientService clientService) : Controller
     {
         private readonly ClientService _clientService = clientService;
@@ -26,9 +29,17 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Add(ClientDto dto)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction("Index");
+            {
+                var clients = await _clientService.GetAllClientsAsync();
+                var cvm = new ClientViewModel
+                {
+                    Clients = clients,
+                    FormModel = new ClientFormModel() // tom modell
+                };
+                return View("Index", cvm);
+            }
 
-            await _clientService.AddClientAsync(dto);
+          await _clientService.AddClientAsync(dto);
             return RedirectToAction("Index");
         }
 
@@ -37,7 +48,15 @@ namespace WebApplication1.Controllers
         {
 
             if (!ModelState.IsValid)
-                return RedirectToAction("Index");
+            {
+                var clients = await _clientService.GetAllClientsAsync();
+                var cvm = new ClientViewModel
+                {
+                    Clients = clients,
+                    FormModel = form
+                };
+                return View("Index", cvm);
+            }
 
             var dto = new ClientDto
             {

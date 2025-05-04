@@ -18,6 +18,7 @@
                     <div class="form-group">
                         <label>Client Name</label>
                         <input asp-for="@Model.ClientName" class="form-input" />
+                        <span asp-validation-for="@Model.ClientName"></span>
                     </div>
                 </div>
                 <button type="submit" class="btn">Add Client</button>
@@ -25,4 +26,4 @@
         </div>
     </div>
 </section>
-@* <script src="@Url.Content("~/js/AddClientModal.js")" asp-append-version="true"></script>  *@
+<script src="@Url.Content("~/js/AddClientModal.js")" asp-append-version="true"></script> 
