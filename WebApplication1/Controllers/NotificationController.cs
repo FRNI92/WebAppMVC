@@ -11,7 +11,7 @@ using WebApplication1.Hubs;
 
 namespace WebApplication1.Controllers;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class NotificationController(UserManager<AppUserEntity> userManager, IHubContext<NotificationHub> notificationHub, NotificationService notificationService) : ControllerBase
@@ -20,7 +20,7 @@ public class NotificationController(UserManager<AppUserEntity> userManager, IHub
     private readonly NotificationService _notificationService = notificationService;
     private readonly UserManager<AppUserEntity> _userManager = userManager;
 
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
     [HttpPost]// not in use. project and member goes straight to signalR
     public async Task<IActionResult> CreateNotification(NotificationEntity notificationEntity)
     {
@@ -35,7 +35,7 @@ public class NotificationController(UserManager<AppUserEntity> userManager, IHub
 
         return Ok(new { success = true });
     }
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
     [HttpGet]
     public async Task<IActionResult> GetNotifications()// not in use,project and member goes straight to signalR
     {

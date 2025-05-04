@@ -7,17 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // if user sets it from cookies, it will trigger to remember
     const darkCookie = getCookie("DarkModeCookie");
-    console.log(`setting the darkmode via cookie:${darkCookie}`)
+    console.log(`setting the darkmode via cookie:${darkCookie}`);
     if (darkCookie === "true") {
         document.body.classList.add("dark-theme");
     }
-    //darkmode
+
     const toggle = document.getElementById("mini-menu-dark-mode-toggle");
 
-    if (localStorage.getItem("darkMode") === "true") {
-        toggle.checked = true;
-        document.body.classList.add("dark-theme");
+    if (toggle) {
+        if (localStorage.getItem("darkMode") === "true") {
+            toggle.checked = true;
+            document.body.classList.add("dark-theme");
+        }
+
+        toggle.addEventListener("change", async () => {
+            const isDark = toggle.checked;
+            document.body.classList.toggle("dark-theme", isDark);
+            localStorage.setItem("darkMode", isDark);
+            await setDarkModeCookie(isDark);
+        });
     }
+
     function closeAllDropdowns(except = null) {
         document.querySelectorAll('.dropdown, .edith-dropdown, #notification-dropdown, #account-dropdown, .client-edith-dropdown')
             .forEach(dropdown => {
@@ -249,24 +259,17 @@ document.querySelectorAll('.delete-project').forEach(button => {
 
 
 
-toggle.addEventListener("change", async () => {
-    const isDark = toggle.checked;
-    document.body.classList.toggle("dark-theme", isDark);
-    localStorage.setItem("darkMode", isDark);
-
-    await setDarkModeCookie(isDark); 
-});
-
 
 // this part updates message count
 document.querySelectorAll('.notifications .btn-close').forEach(button => {
+    console.log("entering notification and updating number")
     button.addEventListener('click', event => {
         event.stopPropagation();
 
         const notification = button.closest('.notification-item');
         if (notification) {
             notification.remove();
-            updateNotificationCount(); // <-- UPPDATERA siffran DIREKT
+            updateNotificationCount(); //update the number
         }
     });
 });

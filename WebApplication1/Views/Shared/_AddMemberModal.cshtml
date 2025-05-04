@@ -12,7 +12,9 @@
             <form asp-controller="Members"
                   asp-action="Add"
                   method="post"
-                  enctype="multipart/form-data">
+                  enctype="multipart/form-data"
+                  novalidate
+                  id="add-member-form">
                 <input asp-for="FormModel.Id" type="hidden" />
                 <div class="form-group">
                     <div id="upload-trigger"

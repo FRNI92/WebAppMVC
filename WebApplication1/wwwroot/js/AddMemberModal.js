@@ -1,4 +1,5 @@
 ﻿// Form select
+console.log("AddMemberModal JS is activated")
 document.querySelectorAll('#add-member-modal .form-select').forEach(select => {
     const trigger = select.querySelector('.form-select-trigger');
     const triggerText = trigger.querySelector('.form-select-text');
@@ -100,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Validering av ett specifikt fält
+    // validate specifik fields. some dont react since I have not set required on them in the model
     function validateField(field) {
         const errorSpan = form.querySelector(`span[data-valmsg-for='${field.name}']`);
         if (!errorSpan) return true;
@@ -112,8 +113,16 @@ document.addEventListener('DOMContentLoaded', function () {
             errorMessage = "First Name is required.";
         } else if (field.name === "FormModel.LastName" && !value) {
             errorMessage = "Last Name is required.";
-        } else if (field.name === "FormModel.Email" && !value) {
-            errorMessage = "Email is required.";
+        } else if (field.name === "FormModel.Email") {
+            console.log("real time email val")
+            if (!value) {
+                errorMessage = "Email is required.";
+            } else {
+                const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+                if (!emailRegex.test(value)) {
+                    errorMessage = "x@x.x";
+                }
+            }
         } else if (field.name === "FormModel.Phone" && !value) {
             errorMessage = "Phone is required.";
         } else if (field.name === "FormModel.DateOfBirth" && !value) {
