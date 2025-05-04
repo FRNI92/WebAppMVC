@@ -253,6 +253,11 @@ body.dark-theme {
     --role-text-color: var(--white-500);
     --member-background-color: var(--grey-800);
     --member-text-color: var(--white-500);
+    /*account name    */
+    --account-name-text-color: var(--white-200);
+    --account-name-border-color: var(--dark-100);
+    --account-name-background-color: var(--dark-100);
+    --account-name-image-border-color: var(--dark-100);
 }
 
 

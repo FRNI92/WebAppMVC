@@ -40,7 +40,7 @@
                         <div class="divider"></div>
                         <form method="post" asp-action="Delete" asp-controller="Members">
                             <input type="hidden" name="id" value="@Model.Member.Id" />
-                            <span>@Model.Member.Id</span>
+                            @* <span>@Model.Member.Id</span> to se correct member id on membercard and on editmenu*@
                             <button type="submit" class="dropdown-button dropdown-button-danger">
                                 <i class="fa-duotone fa-solid fa-trash-can"></i>
                                 <span>Delete Member</span>

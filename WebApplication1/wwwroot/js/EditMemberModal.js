@@ -92,5 +92,80 @@ document.querySelectorAll('.open-edit-member-modal').forEach(button => {
             select.value = linkedId;
             //console.log('Select is set to linkedId:', select.value);
         }
+
+
+
+        const editForm = document.querySelector('#add-edit-member-modal form');
+
+        if (editForm) {
+            const firstName = editForm.querySelector('input[name="FormModel.FirstName"]');
+            const lastName = editForm.querySelector('input[name="FormModel.LastName"]');
+            const email = editForm.querySelector('input[name="FormModel.Email"]');
+
+            function validateField(field, type) {
+                const span = editForm.querySelector(`span[data-valmsg-for='${field.name}']`);
+                if (!span) {
+                    console.log(`No span found for ${field.name}`);
+                    return true;
+                }
+
+                let ok = true;
+                let message = '';
+
+                if (type === "text" && !field.value.trim()) {
+                    ok = false;
+                    message = `${field.previousElementSibling?.textContent} is required.`;
+                }
+
+                if (type === "email") {
+                    const val = field.value.trim();
+                    if (!val) {
+                        ok = false;
+                        message = "Email is required.";
+                    } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val)) {
+                        ok = false;
+                        message = "x@x.x";
+                    }
+                }
+
+                if (!ok) {
+                    console.log(`Validation failed for ${field.name}: ${message}`);
+                    field.classList.add("input-validation-error");
+                    span.textContent = message;
+                    span.classList.add("field-validation-error");
+                    span.classList.remove("field-validation-valid");
+                } else {
+                    console.log(`No error for ${field.name}`);
+                    field.classList.remove("input-validation-error");
+                    span.textContent = "";
+                    span.classList.remove("field-validation-error");
+                    span.classList.add("field-validation-valid");
+                }
+
+                return ok;
+            }
+
+            // realtime
+            [firstName, lastName, email].forEach(field => {
+                field.addEventListener("input", () => {
+                    const type = field === email ? "email" : "text";
+                    validateField(field, type);
+                });
+            });
+
+            // on submit
+            editForm.addEventListener("submit", e => {
+                let valid = true;
+                valid &= validateField(firstName, "text");
+                valid &= validateField(lastName, "text");
+                valid &= validateField(email, "email");
+
+                if (!valid) {
+                    console.log("Form has errors. Submission cancelled.");
+                    e.preventDefault();
+                }
+            });
+        }
     });
 });
+

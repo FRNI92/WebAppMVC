@@ -146,6 +146,7 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Edit(MemberViewModel model)
+        
         {
             if (!ModelState.IsValid)
                 return RedirectToAction("Members");
