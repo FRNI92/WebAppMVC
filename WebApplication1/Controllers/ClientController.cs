@@ -8,7 +8,7 @@ using WebApplication1.ViewModels;
 namespace WebApplication1.Controllers
 {
 
-    [Authorize(Roles = "Administrator")]
+    [Authorize]
     public class ClientController(ClientService clientService) : Controller
     {
         private readonly ClientService _clientService = clientService;
@@ -25,6 +25,7 @@ namespace WebApplication1.Controllers
             return View(cvm);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Add(ClientDto dto)
         {
@@ -43,6 +44,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Update(ClientFormModel form)
         {
@@ -68,6 +70,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

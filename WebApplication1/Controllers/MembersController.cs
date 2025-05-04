@@ -12,6 +12,7 @@ using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize]
     public class MembersController(MemberService memberService, IWebHostEnvironment env, AddressService addressService, UserManager<AppUserEntity> userManager, NotificationService notificationService) : Controller
     {
 
@@ -65,7 +66,7 @@ namespace WebApplication1.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Add(MemberViewModel model)
         {
             if (!ModelState.IsValid)
@@ -142,7 +143,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Members", "Members");
         }
 
-
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Edit(MemberViewModel model)
         {
@@ -215,7 +216,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Members");
         }
 
-
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

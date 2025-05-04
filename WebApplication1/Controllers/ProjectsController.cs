@@ -125,6 +125,8 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
+
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

@@ -4,6 +4,7 @@ using System.Text.Json;
 
 namespace WebApplication1.Controllers;
 
+// dont put any authorize here. it must be accessable before creating and/or logging in 
 public class CookieController : Controller
 {
 

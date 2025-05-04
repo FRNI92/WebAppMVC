@@ -1,6 +1,7 @@
 ﻿using Business.Services;
 using Database.Entities;
 using IdentityDatabase.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using WebApplication1.Hubs;
 
 namespace WebApplication1.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class NotificationController(UserManager<AppUserEntity> userManager, IHubContext<NotificationHub> notificationHub, NotificationService notificationService) : ControllerBase
@@ -18,7 +20,7 @@ public class NotificationController(UserManager<AppUserEntity> userManager, IHub
     private readonly NotificationService _notificationService = notificationService;
     private readonly UserManager<AppUserEntity> _userManager = userManager;
 
-
+    [Authorize(Roles = "Administrator")]
     [HttpPost]// not in use. project and member goes straight to signalR
     public async Task<IActionResult> CreateNotification(NotificationEntity notificationEntity)
     {
@@ -33,7 +35,7 @@ public class NotificationController(UserManager<AppUserEntity> userManager, IHub
 
         return Ok(new { success = true });
     }
-
+    [Authorize(Roles = "Administrator")]
     [HttpGet]
     public async Task<IActionResult> GetNotifications()// not in use,project and member goes straight to signalR
     {
